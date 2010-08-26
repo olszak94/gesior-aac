@@ -1,0 +1,37 @@
+What's new in 0.2.0+SVN version?
+
+* Dropped 0.0.x and 0.1.x deprecations.
+
+    There were many elements that lasted from the very first release of PHP OTServ Toolkit and they caused big mess in code. All of them have been dropped out (code that used deprecated methods/constants will not work!).
+
+* Dropped PHP 5.0 support.
+
+    PHP 5.0 is ancient. Does anyone still uses it? If so then POT won't run there. Not a big loss anyway - PHP 5.0 lacked many new capabilities like array typehinting, PDO, improved SPL library and many many more.
+
+* Made POT class static.
+
+    POT main class is now set of static methods - no need to instantize it and/or using it's singleton. You in fact should not do that anymore.
+
+* More strictive cache drivers interface.
+
+    From now cache driver must throw exception when request for unexisting cache was called. To check if cache exists new methods IOTS_FileCache::hasCache() and IOTS_ItemsCache::hasItems() are introduced.
+
+* Updated for new database structure.
+
+    As always :).
+
+* Deaths list support.
+
+    One of biggest new feature is support for deaths list done in great objective way which allows to easy fetching both killers and victims, checking environment hits etc.
+
+* Fixed loading instants in player spells.
+
+    Just a typo in code.
+
+* Fixed name magic property setting in account.
+
+    It was bugged and now is fixed.
+
+* Lots of bugs reported by Junkfood fixed.
+
+    Great thanks to Junkfood for reporting them.

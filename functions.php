@@ -37,7 +37,7 @@
 		$passwordency = 'sha1';
 	
 	##-- POT --##
-	include('POT/OTS.php');
+	include('Libs/POT/OTS.php');
 	
 	##-- Connect MySql database --##
 	$ots = POT::getInstance();

@@ -1,6 +1,6 @@
 <?PHP
 	##-- load file ini--##
-	$config['site'] = parse_ini_file('config/Config.ini');
+	$config['site'] = parse_ini_file('Config/Config.ini');
 	
 	##-- config --##
 	include('Config/Config.php');
@@ -8,12 +8,12 @@
 	##-- cheak install page--##
 	if($config['site']['install'] != "no")
 	{
-		header("Location: Install/install.php");
+		header("Location: Install/Install.php");
 		exit;
 	}
 	
 	##-- Connect server --##
-	$config['server'] = parse_ini_file($config['site']['server_path'].'config.lua');
+	$config['server'] = parse_ini_file($config['site']['path_server'].'config.lua');
 	if(isset($config['server']['mysqlHost']))
 	{	##-- Connect Mysql TFS 0.2 --##
 		$mysqlhost = $config['server']['mysqlHost'];
@@ -30,14 +30,15 @@
 	}
 	
 	##-- encryption password --##
-	$passwordency = '';
+		$passwordency = '';
 	if(strtolower($config['server']['encryptionType']) == 'md5')
 		$passwordency = 'md5';
 	if(strtolower($config['server']['encryptionType']) == 'sha1')
 		$passwordency = 'sha1';
 	
-	##-- POT --##
+	##-- POT && Class --##
 	include('Libs/POT/OTS.php');
+	include('Libs/Class/Class.php');
 	
 	##-- Connect MySql database --##
 	$ots = POT::getInstance();
@@ -49,7 +50,10 @@
 		}
 		catch(PDOException $error)
 		{
-			echo 'Database error - can\'t connect to MySQL database. Possible reasons:<br>1. MySQL server is not running on host.<br>2. MySQL user, password, database or host isn\'t configured in: <b>'.$config['site']['server_path'].'config.lua</b> .<br>3. MySQL user, password, database or host is wrong.';
+			echo 'Database error - can\'t connect to MySQL database. Possible reasons:<br>
+				1. MySQL server is not running on host.<br>
+				2. MySQL user, password, database or host isn\'t configured in: <b>'.$config['site']['server_path'].'config.lua</b> .<br>
+				3. MySQL user, password, database or host is wrong.';
 			exit;
 		}
 	}
@@ -68,7 +72,7 @@
 		if($status_var > 0)
 			$statustimeout = $statustimeout * $status_var;
 			$statustimeout = $statustimeout / 1000;
-			$config['status'] = parse_ini_file('Config/serverstatus');
+			$config['status'] = parse_ini_file('Config/ServerStatus');
 			if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
 			{
 				$config['status']['serverStatus_checkInterval'] = $statustimeout+3;
@@ -99,7 +103,7 @@
 					$config['status']['serverStatus_players'] = 0;
 					$config['status']['serverStatus_playersMax'] = 0;
 				}
-				$file = fopen("Config/serverstatus", "w");
+				$file = fopen("Config/ServerStatus", "w");
 				foreach($config['status'] as $param => $data)
 				{
 					$file_data .= $param.' = "'.str_replace('"', '', $data).'"';

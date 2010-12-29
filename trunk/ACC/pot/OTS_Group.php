@@ -2,14 +2,13 @@
 
 /**#@+
  * @version 0.0.1
- * @since 0.0.1
  */
 
 /**
  * @package POT
- * @version 0.1.0
+ * @version 0.1.4
  * @author Wrzasq <wrzasq@gmail.com>
- * @copyright 2007 (C) by Wrzasq
+ * @copyright 2007 - 2008 (C) by Wrzasq
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
@@ -17,7 +16,7 @@
  * OTServ user group abstraction.
  * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.4
  * @property string $name Group name.
  * @property int $flags Access flags.
  * @property int $access Access level.
@@ -27,7 +26,7 @@
  * @property-read int $id Row ID.
  * @property-read OTS_Players_List $playersList List of members of this group.
  */
-class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
+class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
 {
 /**
  * Group data.
@@ -41,11 +40,32 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
  * 
  * @version 0.0.5
  * @param int $id Group number.
+ * @throws PDOException On PDO operation error.
  */
     public function load($id)
     {
         // SELECT query on database
         $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('flags') . ', ' . $this->db->fieldName('access') . ', ' . $this->db->fieldName('maxdepotitems') . ', ' . $this->db->fieldName('maxviplist') . ' FROM ' . $this->db->tableName('groups') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+    }
+
+/**
+ * Loads group by it's name.
+ * 
+ * @version 0.1.1
+ * @since 0.1.1
+ * @param string $name Group name.
+ * @throws PDOException On PDO operation error.
+ */
+    public function find($name)
+    {
+        // finds group's ID
+        $id = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('groups') . ' WHERE ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($name) )->fetch();
+
+        // if anything was found
+        if( isset($id['id']) )
+        {
+            $this->load($id['id']);
+        }
     }
 
 /**
@@ -59,9 +79,14 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * Saves account in database.
+ * Saves group in database.
+ * 
+ * <p>
+ * If group is not loaded to represent any existing group it will create new row for it.
+ * </p>
  * 
  * @version 0.0.5
+ * @throws PDOException On PDO operation error.
  */
     public function save()
     {
@@ -84,6 +109,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Group ID.
  * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded exception} instead of triggering E_USER_WARNING.
+ * </p>
+ * 
  * @version 0.0.3
  * @return int Group ID.
  * @throws E_OTS_NotLoaded If group is not loaded.
@@ -100,6 +129,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Group name.
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded exception} instead of triggering E_USER_WARNING.
+ * </p>
  * 
  * @version 0.0.3
  * @return string Name.
@@ -118,6 +151,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Sets group's name.
  * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Group::save() save() method} to flush changed to database.
+ * </p>
+ * 
  * @param string $name Name.
  */
     public function setName($name)
@@ -127,6 +164,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Rights flags.
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded exception} instead of triggering E_USER_WARNING.
+ * </p>
  * 
  * @version 0.0.3
  * @return int Flags.
@@ -145,6 +186,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Sets rights flags.
  * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Group::save() save() method} to flush changed to database.
+ * </p>
+ * 
  * @param int $flags Flags.
  */
     public function setFlags($flags)
@@ -154,6 +199,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Access level.
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded exception} instead of triggering E_USER_WARNING.
+ * </p>
  * 
  * @version 0.0.3
  * @return int Access level.
@@ -172,6 +221,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Sets access level.
  * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Group::save() save() method} to flush changed to database.
+ * </p>
+ * 
  * @param int $access Access level.
  */
     public function setAccess($access)
@@ -181,6 +234,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Maximum count of items in depot.
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded exception} instead of triggering E_USER_WARNING.
+ * </p>
  * 
  * @version 0.0.3
  * @return int Maximum value.
@@ -199,6 +256,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Sets maximum count of items in depot.
  * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Group::save() save() method} to flush changed to database.
+ * </p>
+ * 
  * @param int $maxdepotitems Maximum value.
  */
     public function setMaxDepotItems($maxdepotitems)
@@ -208,6 +269,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Maximum count of players in VIP list.
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded exception} instead of triggering E_USER_WARNING.
+ * </p>
  * 
  * @version 0.0.3
  * @return int Maximum value.
@@ -226,6 +291,10 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Sets maximum count of players in VIP list.
  * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Group::save() save() method} to flush changed to database.
+ * </p>
+ * 
  * @param int $maxviplist Maximum value.
  */
     public function setMaxVIPList($maxviplist)
@@ -236,15 +305,20 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Reads custom field.
  * 
+ * <p>
  * Reads field by it's name. Can read any field of given record that exists in database.
+ * </p>
  * 
+ * <p>
  * Note: You should use this method only for fields that are not provided in standard setters/getters (SVN fields). This method runs SQL query each time you call it so it highly overloads used resources.
+ * </p>
  * 
  * @version 0.0.5
  * @since 0.0.3
  * @param string $field Field name.
  * @return string Field value.
  * @throws E_OTS_NotLoaded If group is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function getCustomField($field)
     {
@@ -260,17 +334,24 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Writes custom field.
  * 
+ * <p>
  * Write field by it's name. Can write any field of given record that exists in database.
+ * </p>
  * 
+ * <p>
  * Note: You should use this method only for fields that are not provided in standard setters/getters (SVN fields). This method runs SQL query each time you call it so it highly overloads used resources.
+ * </p>
  * 
+ * <p>
  * Note: Make sure that you pass $value argument of correct type. This method determinates whether to quote field name. It is safe - it makes you sure that no unproper queries that could lead to SQL injection will be executed, but it can make your code working wrong way. For example: $object->setCustomField('foo', '1'); will quote 1 as as string ('1') instead of passing it as a integer.
+ * </p>
  * 
  * @version 0.0.5
  * @since 0.0.3
  * @param string $field Field name.
  * @param mixed $value Field value.
  * @throws E_OTS_NotLoaded If group is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function setCustomField($field, $value)
     {
@@ -289,8 +370,6 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * List of characters in given group.
- * 
  * @version 0.1.0
  * @return array Array of OTS_Player objects from given group.
  * @throws E_OTS_NotLoaded If group is not loaded.
@@ -319,9 +398,15 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * List of characters in group.
  * 
+ * <p>
  * In difference to {@link OTS_Group::getPlayers() getPlayers() method} this method returns filtered {@link OTS_Players_List OTS_Players_List} object instead of array of {@link OTS_Player OTS_Player} objects. It is more effective since OTS_Player_List doesn't perform all rows loading at once.
+ * </p>
  * 
- * @version 0.1.0
+ * <p>
+ * Note: Returned object is only prepared, but not initialised. When using as parameter in foreach loop it doesn't matter since it will return it's iterator, but if you will wan't to execute direct operation on that object you will need to call {@link OTS_Base_List::rewind() rewind() method} first.
+ * </p>
+ * 
+ * @version 0.1.4
  * @since 0.0.5
  * @return OTS_Players_List List of players from current group.
  * @throws E_OTS_NotLoaded If group is not loaded.
@@ -332,8 +417,6 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
         {
             throw new E_OTS_NotLoaded();
         }
-
-        $ots = POT::getInstance();
 
         // creates filter
         $filter = new OTS_SQLFilter();
@@ -352,6 +435,7 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
  * @version 0.0.5
  * @since 0.0.5
  * @throws E_OTS_NotLoaded If group is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function delete()
     {
@@ -370,11 +454,14 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Returns players iterator.
  * 
+ * <p>
  * There is no need to implement entire Iterator interface since we have {@link OTS_Players_List players list class} for it.
+ * </p>
  * 
  * @version 0.0.5
  * @since 0.0.5
  * @throws E_OTS_NotLoaded If group is not loaded.
+ * @throws PDOException On PDO operation error.
  * @return Iterator List of players.
  */
     public function getIterator()
@@ -388,6 +475,7 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
  * @version 0.0.5
  * @since 0.0.5
  * @throws E_OTS_NotLoaded If group is not loaded.
+ * @throws PDOException On PDO operation error.
  * @return int Count of players.
  */
     public function count()
@@ -402,7 +490,9 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
  * @since 0.1.0
  * @param string $name Property name.
  * @return mixed Property value.
+ * @throws E_OTS_NotLoaded If group is not loaded.
  * @throws OutOfBoundsException For non-supported properties.
+ * @throws PDOException On PDO operation error.
  */
     public function __get($name)
     {
@@ -445,6 +535,7 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
  * @param string $name Property name.
  * @param mixed $value Property value.
  * @throws OutOfBoundsException For non-supported properties.
+ * @throws PDOException On PDO operation error.
  */
     public function __set($name, $value)
     {
@@ -478,9 +569,11 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Returns string representation of object.
  * 
+ * <p>
  * If any display driver is currently loaded then it uses it's method. Else it returns group name.
+ * </p>
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return string String representation of object.
  */
@@ -493,10 +586,8 @@ class OTS_Group extends OTS_Base_DAO implements IteratorAggregate, Countable
         {
             return $ots->getDisplayDriver()->displayGroup($this);
         }
-        else
-        {
-            return $this->getName();
-        }
+
+        return $this->getName();
     }
 }
 

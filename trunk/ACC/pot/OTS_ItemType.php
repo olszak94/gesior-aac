@@ -9,7 +9,7 @@
  * Code in this file bases on oryginal OTServ items loading C++ code (items.cpp, items.h).
  * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.3
  * @author Wrzasq <wrzasq@gmail.com>
  * @copyright 2007 - 2008 (C) by Wrzasq
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
@@ -18,8 +18,12 @@
 /**
  * Item type info.
  * 
+ * <p>
+ * This class represents only item type information. You can't assign it to player. To do that, you need to create instance of this item type (you can use {@link OTS_ItemType::createItem() createItem() method} to do that).
+ * </p>
+ * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.3
  * @property int $clientId Client ID.
  * @property string $name Item name.
  * @property int $group Group.
@@ -289,14 +293,18 @@ class OTS_ItemType
 /**
  * Magic PHP5 method.
  * 
+ * <p>
  * Allows object importing from {@link http://www.php.net/manual/en/function.var-export.php var_export()}.
+ * </p>
  * 
- * @internal Magic PHP5 method.
+ * @version 0.1.3
  * @param array $properties List of object properties.
  */
     public static function __set_state($properties)
     {
-        $object = new self();
+        $object = new self($properties['id']);
+
+        unset($properties['id']);
 
         // loads properties
         foreach($properties as $name => $value)
@@ -358,10 +366,25 @@ class OTS_ItemType
     }
 
 /**
+ * Checks if this type has given attribute.
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ * @param string $attribyte Attribute name.
+ * @return bool Attribute set state.
+ */
+    public function hasAttribute($name)
+    {
+        return isset($this->attributes[$name]);
+    }
+
+/**
  * Returns given attribute.
  * 
+ * @version 0.1.3
  * @param string $attribyte Attribute name.
- * @return string|null Attribute value (null if not set).
+ * @return string Attribute value.
+ * @throws OutOfBoundsException If not set.
  */
     public function getAttribute($name)
     {
@@ -369,10 +392,8 @@ class OTS_ItemType
         {
             return $this->attributes[$name];
         }
-        else
-        {
-            return null;
-        }
+
+        throw new OutOfBoundsException();
     }
 
 /**
@@ -693,6 +714,30 @@ class OTS_ItemType
             default:
                 throw new OutOfBoundsException();
         }
+    }
+
+/**
+ * Returns string representation of object.
+ * 
+ * <p>
+ * If any display driver is currently loaded then it uses it's method. Otherwise just returns item ID.
+ * </p>
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ * @return string String representation of object.
+ */
+    public function __toString()
+    {
+        $ots = POT::getInstance();
+
+        // checks if display driver is loaded
+        if( $ots->isDataDisplayDriverLoaded() )
+        {
+            return $ots->getDataDisplayDriver()->displayItemType($this);
+        }
+
+        return $this->getId();
     }
 }
 

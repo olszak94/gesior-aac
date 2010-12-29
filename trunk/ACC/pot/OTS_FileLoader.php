@@ -9,7 +9,7 @@
  * Code in this file bases on oryginal OTServ binary format loading C++ code (fileloader.h, fileloader.cpp).
  * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.3
  * @author Wrzasq <wrzasq@gmail.com>
  * @copyright 2007 - 2008 (C) by Wrzasq
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
@@ -18,8 +18,16 @@
 /**
  * Universal OTServ binary formats reader.
  * 
+ * <p>
+ * This class is general class that handle node-based binary OTServ files. It provides no file format-related logic, only loading nodes from files. To open given file format you need to use proper class like {@link OTS_OTBMFile OTS_OTBMFile} or {@link OTS_ItemsList OTS_ItemsList} classes.
+ * </p>
+ * 
+ * <p>
+ * This class is mostly usefull when you create own extensions for POT code.
+ * </p>
+ * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.3
  * @property-write IOTS_FileCache $cacheDriver Cache driver.
  */
 class OTS_FileLoader
@@ -61,12 +69,13 @@ class OTS_FileLoader
 /**
  * Magic PHP5 method.
  * 
+ * <p>
  * Allows object serialisation.
+ * </p>
  * 
  * @version 0.0.6
  * @since 0.0.6
  * @return array List of properties that should be saved.
- * @internal Magic PHP5 method.
  */
     public function __sleep()
     {
@@ -76,11 +85,12 @@ class OTS_FileLoader
 /**
  * Creates clone of object.
  * 
+ * <p>
  * Copy of object needs to have different ID.
+ * </p>
  * 
  * @version 0.0.6
  * @since 0.0.6
- * @internal magic PHP5 method.
  */
     public function __clone()
     {
@@ -91,11 +101,12 @@ class OTS_FileLoader
 /**
  * Magic PHP5 method.
  * 
+ * <p>
  * Allows object importing from {@link http://www.php.net/manual/en/function.var-export.php var_export()}.
+ * </p>
  * 
  * @version 0.0.6
  * @since 0.0.6
- * @internal Magic PHP5 method.
  * @param array $properties List of object properties.
  */
     public static function __set_state($properties)
@@ -114,6 +125,10 @@ class OTS_FileLoader
 /**
  * Sets cache handler.
  * 
+ * <p>
+ * You have to set cache driver before loading/saving any file in order to apply it to that file.
+ * </p>
+ * 
  * @param IOTS_FileCache $cache Cache handler (leave this parameter if you want to unset caching).
  */
     public function setCacheDriver(IOTS_FileCache $cache = null)
@@ -124,7 +139,7 @@ class OTS_FileLoader
 /**
  * Opens file.
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @param string $file Filepath.
  * @throws E_OTS_FileLoaderError When error occurs during file operation.
  */
@@ -148,7 +163,7 @@ class OTS_FileLoader
         if($this->file)
         {
             // reads file version
-            $version = unpack('L', fread($this->file, 4) );
+            $version = unpack('V', fread($this->file, 4) );
 
             if($version[1] > 0)
             {

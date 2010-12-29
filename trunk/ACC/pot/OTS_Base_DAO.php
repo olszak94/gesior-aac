@@ -16,6 +16,14 @@
 /**
  * Basic data access object routines.
  * 
+ * <p>
+ * This class defines basic mechanisms for all classes that will represent database accessors. However no coding logic is defined here - only connection handling and PHP core-related stuff to enable variouse operations with objects.
+ * </p>
+ * 
+ * <p>
+ * This class is mostly usefull when you create own extensions for POT code.
+ * </p>
+ * 
  * @package POT
  * @version 0.1.0
  */
@@ -41,10 +49,11 @@ abstract class OTS_Base_DAO implements IOTS_DAO
 /**
  * Magic PHP5 method.
  * 
+ * <p>
  * Allows object serialisation.
+ * </p>
  * 
  * @return array List of properties that should be saved.
- * @internal Magic PHP5 method.
  */
     public function __sleep()
     {
@@ -54,9 +63,9 @@ abstract class OTS_Base_DAO implements IOTS_DAO
 /**
  * Magic PHP5 method.
  * 
+ * <p>
  * Allows object unserialisation.
- * 
- * @internal Magic PHP5 method.
+ * </p>
  */
     public function __wakeup()
     {
@@ -66,9 +75,9 @@ abstract class OTS_Base_DAO implements IOTS_DAO
 /**
  * Creates clone of object.
  * 
+ * <p>
  * Copy of object needs to have different ID.
- * 
- * @internal magic PHP5 method.
+ * </p>
  */
     public function __clone()
     {
@@ -78,10 +87,11 @@ abstract class OTS_Base_DAO implements IOTS_DAO
 /**
  * Magic PHP5 method.
  * 
+ * <p>
  * Allows object importing from {@link http://www.php.net/manual/en/function.var-export.php var_export()}.
+ * </p>
  * 
  * @version 0.1.0
- * @internal Magic PHP5 method.
  * @param array $properties List of object properties.
  */
     public static function __set_state($properties)

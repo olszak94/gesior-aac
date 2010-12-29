@@ -2,36 +2,33 @@
 
 /**#@+
  * @version 0.0.1
- * @since 0.0.1
  */
 
 /**
  * This file contains main toolkit class. Please read README file for quick startup guide and/or tutorials for more info.
  * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.6
  * @author Wrzasq <wrzasq@gmail.com>
- * @copyright 2007 (C) by Wrzasq
+ * @copyright 2007 - 2009 (C) by Wrzasq
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
- * @todo 0.1.1: Support for call constructors with ID/name parameter for automatic pre-load for data.
- * @todo 0.1.2: OTAdmin protocol.
- * @todo 0.1.3: SOAP interface for remote controll.
- * @todo 0.2.0: Implement OutOfBoundsException instead of mixed results types.
- * @todo 0.2.0: Implement NetworkMessage.
- * @todo 1.0.0: Unify *List and *_List naming (probably into *List).
- * @todo 1.0.0: Deprecations cleanup.
- * @todo 1.0.0: Complete phpUnit test.
- * @todo 1.0.0: More detailed documentation and tutorials, also update examples and tutorials.
- * @todo 1.0.0: Main POT class as database instance.
- * @todo 1.0.0: PHAR and PHK packages.
- * @todo 2.0.0: Code as C++ extension (as an alternative to pure PHP library which of course would still be available).
+ * @todo future: Code as C++ extension (as an alternative to pure PHP library which of course would still be available).
+ * @todo future: Implement POT namespace when it will be supported by PHP.
+ * @todo future: Complete phpUnit test.
+ * @todo 0.2.0: Make POT static class (this won't break compatibility because static methods can be called from dynamic context - however getInstance() method should be left).
+ * @todo 0.2.0: Use prepared statements.
+ * @todo 0.2.0: Drop PHP 5.0.x support (PDO:: constants, array type hinting).
+ * @todo 0.2.0: Deprecations cleanup (0.1.x and 0.0.x).
+ * @todo 1.0.0: Deprecations cleanup (0.x).
+ * @todo 1.0.0: Replace all private members with procteted (left only reasonable private members).
+ * @todo 1.0.0: E_* classes into *Exception, IOTS_* into *Interface, change POT classes prefix from OTS_* into OT_*, unify *List and *_List naming into *List, remove prefix from filenames.
  */
 
 /**
  * Main POT class.
  * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.6
  */
 class POT
 {
@@ -68,32 +65,22 @@ class POT
     const SEX_MALE = 1;
 
 /**
- * None vocation.
- * 
  * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
  */
     const VOCATION_NONE = 0;
 /**
- * Sorcerer.
- * 
  * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
  */
     const VOCATION_SORCERER = 1;
 /**
- * Druid.
- * 
  * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
  */
     const VOCATION_DRUID = 2;
 /**
- * Paladin.
- * 
  * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
  */
     const VOCATION_PALADIN = 3;
 /**
- * Knight.
- * 
  * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
  */
     const VOCATION_KNIGHT = 4;
@@ -282,24 +269,18 @@ class POT
     const ORDER_DESC = 2;
 
 /**
- * Rune spell.
- * 
  * @version 0.0.7
  * @since 0.0.7
  * @deprecated 0.1.0 Use OTS_SpellsList::SPELL_RUNE.
  */
     const SPELL_RUNE = 0;
 /**
- * Instant spell.
- * 
  * @version 0.0.7
  * @since 0.0.7
  * @deprecated 0.1.0 Use OTS_SpellsList::SPELL_INSTANT.
  */
     const SPELL_INSTANT = 1;
 /**
- * Conjure spell.
- * 
  * @version 0.0.7
  * @since 0.0.7
  * @deprecated 0.1.0 Use OTS_SpellsList::SPELL_CONJURE.
@@ -309,7 +290,13 @@ class POT
 /**
  * Singleton.
  * 
+ * <p>
+ * This method return global instance of POT class. You can only fetch it this way - class constructor is private and you can't create instance of it other way. This is clasic singleton implementation. As class names are globaly accessible you can fetch it anywhere in code.
+ * </p>
+ * 
  * @return POT Global POT class instance.
+ * @example examples/quickstart.php quickstart.php
+ * @tutorial POT/Basics.pkg#basics.instance
  */
     public static function getInstance()
     {
@@ -318,7 +305,7 @@ class POT
         // creates new instance
         if( !isset($instance) )
         {
-            $instance = new self;
+            $instance = new self();
         }
 
         return $instance;
@@ -327,20 +314,24 @@ class POT
 /**
  * POT classes directory.
  * 
+ * <p>
  * Directory path to POT files.
+ * </p>
  * 
  * @var string
- * @see POT::setPOTPath()
  */
     private $path = '';
 
 /**
  * Set POT directory.
  * 
- * Use this method if you keep your POT package in different directory then this file.
+ * <p>
+ * Use this method if you keep your POT package in different directory then this file. Don't need to care about trailing directory separator - it will append it if needed.
+ * </p>
  * 
  * @param string $path POT files path.
  * @example examples/fakeroot.php fakeroot.php
+ * @tutorial POT/Basics.pkg#basics.fakeroot
  */
     public function setPOTPath($path)
     {
@@ -356,11 +347,19 @@ class POT
 /**
  * Class initialization tools.
  * 
+ * <p>
  * Never create instance of this class by yourself! Use POT::getInstance()!
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.0.2 version this method registers spl_autoload_register() callback. If you use POT with PHP 5.0 you need {@link compat.php compat.php library} to prevent from FATAL errors.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method is private.
+ * </p>
  * 
  * @version 0.0.3
- * @see POT::getInstance()
- * @internal
  */
     private function __construct()
     {
@@ -373,14 +372,16 @@ class POT
 /**
  * Loads POT class file.
  * 
- * Runtime class loading on demand - usefull for __autoload() function.
- * 
  * <p>
- * Note: Since 0.0.2 version this function is suitable for spl_autoload_register().
+ * Runtime class loading on demand - usefull for autoloading functions. Usualy you don't need to call this method directly.
  * </p>
  * 
  * <p>
- * Note: Since 0.0.3 version this function handles also exceptions.
+ * Note: Since 0.0.2 version this method is suitable for spl_autoload_register().
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method handles also exception classes.
  * </p>
  * 
  * @version 0.0.3
@@ -397,7 +398,9 @@ class POT
 /**
  * Database connection.
  * 
+ * <p>
  * OTServ database connection object.
+ * </p>
  * 
  * @var PDO
  */
@@ -406,29 +409,48 @@ class POT
 /**
  * Connects to database.
  * 
+ * <p>
  * Creates OTServ database connection object.
+ * </p>
  * 
  * <p>
- * First parameter is one of database driver constants values. Currently MySQL, SQLite, PostgreSQL and ODBC drivers are supported.<br />
- * This parameter can be null, then you have to specify <var>'driver'</var> parameter.<br />
- * Such way is comfortable to store entire database configuration in one array and possibly runtime evaluation and/or configuration file saving.<br />
+ * First parameter is one of database driver constants values. Currently {@link OTS_DB_MySQL MySQL}, {@link OTS_DB_SQLite SQLite}, {@link OTS_DB_PostgreSQL PostgreSQL} and {@link OTS_DB_ODBC ODBC} drivers are supported. This parameter can be null, then you have to specify <var>'driver'</var> parameter. Such way is comfortable to store entire database configuration in one array and possibly runtime evaluation and/or configuration file saving.
  * </p>
  * 
  * <p>
  * For parameters list see driver documentation. Common parameters for all drivers are:
  * </p>
  * 
- * - <var>driver</var> - optional, specifies driver, aplies when <var>$driver</var> method parameter is <i>null</i>
- * - <var>prefix</var> - optional, prefix for database tables, use if you have more then one OTServ installed on one database.
+ * <ul>
+ * <li><var>driver</var> - optional, specifies driver, aplies when <var>$driver</var> method parameter is <i>null</i>,</li>
+ * <li><var>prefix</var> - optional, prefix for database tables, use if you have more then one OTServ installed on one database.</li>
+ * </ul>
  * 
- * @version 0.0.4
+ * <p>
+ * Note: Since 0.1.1 version this method throws {@link E_OTS_Generic E_OTS_Generic exceptions} instead of general Exception class objects. Since all exception classes are child classes of Exception class so your old code will still handle all exceptions.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.1.2 version this method checks if PDO extension is loaded and if not, then throws LogicException. This exception class is part of SPL library and was introduced in PHP 5.1 so if you use PHP 5.0 you will need to load {@link compat.php compat.php library} first.
+ * </p>
+ * 
+ * @version 0.1.3
  * @param int|null $driver Database driver type.
  * @param array $params Connection info.
- * @throws Exception When driver is not supported.
- * @example examples/connect.php connect.php
+ * @throws E_OTS_Generic When driver is not supported or not supported.
+ * @throws LogicException When PDO extension is not loaded.
+ * @throws PDOException On PDO operation error.
+ * @example examples/quickstart.php quickstart.php
+ * @tutorial POT/Basics.pkg#basics.database
  */
     public function connect($driver, $params)
     {
+        // checks if PDO extension is loaded
+        if( !extension_loaded('PDO') )
+        {
+            throw new LogicException();
+        }
+
         // $params['driver'] option instead of $driver
         if( !isset($driver) )
         {
@@ -438,7 +460,7 @@ class POT
             }
             else
             {
-                throw new Exception('You must specify database driver to connect with.');
+                throw new E_OTS_Generic(E_OTS_Generic::CONNECT_NO_DRIVER);
             }
         }
         unset($params['driver']);
@@ -468,13 +490,14 @@ class POT
 
             // unsupported driver
             default:
-                throw new Exception('Driver \'' . $driver . '\' is not supported.');
+                throw new E_OTS_Generic(E_OTS_Generic::CONNECT_INVALID_DRIVER);
         }
+
+        $this->db->setAttribute(PDO_ATTR_ERRMODE, PDO_ERRMODE_EXCEPTION);
+//        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
 /**
- * Creates OTServ DAO class instance.
- * 
  * @version 0.1.0
  * @param string $class Class name.
  * @return IOTS_DAO OTServ database object.
@@ -489,54 +512,28 @@ class POT
 /**
  * Queries server status.
  * 
- * Sends 'info' packet to OTS server and return output.
+ * <p>
+ * Sends 'info' packet to OTS server and return output. Returns {@link OTS_InfoRespond OTS_InfoRespond} (wrapper for XML data) with results or <var>false</var> if server is online.
+ * </p>
  * 
- * @version 0.0.2
+ * <p>
+ * Note: Since 0.1.4 version this method is static so you can call it staticly, but it is also still possible to call it in dynamic context.
+ * </p>
+ * 
+ * @version 0.1.4
  * @since 0.0.2
  * @param string $server Server IP/domain.
  * @param int $port OTServ port.
  * @return OTS_InfoRespond|bool Respond content document (false when server is offline).
- * @example examples/info.php
+ * @throws DOMException On DOM operation error.
+ * @example examples/info.php info.php
+ * @tutorial POT/Server_status.pkg
+ * @deprecated 0.1.4 Use OTS_ServerInfo->status().
  */
-    public function serverStatus($server, $port)
+    public static function serverStatus($server, $port)
     {
-        // connects to server
-        // gives maximum 5 seconds to connect
-        $socket = fsockopen($server, $port, $error, $message, 5);
-
-        // if connected then checking statistics
-        if($socket)
-        {
-            // sets 5 second timeout for reading and writing
-            stream_set_timeout($socket, 5);
-
-            // sends packet with request
-            // 06 - length of packet, 255, 255 is the comamnd identifier, 'info' is a request
-            fwrite($socket, chr(6) . chr(0) . chr(255) . chr(255) . 'info');
-
-            // reads respond
-            $data = stream_get_contents($socket);
-
-            // closing connection to current server
-            fclose($socket);
-
-            // sometimes server returns empty info
-            if( empty($data) )
-            {
-                // returns offline state
-                return false;
-            }
-
-            // loads respond XML
-            $info = new OTS_InfoRespond();
-            $info->loadXML($data);
-            return $info;
-        }
-        // returns offline state
-        else
-        {
-            return false;
-        }
+        $status = new OTS_ServerInfo($server, $port);
+        return $status->status();
     }
 
 /**
@@ -550,10 +547,13 @@ class POT
  * It is also important as serialised objects after unserialisation needs to be re-initialised with database connection.
  * </p>
  * 
+ * <p>
+ * Note that before you will be able to fetch connection handler, you have to connect to database using {@link POT::connect() connect() method}.
+ * </p>
+ * 
  * @version 0.0.4
  * @since 0.0.4
  * @return PDO Database connection handle.
- * @internal You should not call this function in your external code without real need.
  */
     public function getDBHandle()
     {
@@ -563,102 +563,113 @@ class POT
 /**
  * Bans given IP number.
  * 
+ * <p>
  * Adds IP/mask ban. You can call this function with only one parameter to ban only given IP address without expiration.
+ * </p>
  * 
- * @version 0.0.5
+ * <p>
+ * Second parameter is mask which you can use to ban entire IP classes. Third parameter is time after which ban will expire. However - this is not lifetime - it is timestamp of moment, when ban should expire (and <var>0</var> means forever).
+ * </p>
+ * 
+ * @version 0.1.5
  * @since 0.0.5
  * @param string $ip IP to ban.
  * @param string $mask Mask for ban (by default bans only given IP).
  * @param int $time Time for time until expires (0 - forever).
+ * @throws PDOException On PDO operation error.
+ * @deprecated 0.1.5 Use OTS_IPBan class.
  */
     public function banIP($ip, $mask = '255.255.255.255', $time = 0)
     {
-        // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
         // it's because that PHP integer types are signed
-        if($ip == '255.255.255.255')
-        {
-            $ip = 4294967295;
-        }
-        else
-        {
-            $ip = sprintf('%u', ip2long($ip) );
-        }
-
-        if($mask == '255.255.255.255')
-        {
-            $mask = 4294967295;
-        }
-        else
-        {
-            $mask = sprintf('%u', ip2long($mask) );
-        }
-
-        $this->db->query('INSERT INTO ' . $this->db->tableName('bans') . ' (' . $this->db->fieldName('type') . ', ' . $this->db->fieldName('ip') . ', ' . $this->db->fieldName('mask') . ', ' . $this->db->fieldName('time') . ') VALUES (' . self::BAN_IP . ', ' . $ip . ', ' . $mask . ', ' . (int) $time . ')');
+        $ip = sprintf('%u', ip2long($ip) );
+        $mask = sprintf('%u', ip2long($mask) );
+        
+        // creates ban entry
+        $ban = new OTS_IPBan();
+        $ban->setValue($ip);
+        $ban->setParam($mask);
+        $ban->setExpires($time);
+        $ban->setAdded( time() );
+        $ban->activate();
+        $ban->save();
     }
 
 /**
  * Deletes ban from given IP number.
  * 
- * Removes given IP/mask ban.
+ * <p>
+ * Removes given IP/mask ban. Remember to specify also mask if you banned intire IP class.
+ * </p>
  * 
- * @version 0.0.5
+ * @version 0.1.5
  * @since 0.0.5
  * @param string $ip IP to ban.
- * @param string $mask Mask for ban (by default 255.255.255.255).
+ * @param string $mask Mask for ban (by default 255.255.255.255) - not used thought.
+ * @throws PDOException On PDO operation error.
+ * @deprecated 0.1.5 Use OTS_IPBan class.
  */
     public function unbanIP($ip, $mask = '255.255.255.255')
     {
-        // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
         // it's because that PHP integer types are signed
-        if($ip == '255.255.255.255')
-        {
-            $ip = 4294967295;
-        }
-        else
-        {
-            $ip = sprintf('%u', ip2long($ip) );
-        }
+        $ip = sprintf('%u', ip2long($ip) );
+        
+        // mask is not used anymore
 
-        if($mask == '255.255.255.255')
-        {
-            $mask = 4294967295;
-        }
-        else
-        {
-            $mask = sprintf('%u', ip2long($mask) );
-        }
-
-        $this->db->query('DELETE FROM ' . $this->db->tableName('bans') . ' WHERE ' . $this->db->fieldName('type') . ' = ' . self::BAN_IP . ' AND ' . $this->db->fieldName('ip') . ' = ' . $ip . ' AND ' . $this->db->fieldName('mask') . ' = ' . $mask);
+        // deletes ban entry
+        $ban = new OTS_IPBan();
+        $ban->find($ip);
+        $ban->delete();
     }
 
 /**
  * Checks if given IP is banned.
  * 
- * @version 0.0.5
+ * @version 0.1.5
  * @since 0.0.5
  * @param string $ip IP to ban.
  * @return bool True if IP number is banned, false otherwise.
+ * @throws PDOException On PDO operation error.
+ * @deprecated 0.1.5 Use OTS_IPBan class.
  */
     public function isIPBanned($ip)
     {
-        // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
         // it's because that PHP integer types are signed
-        if($ip == '255.255.255.255')
-        {
-            $ip = 4294967295;
-        }
-        else
-        {
-            $ip = sprintf('%u', ip2long($ip) );
-        }
-
-        $ban = $this->db->query('SELECT COUNT(' . $this->db->fieldName('type') . ') AS ' . $this->db->fieldName('count') . ' FROM ' . $this->db->tableName('bans') . ' WHERE ' . $this->db->fieldName('ip') . ' & ' . $this->db->fieldName('mask') . ' = ' . $ip . ' & ' . $this->db->fieldName('mask') . ' AND (' . $this->db->fieldName('time') . ' > ' . time() . ' OR ' . $this->db->fieldName('time') . ' = 0) AND ' . $this->db->fieldName('type') . ' = ' . self::BAN_IP)->fetch();
-        return $ban['count'] > 0;
+        $ip = sprintf('%u', ip2long($ip) );
+        
+        // finds ban entry
+        $ban = new OTS_IPBan();
+        $ban->find($ip, $mask);
+        return $ban->isLoaded() && $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() );
     }
 
 /**
- * Creates lists filter.
+ * Returns list of banned IPs as list of pairs (ip => IP, mask => MASK).
  * 
+ * @version 0.1.5
+ * @since 0.1.3
+ * @return array List of banned IPs.
+ * @throws PDOException On PDO operation error.
+ * @deprecated 0.1.5 Use OTS_IPBans_List class.
+ */
+    public function bannedIPs()
+    {
+        $list = array();
+
+        // generates bans array
+        foreach( new OTS_IPBans_List() as $ban)
+        {
+            // checks if ban is active
+            if( $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() ) )
+            {
+                $list[] = array('ip' => $ban->getValue(), 'mask' => $ban->getParam() );
+            }
+        }
+
+        return $list;
+    }
+
+/**
  * @version 0.1.0
  * @since 0.0.5
  * @return OTS_SQLFilter Filter object.
@@ -681,9 +692,18 @@ class POT
 /**
  * Loads vocations list.
  * 
+ * <p>
+ * This method loads vocations from given file. You can create local instances of vocations lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.1.0 version this method loads instance of {@link OTS_VocationsList OTS_VocationsList} which you should fetch to get vocations info instead of calling POT class methods.
+ * </p>
+ * 
  * @version 0.1.0
  * @since 0.0.5
  * @param string $file vocations.xml file location.
+ * @throws DOMException On DOM operation error.
  */
     public function loadVocations($file)
     {
@@ -693,6 +713,10 @@ class POT
 
 /**
  * Checks if vocations are loaded.
+ * 
+ * <p>
+ * You should use this method before fetching vocations list in new enviroment, or after loading new list to make sure it is loaded.
+ * </p>
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -717,7 +741,11 @@ class POT
 /**
  * Returns vocations list object.
  * 
- * @version 0.1.0
+ * <p>
+ * Note: Since 0.1.0 version this method returns loaded instance of {@link OTS_VocationsList OTS_VocationsList} instead of array. However {@link OTS_VocationsList OTS_VocationsList class} provides full array interface including Iterator, Countable and ArrayAccess interfaces so your code will work fine with it.
+ * </p>
+ * 
+ * @version 0.1.3
  * @since 0.0.5
  * @return OTS_VocationsList List of vocations.
  * @throws E_OTS_NotLoaded If vocations list is not loaded.
@@ -728,20 +756,17 @@ class POT
         {
             return $this->vocations;
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns vocation's ID.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.0.5
  * @param string $name Vocation.
- * @return int|bool ID (false if not found).
+ * @return int ID.
  * @throws E_OTS_NotLoaded If vocations list is not loaded.
+ * @deprecated 0.1.3 Use POT::getVocationsList()->getVocationId().
  */
     public function getVocationId($name)
     {
@@ -749,20 +774,17 @@ class POT
         {
             return $this->vocations->getVocationId($name);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns name of given vocation's ID.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.0.5
  * @param int $id Vocation ID.
- * @return string|bool Name (false if not found).
+ * @return string Name.
  * @throws E_OTS_NotLoaded If vocations list is not loaded.
+ * @deprecated 0.1.3 Use POT::getVocationsList()->getVocationName().
  */
     public function getVocationName($id)
     {
@@ -770,10 +792,8 @@ class POT
         {
             return $this->vocations->getVocationName($id);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
@@ -788,9 +808,18 @@ class POT
 /**
  * Loads monsters mapping file.
  * 
+ * <p>
+ * This method loads monsters list from <var>monsters.xml</var> file in given directory. You can create local instances of monsters lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.1.0 version this method loads instance of {@link OTS_MonstersList OTS_MonstersList} which you should fetch to get vocations info instead of calling POT class methods.
+ * </p>
+ * 
  * @version 0.1.0
  * @since 0.0.6
  * @param string $path Monsters directory.
+ * @throws DOMException On DOM operation error.
  */
     public function loadMonsters($path)
     {
@@ -799,6 +828,10 @@ class POT
 
 /**
  * Checks if monsters are loaded.
+ * 
+ * <p>
+ * You should use this method before fetching monsters list in new enviroment, or after loading new list to make sure it is loaded.
+ * </p>
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -823,7 +856,11 @@ class POT
 /**
  * Returns list of laoded monsters.
  * 
- * @version 0.1.0
+ * <p>
+ * Note: Since 0.1.0 version this method returns loaded instance of {@link OTS_MonstersList OTS_MonstersList} instead of array. However {@link OTS_MonstersList OTS_MonstersList class} provides full array interface including Iterator, Countable and ArrayAccess interfaces so your code will work fine with it.
+ * </p>
+ * 
+ * @version 0.1.3
  * @since 0.0.6
  * @return OTS_MonstersList List of monsters.
  * @throws E_OTS_NotLoaded If monsters list is not loaded.
@@ -834,20 +871,17 @@ class POT
         {
             return $this->monsters;
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns loaded data of given monster.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.0.6
  * @param string $name Monster name.
- * @return OTS_Monster|null Monster data (null if not exists).
+ * @return OTS_Monster Monster data.
  * @throws E_OTS_NotLoaded If monsters list is not loaded.
+ * @deprecated 0.1.3 Use POT::getMonstersList()->getMonster().
  */
     public function getMonster($name)
     {
@@ -855,10 +889,8 @@ class POT
         {
             return $this->monsters->getMonster($name);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
@@ -873,9 +905,18 @@ class POT
 /**
  * Loads spells list.
  * 
+ * <p>
+ * This method loads spells list from given file. You can create local instances of spells lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.1.0 version this method loads instance of {@link OTS_SpellsList OTS_SpellsList} which you should fetch to get vocations info instead of calling POT class methods.
+ * </p>
+ * 
  * @version 0.1.0
  * @since 0.0.7
  * @param string $file Spells file name.
+ * @throws DOMException On DOM operation error.
  */
     public function loadSpells($file)
     {
@@ -884,6 +925,10 @@ class POT
 
 /**
  * Checks if spells are loaded.
+ * 
+ * <p>
+ * You should use this method before fetching spells list in new enviroment, or after loading new list to make sure it is loaded.
+ * </p>
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -908,7 +953,7 @@ class POT
 /**
  * Returns list of laoded spells.
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return OTS_SpellsList List of spells.
  * @throws E_OTS_NotLoaded If spells list is not loaded.
@@ -919,19 +964,16 @@ class POT
         {
             return $this->spells;
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns list of runes.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.0.7
  * @return array List of rune names.
  * @throws E_OTS_NotLoaded If spells list is not loaded.
+ * @deprecated 0.1.3 Use POT::getSpellsList()->getRunesList().
  */
     public function getRunesList()
     {
@@ -939,20 +981,17 @@ class POT
         {
             return $this->spells->getRunesList();
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns given rune spell.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.0.7
  * @param string $name Rune name.
- * @return OTS_Spell|null Rune spell wrapper (null if rune does not exist).
+ * @return OTS_Spell Rune spell wrapper (null if rune does not exist).
  * @throws E_OTS_NotLoaded If spells list is not loaded.
+ * @deprecated 0.1.3 Use POT::getSpellsList()->getRune().
  */
     public function getRune($name)
     {
@@ -960,19 +999,16 @@ class POT
         {
             return $this->spells->getRune($name);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns list of instants.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.0.7
  * @return array List of instant spells names.
  * @throws E_OTS_NotLoaded If spells list is not loaded.
+ * @deprecated 0.1.3 Use POT::getSpellsList()->getInstantsList().
  */
     public function getInstantsList()
     {
@@ -980,20 +1016,17 @@ class POT
         {
             return $this->spells->getInstantsList();
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns given instant spell.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.0.7
  * @param string $name Spell name.
- * @return OTS_Spell|null Instant spell wrapper (null if rune does not exist).
+ * @return OTS_Spell Instant spell wrapper (null if rune does not exist).
  * @throws E_OTS_NotLoaded If spells list is not loaded.
+ * @deprecated 0.1.3 Use POT::getSpellsList()->getInstant().
  */
     public function getInstant($name)
     {
@@ -1001,19 +1034,16 @@ class POT
         {
             return $this->spells->getInstant($name);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns list of conjure spells.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.0.7
  * @return array List of conjure spells names.
  * @throws E_OTS_NotLoaded If spells list is not loaded.
+ * @deprecated 0.1.3 Use POT::getSpellsList()->getConjuresList().
  */
     public function getConjuresList()
     {
@@ -1021,20 +1051,17 @@ class POT
         {
             return $this->spells->getConjuresList();
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns given conjure spell.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.0.7
  * @param string $name Spell name.
- * @return OTS_Spell|null Conjure spell wrapper (null if rune does not exist).
+ * @return OTS_Spell Conjure spell wrapper (null if rune does not exist).
  * @throws E_OTS_NotLoaded If spells list is not loaded.
+ * @deprecated 0.1.3 Use POT::getSpellsList()->getConjure().
  */
     public function getConjure($name)
     {
@@ -1042,10 +1069,8 @@ class POT
         {
             return $this->spells->getConjure($name);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
@@ -1060,9 +1085,14 @@ class POT
 /**
  * Loads houses list file.
  * 
+ * <p>
+ * This method loads houses list from given file. You can create local instances of houses lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
+ * </p>
+ * 
  * @version 0.1.0
  * @since 0.1.0
  * @param string $path Houses file.
+ * @throws DOMException On DOM operation error.
  */
     public function loadHouses($path)
     {
@@ -1071,6 +1101,10 @@ class POT
 
 /**
  * Checks if houses are loaded.
+ * 
+ * <p>
+ * You should use this method before fetching houses list in new enviroment, or after loading new list to make sure it is loaded.
+ * </p>
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -1095,7 +1129,7 @@ class POT
 /**
  * Returns list of laoded houses.
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return OTS_HousesList List of houses.
  * @throws E_OTS_NotLoaded If houses list is not loaded.
@@ -1106,20 +1140,17 @@ class POT
         {
             return $this->houses;
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns house information.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @param int $id House ID.
- * @return OTS_House|null House information wrapper (null if not found house).
+ * @return OTS_House House information wrapper.
  * @throws E_OTS_NotLoaded If houses list is not loaded.
+ * @deprecated 0.1.3 Use POT::getHousesList()->getHouse().
  */
     public function getHouse($id)
     {
@@ -1127,20 +1158,17 @@ class POT
         {
             return $this->houses->getHouse($id);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns ID of house with given name.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @param string $name House name.
- * @return int|bool House ID (false if not found).
+ * @return int House ID.
  * @throws E_OTS_NotLoaded If houses list is not loaded.
+ * @deprecated 0.1.3 Use POT::getHousesList()->getHouseId().
  */
     public function getHouseId($name)
     {
@@ -1148,10 +1176,8 @@ class POT
         {
             return $this->houses->getHouseId($name);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
@@ -1165,6 +1191,10 @@ class POT
 
 /**
  * Presets cache handler for items loader.
+ * 
+ * <p>
+ * Use this method in order to preset cache handler for items list that you want to load into global POT instance. Note that this driver will be set for global resource only. If you will create local items list instances they won't use this driver automaticly.
+ * </p>
  * 
  * @param IOTS_FileCache $cache Cache handler (skip this parameter to reset cache handler to null).
  */
@@ -1185,9 +1215,14 @@ class POT
 /**
  * Loads items list.
  * 
+ * <p>
+ * This method loads items list from <var>items.xml</var> and <var>items.otb</var> files from given directory. You can create local instances of items lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
+ * </p>
+ * 
  * @version 0.1.0
  * @since 0.1.0
  * @param string $path Items information directory.
+ * @throws E_OTS_FileLoaderError On binary file loading error.
  */
     public function loadItems($path)
     {
@@ -1204,6 +1239,10 @@ class POT
 
 /**
  * Checks if items are loaded.
+ * 
+ * <p>
+ * You should use this method before fetching items list in new enviroment, or after loading new list to make sure it is loaded.
+ * </p>
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -1228,7 +1267,7 @@ class POT
 /**
  * Returns list of laoded items.
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return OTS_ItemsList List of items.
  * @throws E_OTS_NotLoaded If items list is not loaded.
@@ -1239,20 +1278,17 @@ class POT
         {
             return $this->items;
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns item type instance.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @param int $id Item type ID.
- * @return OTS_ItemType|null Item type object (null if not found).
+ * @return OTS_ItemType Item type object.
  * @throws E_OTS_NotLoaded If items list is not loaded.
+ * @deprecated 0.1.3 Use POT::getItemsList()->getItemType().
  */
     public function getItemType($id)
     {
@@ -1260,20 +1296,17 @@ class POT
         {
             return $this->items->getItemType($id);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns ID of type with given name.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @param string $name Item type name.
- * @return int|bool Type ID (false if not found).
+ * @return int Type ID.
  * @throws E_OTS_NotLoaded If items list is not loaded.
+ * @deprecated 0.1.3 Use POT::getItemsList()->getItemTypeId().
  */
     public function getItemTypeId($name)
     {
@@ -1281,10 +1314,8 @@ class POT
         {
             return $this->items->getItemTypeId($name);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
@@ -1298,6 +1329,10 @@ class POT
 
 /**
  * Presets cache handler for OTBM loader.
+ * 
+ * <p>
+ * Use this method in order to preset cache handler for map that you want to load into global POT instance. Note that this driver will be set for global resource only. If you will create local OTBM instances they won't use this driver automaticly.
+ * </p>
  * 
  * @param IOTS_FileCache $cache Cache handler (skip this parameter to reset cache handler to null).
  */
@@ -1318,7 +1353,13 @@ class POT
 /**
  * Loads OTBM map.
  * 
+ * <p>
+ * This method loads OTBM map from given file. You can create local instances of maps directly - calling this method will associate loaded map with POT class instance and will make it available everywhere in the code.
+ * </p>
+ * 
+ * <p>
  * Note: This method will also load houses list associated with map.
+ * </p>
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -1340,6 +1381,10 @@ class POT
 
 /**
  * Checks if OTBM is loaded.
+ * 
+ * <p>
+ * You should use this method before fetching map information in new enviroment, or after loading new map to make sure it is loaded.
+ * </p>
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -1364,7 +1409,7 @@ class POT
 /**
  * Returns loaded map.
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return OTS_OTBMFile Loaded OTBM file.
  * @throws E_OTS_NotLoaded If map is not loaded.
@@ -1375,19 +1420,16 @@ class POT
         {
             return $this->map;
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns map width.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return int Map width.
  * @throws E_OTS_NotLoaded If map is not loaded.
+ * @deprecated 0.1.3 Use POT::getMap()->getMapWidth().
  */
     public function getMapWidth()
     {
@@ -1395,19 +1437,16 @@ class POT
         {
             return $this->map->getWidth();
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns map height.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return int Map height.
  * @throws E_OTS_NotLoaded If map is not loaded.
+ * @deprecated 0.1.3 Use POT::getMap()->getMapHeight().
  */
     public function getMapHeight()
     {
@@ -1415,19 +1454,16 @@ class POT
         {
             return $this->map->getHeight();
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns map description.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return string Map description.
  * @throws E_OTS_NotLoaded If map is not loaded.
+ * @deprecated 0.1.3 Use POT::getMap()->getMapDescription().
  */
     public function getMapDescription()
     {
@@ -1435,20 +1471,17 @@ class POT
         {
             return $this->map->getDescription();
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns town's ID.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @param string $name Town.
- * @return int|bool ID (false if not found).
+ * @return int ID.
  * @throws E_OTS_NotLoaded If map is not loaded.
+ * @deprecated 0.1.3 Use POT::getMap()->getTownId().
  */
     public function getTownId($name)
     {
@@ -1456,20 +1489,17 @@ class POT
         {
             return $this->map->getTownId($name);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
- * Returns name of given town's ID.
- * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @param int $id Town ID.
- * @return string|bool Name (false if not found).
+ * @return string Name.
  * @throws E_OTS_NotLoaded If map is not loaded.
+ * @deprecated 0.1.3 Use POT::getMap()->getTownName().
  */
     public function getTownName($id)
     {
@@ -1477,10 +1507,8 @@ class POT
         {
             return $this->map->getTownName($id);
         }
-        else
-        {
-            throw new E_OTS_NotLoaded();
-        }
+
+        throw new E_OTS_NotLoaded();
     }
 
 /**
@@ -1493,7 +1521,7 @@ class POT
     private $display;
 
 /**
- * Sets display driver.
+ * Sets display driver for database-related resources.
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -1506,6 +1534,10 @@ class POT
 
 /**
  * Checks if any display driver is loaded.
+ * 
+ * <p>
+ * This method is mostly used internaly by POT classes.
+ * </p>
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -1530,7 +1562,11 @@ class POT
 /**
  * Returns current display driver.
  * 
- * @version 0.1.0
+ * <p>
+ * This method is mostly used internaly by POT classes.
+ * </p>
+ * 
+ * @version 0.1.3
  * @since 0.1.0
  * @return IOTS_Display Current display driver.
  * @throws E_OTS_NotLoaded If display driver is not loaded.
@@ -1541,10 +1577,105 @@ class POT
         {
             return $this->display;
         }
-        else
+
+        throw new E_OTS_NotLoaded();
+    }
+
+/**
+ * Display driver for non-database resources.
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ * @var IOTS_DataDisplay
+ */
+    private $dataDisplay;
+
+/**
+ * Sets display driver for non-database resources.
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ * @param IOTS_DataDisplay $dataDisplay Display driver.
+ */
+    public function setDataDisplayDriver(IOTS_DataDisplay $dataDisplay)
+    {
+        $this->dataDisplay = $dataDisplay;
+    }
+
+/**
+ * Checks if any display driver for non-database resources is loaded.
+ * 
+ * <p>
+ * This method is mostly used internaly by POT classes.
+ * </p>
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ * @return bool True if driver is loaded.
+ */
+    public function isDataDisplayDriverLoaded()
+    {
+        return isset($this->dataDisplay);
+    }
+
+/**
+ * Unloads display driver.
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ */
+    public function unloadDataDisplayDriver()
+    {
+        unset($this->dataDisplay);
+    }
+
+/**
+ * Returns current display driver.
+ * 
+ * <p>
+ * This method is mostly used internaly by POT classes.
+ * </p>
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ * @return IOTS_DataDisplay Current display driver.
+ * @throws E_OTS_NotLoaded If display driver is not loaded.
+ */
+    public function getDataDisplayDriver()
+    {
+        if( isset($this->dataDisplay) )
         {
-            throw new E_OTS_NotLoaded();
+            return $this->dataDisplay;
         }
+
+        throw new E_OTS_NotLoaded();
+    }
+
+/**
+ * Returns OTServ database information.
+ * 
+ * <p>
+ * Especialy currently only schema version is available (via <i>'version'</i> key).
+ * </p>
+ * 
+ * @version 0.1.6
+ * @since 0.1.6
+ * @return array List of schema settings.
+ * @throws PDOException On PDO operation error.
+ * @example examples/schema.php schema.php
+ */
+    public function getSchemaInfo()
+    {
+        $info = array();
+
+        // generates associative array
+        /// FIXME: 0.2.0 - Use PDO::FETCH_KEY_ASSOC
+        foreach( $this->db->query('SELECT ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('value') . ' FROM ' . $this->db->tableName('schema_info') ) as $row)
+        {
+            $info[ $row['name'] ] = $row['version'];
+        }
+
+        return $info;
     }
 }
 
@@ -1555,8 +1686,6 @@ class POT
 if( !defined('PDO_PARAM_STR') )
 {
 /**
- * Defines outdated PHP 5.0 constant on PHP 5.1 and newer versions so we can use it all over the POT.
- * 
  * @ignore
  * @version 0.0.7
  * @since 0.0.7
@@ -1568,14 +1697,34 @@ if( !defined('PDO_PARAM_STR') )
 if( !defined('PDO_ATTR_STATEMENT_CLASS') )
 {
 /**
- * Defines outdated PHP 5.0 constant on PHP 5.1 and newer versions so we can use it all over the POT.
- * 
  * @ignore
  * @version 0.0.7
  * @since 0.0.7
  * @deprecated Use PDO::ATTR_STATEMENT_CLASS, this is for PHP 5.0 compatibility.
  */
     define('PDO_ATTR_STATEMENT_CLASS', PDO::ATTR_STATEMENT_CLASS);
+}
+
+if( !defined('PDO_ATTR_ERRMODE') )
+{
+/**
+ * @ignore
+ * @version 0.1.3
+ * @since 0.1.3
+ * @deprecated Use PDO::ATTR_ERRMODE, this is for PHP 5.0 compatibility.
+ */
+    define('PDO_ATTR_ERRMODE', PDO::ATTR_ERRMODE);
+}
+
+if( !defined('PDO_ERRMODE_EXCEPTION') )
+{
+/**
+ * @ignore
+ * @version 0.1.3
+ * @since 0.1.3
+ * @deprecated Use PDO::ERRMODE_EXCEPTION, this is for PHP 5.0 compatibility.
+ */
+    define('PDO_ERRMODE_EXCEPTION', PDO::ERRMODE_EXCEPTION);
 }
 
 /**#@-*/

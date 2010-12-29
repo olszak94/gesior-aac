@@ -2,14 +2,13 @@
 
 /**#@+
  * @version 0.0.1
- * @since 0.0.1
  */
 
 /**
  * @package POT
- * @version 0.1.0
+ * @version 0.1.5
  * @author Wrzasq <wrzasq@gmail.com>
- * @copyright 2007 (C) by Wrzasq
+ * @copyright 2007 - 2008 (C) by Wrzasq
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
@@ -17,46 +16,151 @@
  * OTServ account abstraction.
  * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.5
+ * @property string $name Account name.
  * @property string $password Password.
  * @property string $eMail Email address.
+ * @property int $premiumEnd Timestamp of PACC end.
  * @property bool $blocked Blocked flag state.
+ * @property bool $deleted Deleted flag state.
+ * @property bool $warned Warned flag state.
  * @property bool $banned Ban state.
  * @property-read int $id Account number.
  * @property-read bool $loaded Loaded state.
  * @property-read OTS_Players_List $playersList Characters of this account.
+ * @property-read int $access Access level.
+ * @tutorial POT/Accounts.pkg
  */
-class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
+class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 {
 /**
  * Account data.
  * 
  * @var array
+ * @version 0.1.5
  */
-    private $data = array('email' => '', 'blocked' => false);
+    private $data = array('email' => '', 'premend' => 0, 'blocked' => false, 'deleted' => false, 'warned' => false);
 
 /**
  * Creates new account.
  * 
- * Create new account in given range (1 - 9999999 by default).
- * 
  * <p>
- * Remember! This method sets blocked flag to true after account creation!
+ * This method creates new account with given name. Account number is generated automaticly and saved into {@link OTS_Account::getId() ID field}.
  * </p>
  * 
- * @version 0.0.6
+ * <p>
+ * If you won't specify account name then random one will be generated.
+ * </p>
+ * 
+ * <p>
+ * If you use own account name then it will be returned after success, and exception will be generated if it will be alredy used as name will be simply used in query with account create attempt.
+ * </p>
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ * @param string $name Account name.
+ * @return string Account name.
+ * @throws PDOException On PDO operation error.
+ * @example examples/create.php create.php
+ * @tutorial POT/Accounts.pkg#create
+ */
+    public function createNamed($name = null)
+    {
+        // if name is not passed then it will be generated randomly
+        if( !isset($name) )
+        {
+            $exist = array();
+
+            // reads already existing names
+            foreach( $this->db->query('SELECT ' . $this->db->fieldName('name') . ' FROM ' . $this->db->tableName('accounts') )->fetchAll() as $account)
+            {
+                $exist[] = $account['name'];
+            }
+
+            // initial name
+            $name = uniqid();
+
+            // repeats until name is unique
+            while( in_array($name, $exist) )
+            {
+                $name .= '_';
+            }
+        }
+
+        // saves blank account info
+        $this->db->query('INSERT INTO ' . $this->db->tableName('accounts') . ' (' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ') VALUES (' . $this->db->quote($name) . ', \'\', \'\')');
+
+        // reads created account's ID
+        $this->data['id'] = $this->db->lastInsertId();
+
+        // return name of newly created account
+        return $name;
+    }
+
+/**
+ * Creates new account.
+ * 
+ * <p>
+ * Create new account in given range (1 - 9999999 by default).
+ * </p>
+ * 
+ * <p>
+ * Note: If account name won't be speciffied random will be created.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method doesn't require buffered queries.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.1.5 version you should use {@link OTS_Account::createNamed() createNamed() method} since OTServ now uses account names.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.1.1 version this method throws {@link E_OTS_Generic E_OTS_Generic} exceptions instead of general Exception class objects. Since all exception classes are child classes of Exception class so your old code will still handle all exceptions.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.1.5 version this method no longer creates account as blocked.
+ * </p>
+ * 
+ * @version 0.1.5
  * @param int $min Minimum number.
  * @param int $max Maximum number.
+ * @param string $name Account name.
  * @return int Created account number.
- * @example examples/account.php account.php
- * @throws Exception When there are no free account numbers.
+ * @throws E_OTS_Generic When there are no free account numbers.
+ * @throws PDOException On PDO operation error.
+ * @deprecated 0.1.5 Use createNamed().
  */
-    public function create($min = 1, $max = 9999999)
+    public function create($min = 1, $max = 9999999, $name = null)
     {
         // generates random account number
         $random = rand($min, $max);
         $number = $random;
         $exist = array();
+
+        // if name is not passed then it will be generated randomly
+        if( !isset($name) )
+        {
+            // reads already existing names
+            foreach( $this->db->query('SELECT ' . $this->db->fieldName('name') . ' FROM ' . $this->db->tableName('accounts') )->fetchAll() as $account)
+            {
+                $exist[] = $account['name'];
+            }
+
+            // initial name
+            $name = uniqid();
+
+            // repeats until name is unique
+            while( in_array($name, $exist) )
+            {
+                $name .= '_';
+            }
+
+            // resets array for account numbers loop
+            $exist = array();
+        }
 
         // reads already existing accounts
         foreach( $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('accounts') )->fetchAll() as $account)
@@ -85,33 +189,20 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
             // we checked all possibilities
             if($number == $random)
             {
-                throw new Exception('No free account number are available.');
+                throw new E_OTS_Generic(E_OTS_Generic::CREATE_ACCOUNT_IMPOSSIBLE);
             }
         }
 
         // saves blank account info
         $this->data['id'] = $number;
-        $this->data['blocked'] = true;
 
-        $this->db->query('INSERT INTO ' . $this->db->tableName('accounts') . ' (' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('blocked') . ') VALUES (' . $number . ', \'\', \'\', 1)');
+        $this->db->query('INSERT INTO ' . $this->db->tableName('accounts') . ' (' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ') VALUES (' . $number . ', ' . $this->db->quote($name) . ', \'\', \'\')');
 
         return $number;
     }
 
 /**
- * Creates new account.
- * 
- * Create new account in given range (1 - 9999999 by default) in given group.
- * 
- * <p>
- * Remember! This method sets blocked flag to true after account creation!
- * </p>
- * 
- * <p>
- * IMPORTANT: Since 0.0.6 there isn't group_id field which this method was created for. You should use {@link OTS_Account::create() create()} method.
- * </p>
- * 
- * @version 0.0.6_SVN
+ * @version 0.0.6
  * @since 0.0.4
  * @param OTS_Group $group Group to be assigned to account.
  * @param int $min Minimum number.
@@ -129,21 +220,47 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
  * 
  * @version 0.0.6
  * @param int $id Account number.
+ * @throws PDOException On PDO operation error.
  */
     public function load($id)
     {
         // SELECT query on database
-        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('blocked') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('premend') . ', ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('deleted') . ', ' . $this->db->fieldName('warned') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+    }
+
+/**
+ * Loads account by it's name.
+ * 
+ * <p>
+ * Note: Since 0.1.5 version this method loads account by it's name not by e-mail address. To find account by it's e-mail address use {@link OTS_Account::findByEMail() findByEMail() method}.
+ * </p>
+ * 
+ * @version 0.1.5
+ * @since 0.0.2
+ * @param string $name Account's name.
+ * @throws PDOException On PDO operation error.
+ */
+    public function find($name)
+    {
+        // finds player's ID
+        $id = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($name) )->fetch();
+
+        // if anything was found
+        if( isset($id['id']) )
+        {
+            $this->load($id['id']);
+        }
     }
 
 /**
  * Loads account by it's e-mail address.
  * 
- * @version 0.0.5
- * @since 0.0.2
+ * @version 0.1.5
+ * @since 0.1.5
  * @param string $email Account's e-mail address.
+ * @throws PDOException On PDO operation error.
  */
-    public function find($email)
+    public function findByEMail($email)
     {
         // finds player's ID
         $id = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('email') . ' = ' . $this->db->quote($email) )->fetch();
@@ -168,8 +285,17 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Updates account in database.
  * 
- * @version 0.0.6
- * @throws E_OTS_NotLoaded False if account doesn't have ID assigned.
+ * <p>
+ * Unlike other DAO objects account can't be saved without ID being set. It means that you can't just save unexisting account to automaticly create it. First you have to create record by using {@link OTS_Account::createName() createNamed() method}
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded exception} instead of triggering E_USER_WARNING.
+ * </p>
+ * 
+ * @version 0.1.5
+ * @throws E_OTS_NotLoaded If account doesn't have ID assigned.
+ * @throws PDOException On PDO operation error.
  */
     public function save()
     {
@@ -179,11 +305,15 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
         }
 
         // UPDATE query on database
-        $this->db->query('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName('password') . ' = ' . $this->db->quote($this->data['password']) . ', ' . $this->db->fieldName('email') . ' = ' . $this->db->quote($this->data['email']) . ', ' . $this->db->fieldName('blocked') . ' = ' . (int) $this->data['blocked'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+        $this->db->query('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName('password') . ' = ' . $this->db->quote($this->data['password']) . ', ' . $this->db->fieldName('email') . ' = ' . $this->db->quote($this->data['email']) . ', ' . $this->db->fieldName('premend') . ' = ' . $this->data['premend'] . ', ' . $this->db->fieldName('blocked') . ' = ' . (int) $this->data['blocked'] . ', ' . $this->db->fieldName('deleted') . ' = ' . (int) $this->data['deleted'] . ', ' . $this->db->fieldName('warned') . ' = ' . (int) $this->data['warned'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
     }
 
 /**
  * Account number.
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded} exception instead of triggering E_USER_WARNING.
+ * </p>
  * 
  * @version 0.0.3
  * @return int Account number.
@@ -200,8 +330,6 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * Returns group of this account.
- * 
  * @version 0.1.0
  * @since 0.0.4
  * @return OTS_Group Group of which current account is member (currently random group).
@@ -222,8 +350,6 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * Assigns account to group.
- * 
  * @version 0.0.6
  * @param OTS_Group $group Group to be a member.
  * @deprecated 0.0.6 There is no more group_id field in database.
@@ -233,7 +359,49 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
+ * Name.
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ * @return string Name.
+ * @throws E_OTS_NotLoaded If account is not loaded.
+ */
+    public function getName()
+    {
+        if( !isset($this->data['name']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['name'];
+    }
+
+/**
+ * Sets account's name.
+ * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
+ * </p>
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ * @param string $name Account name.
+ */
+    public function setName($name)
+    {
+        $this->data['name'] = (string) $name;
+    }
+
+/**
  * Account's password.
+ * 
+ * <p>
+ * Doesn't matter what password hashing mechanism is used by OTServ - this method will just return RAW database content. It is not possible to "decrypt" hashed strings, so it even wouldn't be possible to return real password string.
+ * </p>
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded} exception instead of triggering E_USER_WARNING.
+ * </p>
  * 
  * @version 0.0.3
  * @return string Password.
@@ -252,6 +420,14 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Sets account's password.
  * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
+ * </p>
+ * 
+ * <p>
+ * Remember that this method just sets database field's content. It doesn't apply any hashing/encryption so if OTServ uses hashing for passwords you have to apply it by yourself before passing string to this method.
+ * </p>
+ * 
  * @param string $password Password.
  */
     public function setPassword($password)
@@ -261,6 +437,10 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * E-mail address.
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded} exception instead of triggering E_USER_WARNING.
+ * </p>
  * 
  * @version 0.0.3
  * @return string E-mail.
@@ -279,6 +459,10 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Sets account's email.
  * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
+ * </p>
+ * 
  * @param string $email E-mail address.
  */
     public function setEMail($email)
@@ -287,7 +471,45 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
+ * Account's Premium Account expiration timestamp.
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ * @return int Account PACC expiration timestamp.
+ * @throws E_OTS_NotLoaded If account is not loaded.
+ */
+    public function getPremiumEnd()
+    {
+        if( !isset($this->data['premend']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['premend'];
+    }
+
+/**
+ * Sets account's Premium Account expiration timestamp.
+ * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Player::save() save() method} to flush changed to database.
+ * </p>
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ * @param int $premend PACC expiration timestamp.
+ */
+    public function setPremiumEnd($premend)
+    {
+        $this->data['premend'] = (int) $premend;
+    }
+
+/**
  * Checks if account is blocked.
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded} exception instead of triggering E_USER_WARNING.
+ * </p>
  * 
  * @version 0.0.3
  * @return bool Blocked state.
@@ -305,6 +527,10 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Unblocks account.
+ * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
+ * </p>
  */
     public function unblock()
     {
@@ -313,6 +539,10 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Blocks account.
+ * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
+ * </p>
  */
     public function block()
     {
@@ -320,8 +550,102 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * PACC days.
+ * Checks if account is deleted (by flag setting).
  * 
+ * @version 0.1.5
+ * @since 0.1.5
+ * @return bool Flag state.
+ * @throws E_OTS_NotLoaded If account is not loaded.
+ */
+    public function isDeleted()
+    {
+        if( !isset($this->data['deleted']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['blocked'];
+    }
+
+/**
+ * Unsets account's deleted flag.
+ * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
+ * </p>
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ */
+    public function unsetDeleted()
+    {
+        $this->data['deleted'] = false;
+    }
+
+/**
+ * Deletes account (only by setting flag state, not physicly).
+ * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
+ * </p>
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ */
+    public function setDeleted()
+    {
+        $this->data['deleted'] = true;
+    }
+
+/**
+ * Checks if account is warned.
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ * @return bool Flag state.
+ * @throws E_OTS_NotLoaded If account is not loaded.
+ */
+    public function isWarned()
+    {
+        if( !isset($this->data['warned']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['warned'];
+    }
+
+/**
+ * Unwarns account.
+ * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
+ * </p>
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ */
+    public function unwarn()
+    {
+        $this->data['warned'] = false;
+    }
+
+/**
+ * Warns account.
+ * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
+ * </p>
+ * 
+ * @version 0.1.5
+ * @since 0.1.5
+ */
+    public function warn()
+    {
+        $this->data['warned'] = true;
+    }
+
+/**
  * @version 0.0.4
  * @return int PACC days.
  * @throws E_OTS_NotLoaded If account is not loaded.
@@ -338,8 +662,6 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * Sets PACC days count.
- * 
  * @version 0.0.4
  * @param int $pacc PACC days.
  * @deprecated 0.0.3 There is no more premdays field in accounts table.
@@ -351,15 +673,20 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Reads custom field.
  * 
+ * <p>
  * Reads field by it's name. Can read any field of given record that exists in database.
+ * </p>
  * 
+ * <p>
  * Note: You should use this method only for fields that are not provided in standard setters/getters (SVN fields). This method runs SQL query each time you call it so it highly overloads used resources.
+ * </p>
  * 
  * @version 0.0.5
  * @since 0.0.3
  * @param string $field Field name.
  * @return string Field value.
  * @throws E_OTS_NotLoaded If account is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function getCustomField($field)
     {
@@ -375,17 +702,24 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Writes custom field.
  * 
+ * <p>
  * Write field by it's name. Can write any field of given record that exists in database.
+ * </p>
  * 
+ * <p>
  * Note: You should use this method only for fields that are not provided in standard setters/getters (SVN fields). This method runs SQL query each time you call it so it highly overloads used resources.
+ * </p>
  * 
+ * <p>
  * Note: Make sure that you pass $value argument of correct type. This method determinates whether to quote field name. It is safe - it makes you sure that no unproper queries that could lead to SQL injection will be executed, but it can make your code working wrong way. For example: $object->setCustomField('foo', '1'); will quote 1 as as string ('1') instead of passing it as a integer.
+ * </p>
  * 
  * @version 0.0.5
  * @since 0.0.3
  * @param string $field Field name.
  * @param mixed $value Field value.
  * @throws E_OTS_NotLoaded If account is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function setCustomField($field, $value)
     {
@@ -404,8 +738,6 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * List of characters on account.
- * 
  * @version 0.1.0
  * @return array Array of OTS_Player objects from given account.
  * @throws E_OTS_NotLoaded If account is not loaded.
@@ -434,9 +766,15 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * List of characters on account.
  * 
+ * <p>
  * In difference to {@link OTS_Account::getPlayers() getPlayers() method} this method returns filtered {@link OTS_Players_List OTS_Players_List} object instead of array of {@link OTS_Player OTS_Player} objects. It is more effective since OTS_Player_List doesn't perform all rows loading at once.
+ * </p>
  * 
- * @version 0.1.0
+ * <p>
+ * Note: Returned object is only prepared, but not initialised. When using as parameter in foreach loop it doesn't matter since it will return it's iterator, but if you will wan't to execute direct operation on that object you will need to call {@link OTS_Base_List::rewind() rewind() method} first.
+ * </p>
+ * 
+ * @version 0.1.4
  * @since 0.0.5
  * @return OTS_Players_List List of players from current account.
  * @throws E_OTS_NotLoaded If account is not loaded.
@@ -447,8 +785,6 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
         {
             throw new E_OTS_NotLoaded();
         }
-
-        $ots = POT::getInstance();
 
         // creates filter
         $filter = new OTS_SQLFilter();
@@ -462,11 +798,11 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * Bans current account.
- * 
- * @version 0.0.5
+ * @version 0.1.5
  * @since 0.0.5
  * @param int $time Time for time until expires (0 - forever).
+ * @throws PDOException On PDO operation error.
+ * @deprecated 0.1.5 Use OTS_AccountBan class.
  */
     public function ban($time = 0)
     {
@@ -476,14 +812,20 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
             throw new E_OTS_NotLoaded();
         }
 
-        $this->db->query('INSERT INTO ' . $this->db->tableName('bans') . ' (' . $this->db->fieldName('type') . ', ' . $this->db->fieldName('account') . ', ' . $this->db->fieldName('time') . ') VALUES (' . POT::BAN_ACCOUNT . ', ' . $this->data['id'] . ', ' . $time . ')');
+        // creates ban entry
+        $ban = new OTS_AccountBan();
+        $ban->setValue($this->data['id']);
+        $ban->setExpires($time);
+        $ban->setAdded( time() );
+        $ban->activate();
+        $ban->save();
     }
 
 /**
- * Deletes ban from current account.
- * 
- * @version 0.0.5
+ * @version 0.1.5
  * @since 0.0.5
+ * @throws PDOException On PDO operation error.
+ * @deprecated 0.1.5 Use OTS_AccountBan class.
  */
     public function unban()
     {
@@ -493,15 +835,18 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
             throw new E_OTS_NotLoaded();
         }
 
-        $this->db->query('DELETE FROM ' . $this->db->tableName('bans') . ' WHERE ' . $this->db->fieldName('type') . ' = ' . POT::BAN_ACCOUNT . ' AND ' . $this->db->fieldName('account') . ' = ' . $this->data['id']);
+        // deletes ban entry
+        $ban = new OTS_AccountBan();
+        $ban->find($this->data['id']);
+        $ban->delete();
     }
 
 /**
- * Checks if account is banned.
- * 
- * @version 0.0.5
+ * @version 0.1.5
  * @since 0.0.5
  * @return bool True if account is banned, false otherwise.
+ * @throws PDOException On PDO operation error.
+ * @deprecated 0.1.5 Use OTS_AccountBan class.
  */
     public function isBanned()
     {
@@ -511,16 +856,23 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
             throw new E_OTS_NotLoaded();
         }
 
-        $ban = $this->db->query('SELECT COUNT(' . $this->db->fieldName('type') . ') AS ' . $this->db->fieldName('count') . ' FROM ' . $this->db->tableName('bans') . ' WHERE ' . $this->db->fieldName('account') . ' = ' . $this->data['id'] . ' AND (' . $this->db->fieldName('time') . ' > ' . time() . ' OR ' . $this->db->fieldName('time') . ' = 0) AND ' . $this->db->fieldName('type') . ' = ' . POT::BAN_ACCOUNT)->fetch();
-        return $ban['count'] > 0;
+        // finds ban entry
+        $ban = new OTS_AccountBan();
+        $ban->find($this->data['id']);
+        return $ban->isLoaded() && $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() );
     }
 
 /**
  * Deletes account.
  * 
+ * <p>
+ * This method physicly deletes account from database! To set <i>deleted</i> flag use {@link OTS_Account::setDeleted() setDeleted() method}.
+ * </p>
+ * 
  * @version 0.0.5
  * @since 0.0.5
  * @throws E_OTS_NotLoaded If account is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function delete()
     {
@@ -537,13 +889,69 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
+ * Checks highest access level of account.
+ * 
+ * @return int Access level (highest access level of all characters).
+ * @throws PDOException On PDO operation error.
+ */
+    public function getAccess()
+    {
+        // by default
+        $access = 0;
+
+        // finds groups of all characters
+        foreach( $this->getPlayersList() as $player)
+        {
+            $group = $player->getGroup();
+
+            // checks if group's access level is higher then previouls found highest
+            if( $group->getAccess() > $access)
+            {
+                $access = $group->getAccess();
+            }
+        }
+
+        return $access;
+    }
+
+/**
+ * Checks highest access level of account in given guild.
+ * 
+ * @param OTS_Guild $guild Guild in which access should be checked.
+ * @return int Access level (highest access level of all characters).
+ * @throws PDOException On PDO operation error.
+ */
+    public function getGuildAccess(OTS_Guild $guild)
+    {
+        // by default
+        $access = 0;
+
+        // finds ranks of all characters
+        foreach( $this->getPlayersList() as $player)
+        {
+            $rank = $player->getRank();
+
+            // checks if rank's access level is higher then previouls found highest
+            if( isset($rank) && $rank->getGuild()->getId() == $guild->getId() && $rank->getLevel() > $access)
+            {
+                $access = $rank->getLevel();
+            }
+        }
+
+        return $access;
+    }
+
+/**
  * Returns players iterator.
  * 
+ * <p>
  * There is no need to implement entire Iterator interface since we have {@link OTS_Players_List players list class} for it.
+ * </p>
  * 
  * @version 0.0.5
  * @since 0.0.5
  * @throws E_OTS_NotLoaded If account is not loaded.
+ * @throws PDOException On PDO operation error.
  * @return Iterator List of players.
  */
     public function getIterator()
@@ -557,6 +965,7 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
  * @version 0.0.5
  * @since 0.0.5
  * @throws E_OTS_NotLoaded If account is not loaded.
+ * @throws PDOException On PDO operation error.
  * @return int Count of players.
  */
     public function count()
@@ -567,11 +976,13 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Magic PHP5 method.
  * 
- * @version 0.1.0
+ * @version 0.1.5
  * @since 0.1.0
  * @param string $name Property name.
  * @return mixed Property value.
+ * @throws E_OTS_NotLoaded If account is not loaded.
  * @throws OutOfBoundsException For non-supported properties.
+ * @throws PDOException On PDO operation error.
  */
     public function __get($name)
     {
@@ -580,11 +991,17 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
             case 'id':
                 return $this->getId();
 
+            case 'name':
+                return $this->getName();
+
             case 'password':
                 return $this->getPassword();
 
             case 'eMail':
                 return $this->getEMail();
+
+            case 'premiumEnd':
+                return $this->getPremiumEnd();
 
             case 'loaded':
                 return $this->isLoaded();
@@ -595,8 +1012,17 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
             case 'blocked':
                 return $this->isBlocked();
 
+            case 'deleted':
+                return $this->isDeleted();
+
+            case 'warned':
+                return $this->isWarned();
+
             case 'banned':
                 return $this->isBanned();
+
+            case 'access':
+                return $this->getAccess();
 
             default:
                 throw new OutOfBoundsException();
@@ -606,22 +1032,32 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Magic PHP5 method.
  * 
- * @version 0.1.0
+ * @version 0.1.5
  * @since 0.1.0
  * @param string $name Property name.
  * @param mixed $value Property value.
+ * @throws E_OTS_NotLoaded If account is not loaded.
  * @throws OutOfBoundsException For non-supported properties.
+ * @throws PDOException On PDO operation error.
  */
     public function __set($name, $value)
     {
         switch($name)
         {
+            case 'name':
+                $this->setName($name);
+                break;
+
             case 'password':
                 $this->setPassword($value);
                 break;
 
             case 'eMail':
                 $this->setEMail($value);
+                break;
+
+            case 'premiumEnd':
+                $this->setPremiumEnd($value);
                 break;
 
             case 'blocked':
@@ -632,6 +1068,28 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
                 else
                 {
                     $this->unblock();
+                }
+                break;
+
+            case 'deleted':
+                if($value)
+                {
+                    $this->setDeleted();
+                }
+                else
+                {
+                    $this->unsetDeleted();
+                }
+                break;
+
+            case 'warned':
+                if($value)
+                {
+                    $this->warn();
+                }
+                else
+                {
+                    $this->unwarn();
                 }
                 break;
 
@@ -654,9 +1112,11 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Returns string representation of object.
  * 
+ * <p>
  * If any display driver is currently loaded then it uses it's method. Otherwise just returns account number.
+ * </p>
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return string String representation of object.
  */
@@ -669,10 +1129,8 @@ class OTS_Account extends OTS_Base_DAO implements IteratorAggregate, Countable
         {
             return $ots->getDisplayDriver()->displayAccount($this);
         }
-        else
-        {
-            return $this->getId();
-        }
+
+        return $this->getId();
     }
 }
 

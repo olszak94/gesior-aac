@@ -20,6 +20,7 @@
  * @version 0.1.0
  * @property-read string $name Field name.
  * @property-read string $table Table name.
+ * @tutorial POT/List_objects.pkg#filters.field
  */
 class OTS_SQLField
 {
@@ -91,13 +92,14 @@ class OTS_SQLField
     }
 
 /**
- * Returns string representation of WHERE clause.
+ * Returns string representation for WHERE clause.
  * 
+ * <p>
  * Returned string can be easily inserted into SQL query.
+ * </p>
  * 
  * @version 0.1.0
  * @since 0.1.0
- * @internal Magic PHP5 function.
  * @return string String WHERE clause.
  */
     public function __toString()

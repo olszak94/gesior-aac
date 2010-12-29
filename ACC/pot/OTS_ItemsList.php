@@ -9,9 +9,9 @@
  * Code in this file bases on oryginal OTServ items loading C++ code (itemloader.h, items.cpp, items.h).
  * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.6
  * @author Wrzasq <wrzasq@gmail.com>
- * @copyright 2007 (C) by Wrzasq
+ * @copyright 2007 - 2009 (C) by Wrzasq
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
@@ -19,10 +19,11 @@
  * Items list loader.
  * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.6
  * @property-read int $otbVersion OTB file version.
  * @property-read int $clientVersion Dedicated client version.
  * @property-read int $buildVersion File build version.
+ * @tutorial POT/data_directory.pkg#items
  */
 class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countable, ArrayAccess
 {
@@ -63,6 +64,41 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
  * Tibia client 8.0 version.
  */
     const CLIENT_VERSION_800 = 7;
+/**
+ * Tibia client 8.1 version.
+ * 
+ * @version 0.1.6
+ * @since 0.1.6
+ */
+    const CLIENT_VERSION_810 = 8;
+/**
+ * Tibia client 8.1.1 version.
+ * 
+ * @version 0.1.6
+ * @since 0.1.6
+ */
+    const CLIENT_VERSION_811 = 9;
+/**
+ * Tibia client 8.2 version.
+ * 
+ * @version 0.1.6
+ * @since 0.1.6
+ */
+    const CLIENT_VERSION_820 = 10;
+/**
+ * Tibia client 8.3 version.
+ * 
+ * @version 0.1.6
+ * @since 0.1.6
+ */
+    const CLIENT_VERSION_830 = 11;
+/**
+ * Tibia client 8.4 version.
+ * 
+ * @version 0.1.6
+ * @since 0.1.6
+ */
+    const CLIENT_VERSION_840 = 12;
 
 /**
  * Server ID.
@@ -116,9 +152,9 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 /**
  * Magic PHP5 method.
  * 
+ * <p>
  * Allows object unserialisation.
- * 
- * @internal Magic PHP5 method.
+ * </p>
  */
     public function __wakeup()
     {
@@ -127,30 +163,16 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
     }
 
 /**
- * Magic PHP5 method.
- * 
- * Allows object importing from {@link http://www.php.net/manual/en/function.var-export.php var_export()}.
- * 
- * @internal Magic PHP5 method.
- * @param array $properties List of object properties.
- */
-    public static function __set_state($properties)
-    {
-        $object = new self();
-
-        // loads properties
-        foreach($properties as $name => $value)
-        {
-            $object->$name = $value;
-        }
-
-        return $object;
-    }
-
-/**
  * Loads items.xml and items.otb files.
  * 
+ * <p>
+ * This method loads both items.xml and items.otb files. Both of them has to be in given directory.
+ * </p>
+ * 
+ * @version 0.1.3
  * @param string $path Path to data/items directory.
+ * @throws E_OTS_FileLoaderError When error occurs during file operation.
+ * @throws DOMException On DOM operation error.
  */
     public function loadItems($path)
     {
@@ -159,7 +181,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
         // loads items.xml cache
         if( isset($this->cache) && $this->cache instanceof IOTS_ItemsCache)
         {
-            $this->items = $this->cache->readItems( md5($path . '/items.xml') );
+            $this->items = $this->cache->readItems( md5_file($path . '/items.xml') );
         }
 
         // checks if cache is loaded
@@ -190,7 +212,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
         }
 
         // loads items.otb
-        parent::loadFile($path . '/items.otb');
+        $this->loadFile($path . '/items.otb');
 
         // parses loaded file
         $this->parse();
@@ -198,7 +220,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
         // saves cache
         if($empty && isset($this->cache) && $this->cache instanceof IOTS_ItemsCache)
         {
-            $this->cache->writeItems( md5($path . '/items.xml'), $this->items);
+            $this->cache->writeItems( md5_file($path . '/items.xml'), $this->items);
         }
     }
 
@@ -420,10 +442,34 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
     }
 
 /**
+ * Checks if given item type exists on list.
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ * @param string $name Name.
+ * @return bool If item type is set then true.
+ */
+    public function hasItemType($name)
+    {
+        foreach($this->items as $id => $type)
+        {
+            if( $type->getName() == $name)
+            {
+                // found it
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+/**
  * Returns given item type.
  * 
+ * @version 0.1.3
  * @param int $id Item type (server) ID.
- * @return OTS_ItemType|null Returns item type of given ID (null if not exists).
+ * @return OTS_ItemType Returns item type of given ID.
+ * @throws OutOfBoundsException If not exists.
  */
     public function getItemType($id)
     {
@@ -431,10 +477,21 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
         {
             return $this->items[$id];
         }
-        else
-        {
-            return null;
-        }
+
+        throw new OutOfBoundsException();
+    }
+
+/**
+ * Checks if given type ID exists on list.
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ * @param int $id ID.
+ * @return bool If item type is set then true.
+ */
+    public function hasItemTypeId($id)
+    {
+        return isset($this->items[$id]);
     }
 
 /**
@@ -444,8 +501,10 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
  * Note: If there are more then one items with same name this function will return first found server ID. It doesn't also mean that it will be the lowest ID - item types are ordered in order that they were loaded from items.xml file.
  * </p>
  * 
+ * @version 0.1.3
  * @param string $name Item type name.
- * @return int|bool Returns item type (server) ID (false if not found).
+ * @return int Returns item type (server) ID.
+ * @throws OutOfBoundsException If not found.
  */
     public function getItemTypeId($name)
     {
@@ -459,12 +518,10 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
         }
 
         // not found
-        return false;
+        throw new OutOfBoundsException();
     }
 
 /**
- * Returns all loaded items.
- * 
  * @return array List of item types.
  * @deprecated 0.1.0 Use this class object as array for iterations, counting and methods for field fetching.
  */
@@ -484,8 +541,6 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
     }
 
 /**
- * Returns item at current position in iterator.
- * 
  * @return string Item name.
  * @deprecated 0.1.0 Use getIterator().
  */
@@ -495,8 +550,6 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
     }
 
 /**
- * Moves to next iterator item.
- * 
  * @deprecated 0.1.0 Use getIterator().
  */
     public function next()
@@ -505,8 +558,6 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
     }
 
 /**
- * Returns ID of current position.
- * 
  * @return int Current position key.
  * @deprecated 0.1.0 Use getIterator().
  */
@@ -516,8 +567,6 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
     }
 
 /**
- * Checks if there is anything more in interator.
- * 
  * @return bool If iterator has anything more.
  * @deprecated 0.1.0 Use getIterator().
  */
@@ -527,8 +576,6 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
     }
 
 /**
- * Resets iterator index.
- * 
  * @deprecated 0.1.0 Use getIterator().
  */
     public function rewind()
@@ -563,45 +610,33 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
         {
             return isset($this->items[$offset]);
         }
+
         // item type name
-        else
-        {
-            return $this->getItemTypeId($offset) !== false;
-        }
+        return $this->hasItemType($offset);
     }
 
 /**
  * Returns item from given position.
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @param string|int $offset Array key.
- * @return mixed If key is an integer (type-sensitive!) then returns item type instance. If it's a string then return associated ID found by type name. False if offset is not set.
+ * @return OTS_ItemType|int If key is an integer (type-sensitive!) then returns item type instance. If it's a string then return associated ID found by type name.
  */
     public function offsetGet($offset)
     {
         // integer key
         if( is_int($offset) )
         {
-            if( isset($this->items[$offset]) )
-            {
-                return $this->items[$offset];
-            }
-            // keys is not set
-            else
-            {
-                return false;
-            }
+            return $this->getItemType($offset);
         }
-        // item type name
-        else
-        {
-            return $this->getItemTypeId($offset);
-        }
+
+        // house name
+        return $this->getItemTypeId($offset);
     }
 
 /**
- * This method is implemented for ArrayAccess interface. In fact you can't write/append to items list. Any call to this method will cause E_OTS_ReadOnly raise.
+ * This method is implemented for ArrayAccess interface. In fact you can't write/append to items list. Any call to this method will cause {@link E_OTS_ReadOnly E_OTS_ReadOnly} raise.
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -615,7 +650,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
     }
 
 /**
- * This method is implemented for ArrayAccess interface. In fact you can't write/append to items list. Any call to this method will cause E_OTS_ReadOnly raise.
+ * This method is implemented for ArrayAccess interface. In fact you can't write/append to items list. Any call to this method will cause {@link E_OTS_ReadOnly E_OTS_ReadOnly} raise.
  * 
  * @version 0.1.0
  * @since 0.1.0
@@ -648,6 +683,30 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
             default:
                 throw new OutOfBoundsException();
         }
+    }
+
+/**
+ * Returns string representation of object.
+ * 
+ * <p>
+ * If any display driver is currently loaded then it uses it's method.
+ * </p>
+ * 
+ * @version 0.1.3
+ * @since 0.1.3
+ * @return string String representation of object.
+ */
+    public function __toString()
+    {
+        $ots = POT::getInstance();
+
+        // checks if display driver is loaded
+        if( $ots->isDataDisplayDriverLoaded() )
+        {
+            return $ots->getDataDisplayDriver()->displayItemsList($this);
+        }
+
+        return (string) $this->count();
     }
 }
 

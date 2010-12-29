@@ -7,9 +7,9 @@
 
 /**
  * @package POT
- * @version 0.1.0
+ * @version 0.1.4
  * @author Wrzasq <wrzasq@gmail.com>
- * @copyright 2007 (C) by Wrzasq
+ * @copyright 2007 - 2008 (C) by Wrzasq
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
@@ -17,18 +17,20 @@
  * OTServ guild abstraction.
  * 
  * @package POT
- * @version 0.1.0
+ * @version 0.1.4
  * @property string $read Guild name.
  * @property OTS_Player $owner Guild founder.
  * @property int $creationData Guild creation data (mostly timestamp).
  * @property-read int $id Guild ID.
+ * @property-read bool $loaded Loaded state.
  * @property-read OTS_GuildRanks_List $guildRanksList Ranks in this guild.
  * @property-read array $invites List of invited players.
  * @property-read array $requests List of players that requested invites.
  * @property-write IOTS_GuildAction $invitesDriver Invitations handler.
  * @property-write IOTS_GuildAction $requestsDriver Membership requests handler.
+ * @tutorial POT/Guilds.pkg
  */
-class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
+class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
 {
 /**
  * Guild data.
@@ -57,7 +59,6 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
  * Allows object serialisation.
  * 
  * @return array List of properties that should be saved.
- * @internal Magic PHP5 method.
  */
     public function __sleep()
     {
@@ -67,19 +68,27 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Creates clone of object.
  * 
- * Copy of object needs to have different ID.
+ * <p>
+ * Copy of object needs to have different ID. Also invites and requests drivers are copied and assigned to object's copy.
+ * </p>
  * 
- * @internal magic PHP5 method.
+ * @version 0.1.3
  */
     public function __clone()
     {
         unset($this->data['id']);
 
-        $this->invites = clone $this->invites;
-        $this->invites->__construct($this);
+        if( isset($this->invites) )
+        {
+            $this->invites = clone $this->invites;
+            $this->invites->__construct($this);
+        }
 
-        $this->requests = clone $this->requests;
-        $this->requests->__construct($this);
+        if( isset($this->requests) )
+        {
+            $this->requests = clone $this->requests;
+            $this->requests->__construct($this);
+        }
     }
 
 /**
@@ -107,6 +116,7 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
  * 
  * @version 0.0.5
  * @param int $id Guild's ID.
+ * @throws PDOException On PDO operation error.
  */
     public function load($id)
     {
@@ -119,6 +129,7 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
  * 
  * @version 0.0.5
  * @param string $name Guild's name.
+ * @throws PDOException On PDO operation error.
  */
     public function find($name)
     {
@@ -145,7 +156,12 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Saves guild in database.
  * 
+ * <p>
+ * If guild is not loaded to represent any existing group it will create new row for it.
+ * </p>
+ * 
  * @version 0.0.5
+ * @throws PDOException On PDO operation error.
  */
     public function save()
     {
@@ -198,7 +214,11 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * Sets players's name.
+ * Sets guild's name.
+ * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Guild::save() save() method} to flush changed to database.
+ * </p>
  * 
  * @param string $name Name.
  */
@@ -213,6 +233,7 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
  * @version 0.1.0
  * @return OTS_Player Owning player.
  * @throws E_OTS_NotLoaded If guild is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function getOwner()
     {
@@ -229,7 +250,12 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Assigns guild to owner.
  * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Guild::save() save() method} to flush changed to database.
+ * </p>
+ * 
  * @param OTS_Player $owner Owning player.
+ * @throws E_OTS_NotLoaded If given <var>$owner</var> object is not loaded.
  */
     public function setOwner(OTS_Player $owner)
     {
@@ -255,6 +281,10 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Sets guild creation data.
  * 
+ * <p>
+ * This method only updates object state. To save changes in database you need to use {@link OTS_Guild::save() save() method} to flush changed to database.
+ * </p>
+ * 
  * @param int $creationdata Guild creation data.
  */
     public function setCreationData($creationdata)
@@ -265,14 +295,19 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Reads custom field.
  * 
+ * <p>
  * Reads field by it's name. Can read any field of given record that exists in database.
+ * </p>
  * 
+ * <p>
  * Note: You should use this method only for fields that are not provided in standard setters/getters (SVN fields). This method runs SQL query each time you call it so it highly overloads used resources.
+ * </p>
  * 
  * @version 0.0.8
  * @param string $field Field name.
  * @return string Field value.
  * @throws E_OTS_NotLoaded If guild is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function getCustomField($field)
     {
@@ -288,16 +323,23 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Writes custom field.
  * 
+ * <p>
  * Write field by it's name. Can write any field of given record that exists in database.
+ * </p>
  * 
+ * <p>
  * Note: You should use this method only for fields that are not provided in standard setters/getters (SVN fields). This method runs SQL query each time you call it so it highly overloads used resources.
+ * </p>
  * 
+ * <p>
  * Note: Make sure that you pass $value argument of correct type. This method determinates whether to quote field value. It is safe - it makes you sure that no unproper queries that could lead to SQL injection will be executed, but it can make your code working wrong way. For example: $object->setCustomField('foo', '1'); will quote 1 as as string ('1') instead of passing it as a integer.
+ * </p>
  * 
  * @version 0.0.5
  * @param string $field Field name.
  * @param mixed $value Field value.
  * @throws E_OTS_NotLoaded If guild is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function setCustomField($field, $value)
     {
@@ -316,8 +358,6 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * Reads all ranks that are in this guild.
- * 
  * @version 0.1.0
  * @return array List of ranks.
  * @throws E_OTS_NotLoaded If guild is not loaded.
@@ -346,9 +386,15 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * List of ranks in guild.
  * 
+ * <p>
  * In difference to {@link OTS_Guild::getGuildRanks() getGuildRanks() method} this method returns filtered {@link OTS_GuildRanks_List OTS_GuildRanks_List} object instead of array of {@link OTS_GuildRank OTS_GuildRank} objects. It is more effective since OTS_GuildRanks_List doesn't perform all rows loading at once.
+ * </p>
  * 
- * @version 0.1.0
+ * <p>
+ * Note: Returned object is only prepared, but not initialised. When using as parameter in foreach loop it doesn't matter since it will return it's iterator, but if you will wan't to execute direct operation on that object you will need to call {@link OTS_Base_List::rewind() rewind() method} first.
+ * </p>
+ * 
+ * @version 0.1.4
  * @since 0.0.5
  * @return OTS_GuildRanks_List List of ranks from current guild.
  * @throws E_OTS_NotLoaded If guild is not loaded.
@@ -359,8 +405,6 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
         {
             throw new E_OTS_NotLoaded();
         }
-
-        $ots = POT::getInstance();
 
         // creates filter
         $filter = new OTS_SQLFilter();
@@ -375,6 +419,10 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Returns list of invited players.
+ * 
+ * <p>
+ * OTServ and it's database doesn't provide such feature like guild invitations. In order to use this mechanism you have to write own {@link IOTS_GuildAction invitations drivers} and assign it using {@link OTS_Guild::setInvitesDriver() setInvitesDriver() method}.
+ * </p>
  * 
  * @return array List of invited players.
  * @throws E_OTS_NotLoaded If guild is not loaded.
@@ -399,6 +447,10 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Invites player to guild.
  * 
+ * <p>
+ * OTServ and it's database doesn't provide such feature like guild invitations. In order to use this mechanism you have to write own {@link IOTS_GuildAction invitations drivers} and assign it using {@link OTS_Guild::setInvitesDriver() setInvitesDriver() method}.
+ * </p>
+ * 
  * @param OTS_Player Player to be invited.
  * @throws E_OTS_NotLoaded If guild is not loaded.
  * @throws E_OTS_NoDriver If there is no invites driver assigned.
@@ -421,6 +473,10 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Deletes invitation for player to guild.
+ * 
+ * <p>
+ * OTServ and it's database doesn't provide such feature like guild invitations. In order to use this mechanism you have to write own {@link IOTS_GuildAction invitations drivers} and assign it using {@link OTS_Guild::setInvitesDriver() setInvitesDriver() method}.
+ * </p>
  * 
  * @param OTS_Player Player to be un-invited.
  * @throws E_OTS_NotLoaded If guild is not loaded.
@@ -445,6 +501,10 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Finalise invitation.
  * 
+ * <p>
+ * OTServ and it's database doesn't provide such feature like guild invitations. In order to use this mechanism you have to write own {@link IOTS_GuildAction invitations drivers} and assign it using {@link OTS_Guild::setInvitesDriver() setInvitesDriver() method}.
+ * </p>
+ * 
  * @param OTS_Player Player to be joined.
  * @throws E_OTS_NotLoaded If guild is not loaded.
  * @throws E_OTS_NoDriver If there is no invites driver assigned.
@@ -467,6 +527,10 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Returns list of players that requested membership.
+ * 
+ * <p>
+ * OTServ and it's database doesn't provide such feature like membership requests. In order to use this mechanism you have to write own {@link IOTS_GuildAction requests drivers} and assign it using {@link OTS_Guild::setInvitesDriver() setRequestsDriver() method}.
+ * </p>
  * 
  * @return array List of players.
  * @throws E_OTS_NotLoaded If guild is not loaded.
@@ -491,6 +555,10 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Requests membership in guild for player player.
  * 
+ * <p>
+ * OTServ and it's database doesn't provide such feature like membership requests. In order to use this mechanism you have to write own {@link IOTS_GuildAction requests drivers} and assign it using {@link OTS_Guild::setInvitesDriver() setRequestsDriver() method}.
+ * </p>
+ * 
  * @param OTS_Player Player that requested membership.
  * @throws E_OTS_NotLoaded If guild is not loaded.
  * @throws E_OTS_NoDriver If there is no requests driver assigned.
@@ -514,6 +582,10 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Deletes request from player.
  * 
+ * <p>
+ * OTServ and it's database doesn't provide such feature like membership requests. In order to use this mechanism you have to write own {@link IOTS_GuildAction requests drivers} and assign it using {@link OTS_Guild::setInvitesDriver() setRequestsDriver() method}.
+ * </p>
+ * 
  * @param OTS_Player Player to be rejected.
  * @throws E_OTS_NotLoaded If guild is not loaded.
  * @throws E_OTS_NoDriver If there is no requests driver assigned.
@@ -536,6 +608,10 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 
 /**
  * Accepts player.
+ * 
+ * <p>
+ * OTServ and it's database doesn't provide such feature like membership requests. In order to use this mechanism you have to write own {@link IOTS_GuildAction requests drivers} and assign it using {@link OTS_Guild::setInvitesDriver() setRequestsDriver() method}.
+ * </p>
  * 
  * @param OTS_Player Player to be accepted.
  * @throws E_OTS_NotLoaded If guild is not loaded.
@@ -563,6 +639,7 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
  * @version 0.0.5
  * @since 0.0.5
  * @throws E_OTS_NotLoaded If guild is not loaded.
+ * @throws PDOException On PDO operation error.
  */
     public function delete()
     {
@@ -581,11 +658,14 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Returns ranks iterator.
  * 
+ * <p>
  * There is no need to implement entire Iterator interface since we have {@link OTS_GuildRanks_List ranks list class} for it.
+ * </p>
  * 
  * @version 0.0.5
  * @since 0.0.5
  * @throws E_OTS_NotLoaded If guild is not loaded.
+ * @throws PDOException On PDO operation error.
  * @return Iterator List of ranks.
  */
     public function getIterator()
@@ -599,6 +679,7 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
  * @version 0.0.5
  * @since 0.0.5
  * @throws E_OTS_NotLoaded If guild is not loaded.
+ * @throws PDOException On PDO operation error.
  * @return int Count of ranks.
  */
     public function count()
@@ -609,16 +690,20 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Magic PHP5 method.
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @param string $name Property name.
  * @return mixed Property value.
  * @throws OutOfBoundsException For non-supported properties.
+ * @throws PDOException On PDO operation error.
  */
     public function __get($name)
     {
         switch($name)
         {
+            case 'loaded':
+                return $this->isLoaded();
+
             case 'id':
                 return $this->getId();
 
@@ -652,6 +737,7 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
  * @since 0.1.0
  * @param string $name Property name.
  * @param mixed $value Property value.
+ * @throws E_OTS_NotLoaded If passed parameter for owner field won't be loaded.
  * @throws OutOfBoundsException For non-supported properties.
  */
     public function __set($name, $value)
@@ -686,9 +772,11 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
 /**
  * Returns string representation of object.
  * 
+ * <p>
  * If any display driver is currently loaded then it uses it's method. Else it returns guild name.
+ * </p>
  * 
- * @version 0.1.0
+ * @version 0.1.3
  * @since 0.1.0
  * @return string String representation of object.
  */
@@ -701,10 +789,8 @@ class OTS_Guild extends OTS_Base_DAO implements IteratorAggregate, Countable
         {
             return $ots->getDisplayDriver()->displayGuild($this);
         }
-        else
-        {
-            return $this->getName();
-        }
+
+        return $this->getName();
     }
 }
 

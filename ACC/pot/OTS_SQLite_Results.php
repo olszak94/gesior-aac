@@ -2,10 +2,10 @@
 
 /**#@+
  * @version 0.0.1
- * @since 0.0.1
  */
 
 /**
+ * @version 0.1.5
  * @package POT
  * @author Wrzasq <wrzasq@gmail.com>
  * @copyright 2007 (C) by Wrzasq
@@ -15,8 +15,8 @@
 /**
  * This class will drop " quotes from field names in SQLite results.
  * 
+ * @version 0.1.5
  * @package POT
- * @internal You dont need to know anything about this class.
  * @ignore
  */
 class OTS_SQLite_Results extends PDOStatement
@@ -50,9 +50,13 @@ class OTS_SQLite_Results extends PDOStatement
 /**
  * Removes quoting delimiters from single row fields.
  * 
- * @return array Record row.
+ * @version 0.1.5
+ * @param int $mode Not used, for PDO compatibility.
+ * @param int $orientation Not used, for PDO compatibility.
+ * @param int $offset Not used, for PDO compatibility.
+ * @return array Records set.
  */
-    public function fetch()
+    public function fetch($mode = null, $orientation = null, $offset = null)
     {
         // standard output
         return $this->strip( parent::fetch() );
@@ -61,9 +65,13 @@ class OTS_SQLite_Results extends PDOStatement
 /**
  * Removes quotes from all result rows.
  * 
- * @return array Records set.
+ * @version 0.1.5
+ * @param int $mode Not used, for PDO compatibility.
+ * @param int $index Not used, for PDO compatibility.
+ * @param array $args Not used, for PDO compatibility.
+ * @return array Record row.
  */
-    public function fetchAll()
+    public function fetchAll($mode = null, $index = null, $args = array() )
     {
         $results = array();
 

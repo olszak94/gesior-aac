@@ -65,6 +65,7 @@ interface IOTS_GuildAction
  */
     public function submitRequest(OTS_Player $player);
 }
+
 /**#@-*/
 
 ?>

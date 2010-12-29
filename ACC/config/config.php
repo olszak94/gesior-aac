@@ -11,6 +11,9 @@ $config['site']['max_players_per_account'] = "15";
 $config['site']['verify_code'] = "yes";
 $config['site']['email_days_to_change'] = "1";
 $config['site']['one_email'] = "yes";
+	//ReCapatha
+	$config['site']['publickey'] = "6LfZAAoAAAAAALswKC2UCdCo_wf3ilh_C0qBhQJs "; // Public Key
+	$config['site']['privkey'] = "6LfZAAoAAAAAAA7_sZX1ZPomaqqTKBka5t6so0Un";; // Private Key
 
 // USE ONLY IF YOU CONFIGURED E-MAIL AND IT WORK
 $config['site']['create_account_verify_mail'] = 0; // when create account player must use right e-mail, he will receive random password to account like on RL tibia, 1 = yes, 0 = no

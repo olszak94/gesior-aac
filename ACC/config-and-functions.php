@@ -2,55 +2,32 @@
 // ###################### CONFIG ########################
 //load page config file
 $config['site'] = parse_ini_file('config/config.ini');
+include('config/config.php');
 //check install
-if($config['site']['install'] != "no") {
+if($config['site']['install'] != "no") 
+{
 	header("Location: install.php");
 	exit;
 }
-//parse data from page config file
-$vocations_from_config = explode(":", $config['site']['char_vocations']);
-foreach(explode(":", $config['site']['char_vocations']) as $value)
-{
-	$char_vocations_add = explode(",", $value);
-	$config['char_vocations'][$char_vocations_add['0']] = $char_vocations_add['1'];
-}
-if($config['site']['char_type'] != "main") {
-	$config['char_vocations']['Rook'] = $config['site']['char_rook_name'];
-}
-foreach(explode(":", $config['site']['towns_list']) as $value)
-{
-	$add_town = explode(",", $value);
-	$towns_list[$add_town['0']] = $add_town['1'];
-}
-$config_vocations = explode(",", $config['site']['vocations_list']);
-$config_vocations_short = explode(",", $config['site']['vocations_short_list']);
 //load server config
 $config['server'] = parse_ini_file($config['site']['server_path'].'config.lua');
-if(isset($config['server']['mysqlHost']))
+if(isset($config['server']['sqlHost']))
 {
-	//new (0.2.6+) ots config.lua file
-	$mysqlhost = $config['server']['mysqlHost'];
-	$mysqluser = $config['server']['mysqlUser'];
-	$mysqlpass = $config['server']['mysqlPass'];
-	$mysqldatabase = $config['server']['mysqlDatabase'];
-}
-elseif(isset($config['server']['sqlHost']))
-{
-	//old (0.2.4) ots config.lua file
+	// ots config.lua file connect database
 	$mysqlhost = $config['server']['sqlHost'];
 	$mysqluser = $config['server']['sqlUser'];
 	$mysqlpass = $config['server']['sqlPass'];
 	$mysqldatabase = $config['server']['sqlDatabase'];
 }
 $sqlitefile = $config['server']['sqliteDatabase'];
-$passwordency = '';
-if(strtolower($config['server']['useMD5Passwords']) == 'yes' || strtolower($config['server']['passwordType']) == 'md5')
+$encryptionType = '';
+if(strtolower($config['server']['encryptionType']) == 'md5')
 {
-	$passwordency = 'md5';
+	$encryptionType = 'md5';
 }
-if(strtolower($config['server']['passwordType']) == 'sha1')
+if(strtolower($config['server']['encryptionType']) == 'sha1')
 {
-	$passwordency = 'sha1';
+	$encryptionType = 'sha1';
 }
 // loads #####POT mainfile#####
 include('pot/OTS.php');
@@ -101,8 +78,7 @@ function saveconfig_ini($config)
 	$file = fopen("config/config.ini", "w");
 	foreach($config as $param => $data)
 	{
-$file_data .= $param.' = "'.str_replace('"', '', $data).'"
-';
+		$file_data .= $param.' = "'.str_replace('"', '', $data).'"';
 	}
 	rewind($file);
 	fwrite($file, $file_data);
@@ -110,7 +86,7 @@ $file_data .= $param.' = "'.str_replace('"', '', $data).'"
 }
 //return password to db
 function password_ency($password) {
-	$ency = $GLOBALS['passwordency'];
+	$ency = $GLOBALS['encryptionType'];
 	if($ency == 'sha1')
 		return sha1($password);
 	elseif($ency == 'md5')
@@ -160,12 +136,6 @@ function delete_player($name) {
 		return TRUE;
 	}
 }
-
-//delete account with id, nto ready
-function delete_account($id) {
-
-}
-
 //delete guild with id
 function delete_guild($id) {
 	$guild = new OTS_Guild();
@@ -191,29 +161,28 @@ function delete_guild($id) {
 	else
 		return FALSE;
 }
-
 //is it valid nick?
 function check_name($name)//sprawdza name
 {
-  $temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- [ ] '");
-  if ($temp != strlen($name)) {
-	return false;
-  }
-  else
-  {
-	$ok = "/[a-zA-Z ']{1,25}/";
-	return (preg_match($ok, $name))? true: false;
-  }
+	$temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- [ ] '");
+	if ($temp != strlen($name)) 
+	{
+		return false;
+	}
+	else
+	{
+		$ok = "/[a-zA-Z ']{1,25}/";
+		return (preg_match($ok, $name))? true: false;
+	}
 }
-
 //is it valid nick for new char?
 function check_name_new_char($name)//sprawdza name
 {
 	$name_to_check = strtolower($name);
 	//first word can't be:
 	//names blocked:
-	$names_blocked = array('gm','cm', 'god', 'tutor');
-	$first_words_blocked = array('gm ','cm ', 'god ','tutor ', "'", '-');
+	$names_blocked = array('gm', 'cm', 'god', 'tutor');
+	$first_words_blocked = array('gm ', 'cm ', 'god ','tutor ', "'", '-');
 	//name can't contain:
 	$words_blocked = array('gamemaster', 'game master', 'game-master', "game'master", '--', "''","' ", " '", '- ', ' -', "-'", "'-", 'fuck', 'sux', 'suck', 'noob', 'tutor');
 	foreach($first_words_blocked as $word)
@@ -225,9 +194,9 @@ function check_name_new_char($name)//sprawdza name
 		return false;
 	if(substr($name_to_check, -2, 1) == " ")
 		return false;
-foreach($names_blocked as $word)
-	if($word == $name)
-		return false;
+	foreach($names_blocked as $word)
+		if($word == $name)
+			return false;
 	for($i = 0; $i < strlen($name_to_check); $i++)
 		if($name_to_check[$i-1] == ' ' && $name_to_check[$i+1] == ' ')
 			return false;
@@ -249,53 +218,115 @@ foreach($names_blocked as $word)
 		return (preg_match($ok, $name))? true: false;
 	}
 }
-
 //is rank name valid?
 function check_rank_name($name)//sprawdza name
 {
   $temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789-[ ] ");
-  if ($temp != strlen($name)) {
-	return false;
-  }
-  else
-  {
-	$ok = "/[a-zA-Z ]{1,60}/";
-	return (preg_match($ok, $name))? true: false;
-  }
+	if ($temp != strlen($name)) 
+	{
+		return false;
+	}
+	else
+	{
+		$ok = "/[a-zA-Z ]{1,60}/";
+		return (preg_match($ok, $name))? true: false;
+	}
 }
 //is guild name valid?
 function check_guild_name($name)
 {
-  $temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789- ");
-  if ($temp != strlen($name)) {
-	return false;
-  }
-  else
-  {
-	$ok = "/[a-zA-Z ]{1,60}/";
-	return (preg_match($ok, $name))? true: false;
-  }
+	$temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789- ");
+	if ($temp != strlen($name)) 
+	{
+		return false;
+	}
+	else
+	{
+		$ok = "/[a-zA-Z ]{1,60}/";
+		return (preg_match($ok, $name))? true: false;
+	}
 }
 //is it valid password?
 function check_password($pass)//sprawdza haslo
 {
-  $temp = strspn("$pass", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890");
-  if ($temp != strlen($pass)) {
-  return false;
-  }
-  else
-  {
-  $ok = "/[a-zA-Z0-9]{1,40}/";
-  return (preg_match($ok, $pass))? true: false;
-  }
+	$temp = strspn("$pass", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890");
+	if ($temp != strlen($pass)) 
+	{
+		return false;
+	}
+	else
+	{
+		$ok = "/[a-zA-Z0-9]{1,40}/";
+		return (preg_match($ok, $pass))? true: false;
+	}
 }
 //is it valid e-mail?
 function check_mail($email)//sprawdza mail
 {
-  $ok = "/[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,4}/";
-  return (preg_match($ok, $email))? true: false;
+	$ok = "/[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,4}/";
+	return (preg_match($ok, $email))? true: false;
 }
-
+// check if is acoount have premium time
+function isPremium($premdays, $lastday)
+{
+	return ($premdays - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $lastday))) - date("z", $lastday)) > 0);
+}
+// get name bans
+function getReason($reasonId)
+{
+	switch($reasonId)
+	{
+		case 0:
+		return "Offensive Name";
+		case 1:
+		return "Invalid Name Format";
+		case 2:
+		return "Unsuitable Name";
+		case 3:
+		return "Name Inciting Rule Violation";
+		case 4:
+		return "Offensive Statement";
+		case 5:
+		return "Spamming";
+		case 6:
+		return "Illegal Advertising";
+		case 7:
+		return "Off-Topic Public Statement";
+		case 8:
+		return "Non-English Public Statement";
+		case 9:
+		return "Inciting Rule Violation";
+		case 10:
+		return "Bug Abuse";
+		case 11:
+		return "Game Weakness Abuse";
+		case 12:
+		return "Using Unofficial Software to Play";
+		case 13:
+		return "Hacking";
+		case 14:
+		return "Multi-Clienting";
+		case 15:
+		return "Account Trading or Sharing";
+		case 16:
+		return "Threatening Gamemaster";
+		case 17:
+		return "Pretending to Have Influence on Rule Enforcement";
+		case 18:
+		return "False Report to Gamemaster";
+		case 19:
+		return "Destructive Behaviour";
+		case 20:
+		return "Excessive Unjustified Player Killing";
+		case 21:
+		return "Invalid Payment";
+		case 22:
+		return "Spoiling Auction";
+		default:
+		break;
+	}
+	return "Unknown Reason";
+}
 //################### DISPLAY FUNCTIONS #####################
 //return shorter text (news ticker)
 function short_text($text, $chars_limit) 
@@ -305,37 +336,9 @@ function short_text($text, $chars_limit)
   else return $text;
 }
 //return text to news msg
-function news_place() {
-if($GLOBALS['subtopic'] == "latestnews") {
-//add tickers to site - without it tickers will not be showed
-//$news .= $GLOBALS['news_content'];
-/*
-//featured article
-$layout_name = $GLOBALS['layout_name'];
-$news .= '  <div id="featuredarticle" class="Box">
-    <div class="Corner-tl" style="background-image:url('.$layout_name.'/images/content/corner-tl.gif);"></div>
-    <div class="Corner-tr" style="background-image:url('.$layout_name.'/images/content/corner-tr.gif);"></div>
-    <div class="Border_1" style="background-image:url('.$layout_name.'/images/content/border-1.gif);"></div>
-    <div class="BorderTitleText" style="background-image:url('.$layout_name.'/images/content/title-background-green.gif);"></div>
-    <img class="Title" src="'.$layout_name.'/images/strings/headline-featuredarticle.gif" alt="Contentbox headline" />
-    <div class="Border_2">
-      <div class="Border_3">
-        <div class="BoxContent" style="background-image:url('.$layout_name.'/images/content/scroll.gif);">
-<div id=\'TeaserThumbnail\'><img src="'.$layout_name.'/images/news/features.jpg" width=150 height=100 border=0 alt="" /></div><div id=\'TeaserText\'><div style="position: relative; top: -2px; margin-bottom: 2px;" >
-<b>Tutaj wpisz tytul</b></div>
-tutaj wpisz tresc newsa<br>
-zdjecie laduje sie w <i>tibiacom/images/news/features.jpg</i><br>
-skad sie laduje mozesz zmienic linijke ponad komentarzem
-</div>        </div>
-      </div>
-    </div>
-    <div class="Border_1" style="background-image:url('.$layout_name.'/images/content/border-1.gif);"></div>
-    <div class="CornerWrapper-b"><div class="Corner-bl" style="background-image:url('.$layout_name.'/images/content/corner-bl.gif);"></div></div>
-    <div class="CornerWrapper-b"><div class="Corner-br" style="background-image:url('.$layout_name.'/images/content/corner-br.gif);"></div></div>
-  </div>';
- */
-}
-return $news;
+function news_place() 
+{
+	return $news;
 }
 //set monster of week
 function logo_monster() {
@@ -380,18 +383,17 @@ if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
 	$file = fopen("config/serverstatus", "w");
 	foreach($config['status'] as $param => $data)
 	{
-$file_data .= $param.' = "'.str_replace('"', '', $data).'"
-';
+		$file_data .= $param.' = "'.str_replace('"', '', $data).'"';
 	}
 	rewind($file);
 	fwrite($file, $file_data);
 	fclose($file);
 }
-
 //PAGE VIEWS COUNTER :)
 $views_counter = "usercounter.dat";
 // checking if the file exists
-if (file_exists($views_counter)) {
+if (file_exists($views_counter)) 
+{
     // het bestand bestaat, waarde + 1
     $actie = fopen($views_counter, "r+"); 
     $page_views = fgets($actie, 9); 
@@ -411,17 +413,16 @@ else
 function makeOrder($arr, $order, $default) {
     // Function by Colandus!
     $type = 'asc';
-    if(isset($_GET['order'])) {
+    if(isset($_GET['order'])) 
+	{
         $v = explode('_', strrev($_GET['order']), 2);
         if(count($v) == 2)
             if($orderBy = $arr[strrev($v[1])])
                 $default = $orderBy;
                 $type = (strrev($v[0]) == 'asc' ? 'desc' : 'asc');
     }
-    
     return 'ORDER BY ' . $default . ' ' . $type;
 }
-
 function getOrder($arr, $order, $this) {
     // Function by Colandus!
     $type = 'asc';
@@ -431,8 +432,6 @@ function getOrder($arr, $order, $this) {
             if(strrev($v[1]) == $this)
                 $type = (strrev($v[0]) == 'asc' ? 'desc' : 'asc');
         }
-    
     return $this . '_' . $type;
 }  
-
 ?>

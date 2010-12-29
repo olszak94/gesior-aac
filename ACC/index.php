@@ -13,19 +13,22 @@ $time_start = microtime_float();
 include('config-and-functions.php');
 $action = $_REQUEST['action'];
 //##### LOGOUT #####
-if($action == "logout") {
-unset($_SESSION['account']);
-unset($_SESSION['password']);
+if($action == "logout") 
+{
+	unset($_SESSION['account']);
+	unset($_SESSION['password']);
 }
 //##### LOGIN #####
 //check is player logged
 $logged = FALSE;
-if(isset($_SESSION['account'])) {
+if(isset($_SESSION['account'])) 
+{
 	$account_logged = $ots->createObject('Account');
 	$account_logged->load($_SESSION['account']);
-	if($account_logged->isLoaded() && $account_logged->getPassword() == $_SESSION['password']) {
+	if($account_logged->isLoaded() && $account_logged->getPassword() == $_SESSION['password']) 
+	{
 		$logged = TRUE;
-		$group_id_of_acc_logged = $account_logged->getCustomField("page_access");
+		$group_id_of_acc_logged = $account_logged->getPageAccess();
 	}
 	else
 	{
@@ -34,31 +37,24 @@ if(isset($_SESSION['account'])) {
 		unset($account_logged);
 	}
 }
-//login with data from form
-$login_account = trim($_POST['account_login']);
+$login_account = strtoupper(trim($_POST['account_login']));
 $login_password = trim($_POST['password_login']);
-if(!$logged && !empty($login_account) && !empty($login_password)) {
-	if(!is_numeric($login_account)) {
-		$show_msgs[] = "Login account is not numeric.";
-	}
-	if(!check_password($login_password)) {
-		$show_msgs[] = "Login password contains illegal chars or lenght.";
-	}
+if(!$logged && !empty($login_account) && !empty($login_password)) 
+{
 	$login_password = password_ency($login_password);
-	if(empty($show_errors)) {
-		$account_logged = $ots->createObject('Account');
-		$account_logged->load($login_account);
-		if($account_logged->isLoaded()) {
-			if($login_password == $account_logged->getPassword()) {
-				$_SESSION['account'] = $login_account;
-				$_SESSION['password'] = $login_password;
-				$logged = TRUE;
-				$account_logged->setCustomField("page_lastday", time());
-				$group_id_of_acc_logged = $account_logged->getCustomField("page_access");
-			} else {
-				$logged = FALSE;
-			}
-		}
+	$account_logged = $ots->createObject('Account');
+	$account_logged->find($login_account);
+	if($account_logged->isLoaded()) 
+	{
+		if($login_password == $account_logged->getPassword()) 
+		{
+			$_SESSION['account'] = $account_logged->getId();
+			$_SESSION['password'] = $login_password;
+			$logged = TRUE;
+			$account_logged->setCustomField("page_lastday", time());
+			$group_id_of_acc_logged = $account_logged->getPageAccess();
+		} else 
+			$logged = FALSE;
 	}
 }
 //#### LOAD PAGE ##########
@@ -231,38 +227,38 @@ switch($_REQUEST['subtopic']) {
 	break;
 }
 //generate title of page
-if(empty($topic)) {
-$title = $GLOBALS['config']['server']["serverName"]." - OTS";
-$main_content .= 'Invalid subtopic. Can\'t load page.';
-}
+if(empty($topic)) 
+{
+	$title = $GLOBALS['config']['server']["serverName"]." - OTS";
+	$main_content .= 'Invalid subtopic. Can\'t load page.';
+} 
 else
 {
-$title = $GLOBALS['config']['server']["serverName"]." - ".$topic;
+	$title = $GLOBALS['config']['server']["serverName"]." - ".$topic;
 }
 //#####LAYOUT#####
 
 $layout_header = '<script type=\'text/javascript\'>
 function GetXmlHttpObject()
 {
-var xmlHttp=null;
-try
-  {
-  xmlHttp=new XMLHttpRequest();
-  }
-catch (e)
-  {
-  try
-    {
-    xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
-    }
-  catch (e)
-    {
-    xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-  }
-return xmlHttp;
+	var xmlHttp=null;
+	try
+	{
+		xmlHttp=new XMLHttpRequest();
+	}
+	catch (e)
+	{
+		try
+		{
+			xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+		}
+		catch (e)
+		{
+			xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+	}
+	return xmlHttp;
 }
-
 function MouseOverBigButton(source)
 {
   source.firstChild.style.visibility = "visible";
@@ -277,8 +273,7 @@ function BigButtonAction(path)
 }
 var';
 if($logged) { $layout_header .= "loginStatus=1; loginStatus='true';"; } else { $layout_header .= "loginStatus=0; loginStatus='false';"; };
-$layout_header .= "var activeSubmenuItem='".$subtopic."';  var IMAGES=0; IMAGES='http://".$_SERVER['SERVER_NAME'].$config['site']['subfolder']."/".$layout_name."/images'; var LINK_ACCOUNT=0; LINK_ACCOUNT='http://".$_SERVER['SERVER_NAME'].$config['site']['subfolder']."';</script>";
+$layout_header .= " var activeSubmenuItem='".$subtopic."';</script>";
 include($layout_name."/layout.php");
 ob_end_flush();
-
 ?>

@@ -78,7 +78,8 @@ function saveconfig_ini($config)
 	$file = fopen("config/config.ini", "w");
 	foreach($config as $param => $data)
 	{
-		$file_data .= $param.' = "'.str_replace('"', '', $data).'"';
+$file_data .= $param.' = "'.str_replace('"', '', $data).'"
+';
 	}
 	rewind($file);
 	fwrite($file, $file_data);
@@ -326,6 +327,12 @@ function getReason($reasonId)
 		break;
 	}
 	return "Unknown Reason";
+}
+function getFooter()
+{
+	$time_end = microtime_float();
+	$time = $time_end - $time_start;
+	echo 'Account maker by <a href="index.php?subtopic=credits">Credits</a>. Layout by '.$config['site']['layout'].'.<br/>Page has been viewed '.$page_views.' times. Load time: '.round($time, 4).' seconds';
 }
 //################### DISPLAY FUNCTIONS #####################
 //return shorter text (news ticker)

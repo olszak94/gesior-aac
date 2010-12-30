@@ -590,12 +590,7 @@ echo "<a href='?subtopic=serverinfo'>
            </div>
           </div>
           <div id="Footer">
-<?PHP
-$time_end = microtime_float();
-$time = $time_end - $time_start;
-
-?>
-            Account maker by Gesior. Layout by CipSoft GmbH.<br/>Page has been viewed <?PHP echo $page_views; ?> times. Load time: <?PHP echo round($time, 4); ?> seconds
+            <?PHP echo getFooter() ?>
           </div>
         </div>
         <div id="ThemeboxesColumn">

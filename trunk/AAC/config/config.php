@@ -61,6 +61,7 @@ $config['site']['email_lai_sec_interval'] = 300;
 	$config['site']['download_page'] = 0;
 	$config['site']['serverinfo_page'] = 0;
 	$config['site']['gallery_page'] = 0;
+	$config['site']['credits_page'] = 0;
 	$config['site']['players_group_id_block'] = 2;
 	// Info
 	$config['site']['last_deaths_limit'] = 30;

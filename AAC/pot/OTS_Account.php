@@ -39,7 +39,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @var array
  * @version 0.1.5
  */
-    private $data = array('email' => '', 'premend' => 0, 'blocked' => false, 'deleted' => false, 'warned' => false);
+    private $data = array('email' => '', 'key' => '', 'premium_points' => 0, 'blocked' => false, 'warnings' => false, 'rlname' => '', 'location' => '', 'page_access' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
 
 /**
  * Creates new account.
@@ -225,7 +225,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function load($id)
     {
         // SELECT query on database
-        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('salt') . ', ' . $this->db->fieldName('premdays') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('warnings') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+		$this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('rlname') . ', ' . $this->db->fieldName('location') . ', ' . $this->db->fieldName('key') . ', ' . $this->db->fieldName('premium_points') . ', ' . $this->db->fieldName('page_access') . ', ' . $this->db->fieldName('premdays') . ', ' . $this->db->fieldName('lastday') . ',  ' . $this->db->fieldName('created') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
     }
 
 /**
@@ -305,7 +305,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         }
 
         // UPDATE query on database
-        $this->db->query('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName('password') . ' = ' . $this->db->quote($this->data['password']) . ', ' . $this->db->fieldName('salt') . ' = ' . $this->db->quote($this->data['salt']) . ', ' . $this->db->fieldName('premdays') . ' = ' . $this->data['premdays'] . ', ' . $this->db->fieldName('email') . ' = ' . $this->db->quote($this->data['email']) . ', ' . $this->db->fieldName('blocked') . ' = ' . (int) $this->data['blocked'] . ', ' . $this->db->fieldName('warnings') . ' = ' . (int) $this->data['warnings'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+        $this->db->query('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName('password') . ' = ' . $this->db->quote($this->data['password']) . ', ' . $this->db->fieldName('email') . ' = ' . $this->db->quote($this->data['email']) . ', ' . $this->db->fieldName('rlname') . ' = ' . $this->db->quote($this->data['rlname']) . ', ' . $this->db->fieldName('premium_points') . ' = ' . $this->db->quote($this->data['premium_points']) . ', ' . $this->db->fieldName('key') . ' = ' . $this->db->quote($this->data['key']) . ', ' . $this->db->fieldName('location') . ' = ' . $this->db->quote($this->data['location']) . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
     }
 
 /**
@@ -327,26 +327,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         }
 
         return $this->data['id'];
-    }
-
-/**
- * @version 0.1.0
- * @since 0.0.4
- * @return OTS_Group Group of which current account is member (currently random group).
- * @throws E_OTS_NotLoaded If account is not loaded.
- * @deprecated 0.0.6 There is no more group_id field in database.
- */
-    public function getGroup()
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
-
-        // loads default group
-        $groups = new OTS_Groups_List();
-        $groups->rewind();
-        return $groups->current();
     }
 	
 /**
@@ -466,12 +446,23 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     }
 
 /**
- * @version 0.0.6
- * @param OTS_Group $group Group to be a member.
+ * @version 0.1.0
+ * @since 0.0.4
+ * @return OTS_Group Group of which current account is member (currently random group).
+ * @throws E_OTS_NotLoaded If account is not loaded.
  * @deprecated 0.0.6 There is no more group_id field in database.
  */
-    public function setGroup(OTS_Group $group)
+    public function getGroup()
     {
+        if( !isset($this->data['id']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        // loads default group
+        $groups = new OTS_Groups_List();
+        $groups->rewind();
+        return $groups->current();
     }
 
 /**
@@ -586,39 +577,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $this->data['email'] = (string) $email;
     }
 
-/**
- * Account's Premium Account expiration timestamp.
- * 
- * @version 0.1.5
- * @since 0.1.5
- * @return int Account PACC expiration timestamp.
- * @throws E_OTS_NotLoaded If account is not loaded.
- */
-    public function getPremiumEnd()
-    {
-        if( !isset($this->data['premend']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
-
-        return $this->data['premend'];
-    }
-
-/**
- * Sets account's Premium Account expiration timestamp.
- * 
- * <p>
- * This method only updates object state. To save changes in database you need to use {@link OTS_Player::save() save() method} to flush changed to database.
- * </p>
- * 
- * @version 0.1.5
- * @since 0.1.5
- * @param int $premend PACC expiration timestamp.
- */
-    public function setPremiumEnd($premend)
-    {
-        $this->data['premend'] = (int) $premend;
-    }
 
 /**
  * Checks if account is blocked.

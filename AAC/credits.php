@@ -1,5 +1,5 @@
 <?PHP
-if($config['site']['serverinfo_page'])
+if($config['site']['credits_page'])
 {
 	$main_content .= '';
 }

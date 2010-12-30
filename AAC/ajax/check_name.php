@@ -88,16 +88,7 @@ if(substr($name, -2, 1) == " ")
 else
 		//connect to DB
 		$server_config = parse_ini_file($config_ini['server_path'].'config.lua');
-		if(isset($server_config['mysqlHost']))
-		{
-			//new (0.2.6+) ots config.lua file
-			$mysqlhost = $server_config['mysqlHost'];
-			$mysqluser = $server_config['mysqlUser'];
-			$mysqlpass = $server_config['mysqlPass'];
-			$mysqldatabase = $server_config['mysqlDatabase'];
-			$sqlitefile = $server_config['sqliteDatabase'];
-		}
-		elseif(isset($server_config['sqlHost']))
+		if(isset($server_config['sqlHost']))
 		{
 			//old (0.2.4) ots config.lua file
 			$mysqlhost = $server_config['sqlHost'];

@@ -121,7 +121,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function load($id)
     {
         // SELECT query on database
-        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('ownerid') . ', ' . $this->db->fieldName('creationdata') . ' FROM ' . $this->db->tableName('guilds') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('ownerid') . ', ' . $this->db->fieldName('creationdata') . ', ' . $this->db->fieldName('world_id') . ' FROM ' . $this->db->tableName('guilds') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
     }
 
 /**
@@ -196,7 +196,15 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
 
         return $this->data['id'];
     }
+	public function getWorld()
+    {
+        if( !isset($this->data['world_id']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
 
+        return $this->data['world_id'];
+    }
 /**
  * Guild name.
  * 

@@ -218,8 +218,8 @@ function check_name_new_char($name)//sprawdza name
 		return (preg_match($ok, $name))? true: false;
 	}
 }
-//is rank name valid?
-function check_rank_name($name)//sprawdza name
+// is rank name valid?
+function check_rank_name($name)
 {
   $temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789-[ ] ");
 	if ($temp != strlen($name)) 
@@ -232,7 +232,7 @@ function check_rank_name($name)//sprawdza name
 		return (preg_match($ok, $name))? true: false;
 	}
 }
-//is guild name valid?
+// is guild name valid?
 function check_guild_name($name)
 {
 	$temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789- ");
@@ -246,8 +246,8 @@ function check_guild_name($name)
 		return (preg_match($ok, $name))? true: false;
 	}
 }
-//is it valid password?
-function check_password($pass)//sprawdza haslo
+// is it valid password?
+function check_password($pass)
 {
 	$temp = strspn("$pass", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890");
 	if ($temp != strlen($pass)) 
@@ -260,8 +260,8 @@ function check_password($pass)//sprawdza haslo
 		return (preg_match($ok, $pass))? true: false;
 	}
 }
-//is it valid e-mail?
-function check_mail($email)//sprawdza mail
+// is it valid e-mail?
+function check_mail($email)
 {
 	$ok = "/[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,4}/";
 	return (preg_match($ok, $email))? true: false;
@@ -331,23 +331,27 @@ function getReason($reasonId)
 //return shorter text (news ticker)
 function short_text($text, $chars_limit) 
 {
-  if (strlen($text) > $chars_limit) 
-    return substr($text, 0, strrpos(substr($text, 0, $chars_limit), " ")).'...';
-  else return $text;
+	if (strlen($text) > $chars_limit) 
+		return substr($text, 0, strrpos(substr($text, 0, $chars_limit), " ")).'...';
+	else 
+		return $text;
 }
 //return text to news msg
 function news_place() 
 {
 	return $news;
 }
-//set monster of week
-function logo_monster() {
+// set monster of week
+function logo_monster() 
+{
 	return str_replace(" ", "", trim(mb_strtolower($GLOBALS['config']['site']['logo_monster'])));
 }
+
 $statustimeout = 1;
 foreach(explode("*", str_replace(" ", "", $config['server']['statusTimeout'])) as $status_var)
 	if($status_var > 0)
 		$statustimeout = $statustimeout * $status_var;
+
 $statustimeout = $statustimeout / 1000;
 $config['status'] = parse_ini_file('config/serverstatus');
 if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
@@ -383,7 +387,8 @@ if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
 	$file = fopen("config/serverstatus", "w");
 	foreach($config['status'] as $param => $data)
 	{
-		$file_data .= $param.' = "'.str_replace('"', '', $data).'"';
+$file_data .= $param.' = "'.str_replace('"', '', $data).'"
+';
 	}
 	rewind($file);
 	fwrite($file, $file_data);

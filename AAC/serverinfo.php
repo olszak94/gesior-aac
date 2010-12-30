@@ -1,7 +1,10 @@
 <?PHP
-$content = file_get_contents("serverinfo.htm");
-if($content != FALSE)
-	$main_content .= $content;
+if($config['site']['serverinfo_page'])
+{
+	$main_content .= '';
+}
 else
-	$main_content .= 'Can not load file <b>erverinfo.htm</b> or file is empty.';
+{
+	$main_content .= 'Invalid subtopic. Can\'t load page.';
+}
 ?>

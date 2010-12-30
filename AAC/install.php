@@ -6,7 +6,8 @@ function saveconfig_ini($config) {
 	$file = fopen("config/config.ini", "w");
 	foreach($config as $param => $data) 
 	{
-		$file_data .= $param.' = "'.str_replace('"', '', $data).'"';
+$file_data .= $param.' = "'.str_replace('"', '', $data).'"
+';
 	}
 	rewind($file);
 	fwrite($file, $file_data);
@@ -46,21 +47,21 @@ function password_ency($password)
 
 if($_REQUEST['page'] == '' && !isset($_REQUEST['step'])) 
 {
-echo '<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
-		<title>Installation of account maker</title>
-	</head>
-	<frameset cols="230,*">
-		<frame name="menu" src="install.php?page=menu" />
-		<frame name="step" src="install.php?page=step&step=0" />
-		<noframes><body>Frames don\'t work. Install Firefox :P</body></noframes>
-	</frameset>
-</html>';
+	echo '<html>
+		<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+			<title>Installation of account maker</title>
+		</head>
+		<frameset cols="230,*">
+			<frame name="menu" src="install.php?page=menu" />
+			<frame name="step" src="install.php?page=step&step=0" />
+			<noframes><body>Frames don\'t work. Install Firefox :P</body></noframes>
+		</frameset>
+	</html>';
 }
 if($_REQUEST['page'] == 'menu') 
 {
-echo '<h2>MENU</h2><br>
+	echo '<h2>MENU</h2><br>
 	<b>IF NOT INSTALLED:</b><br>
 	<a href="install.php?page=step&step=start" target="step">0. Informations</a><br>
 	<a href="install.php?page=step&step=1" target="step">1. Set server path</a><br>
@@ -248,7 +249,6 @@ if($_REQUEST['page'] == 'step')
 				$config['server'] = parse_ini_file($config['site']['server_path'].'config.lua');
 				if($config['server']['sqlType'] == "sqlite") {
 					//if sqlite
-					try { $SQL->query('ALTER TABLE accounts ADD "key" VARCHAR(255) NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE accounts ADD "page_lastday" INTEGER(11) NOT NULL DEFAULT 0;'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE accounts ADD "email_new" VARCHAR(255) NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE accounts ADD "email_new_time" INTEGER(15) NOT NULL DEFAULT 0;'); } catch(PDOException $error) {}
@@ -407,7 +407,7 @@ if($_REQUEST['page'] == 'step')
 			if(!isset($check_news['author'])) 
 			{
 				$SQL->query('INSERT INTO z_news_big (hide_news, date, author, author_id, image_id, topic, text) VALUES 
-													(0, '.time().', "Xart", 1, 0, "Xart prefix Edition!", "Gesior ACC - Xart prefix Edition installed. All options should work fine. Report bugs on <a href="http://code.google.com/p/gesior-aac/issues/list">Issuse</a>.");');
+													(0, '.time().', "Xart", 1, 0, "Xart prefix Edition!", "Gesior ACC - Xart prefix Edition installed. All options should work fine. Report bugs on http://code.google.com/p/gesior-aac/issues/list.");');
 				echo "Added first news.<br/>";
 			} 
 			else 
@@ -486,38 +486,32 @@ if($_REQUEST['page'] == 'step')
 			else 
 			{
 				$newpass = $_POST['newpass'];
-				if(!check_password($newpass)) 
-				{
-				echo 'Password contains illegal characters. Please use only a-Z and 0-9. <a href="install.php?page=step&step=5&server_conf=yes">GO BACK</a> and write other password.';
-				}
+				if(!check_password($newpass))
+					echo 'Password contains illegal characters. Please use only a-Z and 0-9. <a href="install.php?page=step&step=5&server_conf=yes">GO BACK</a> and write other password.';
 				else
 				{
 					$newpass_to_db = password_ency($newpass);
-					//ustawienie/stworzenie konta admina
 					$account = new OTS_Account();
 					$account->load(1);
 					if($account->isLoaded()) 
 					{
-						//set password
 						$account->setPassword($newpass_to_db);
 						$account->save();
-						$account->setCustomField("page_access", 3);
-					}
+						$account->setCustomField("page_access", 6);
+					} 
 					else
 					{
-						//create account
 						$number = $account->create(1,1);
 						$account->setPassword($newpass_to_db);
 						$account->unblock();
 						$account->save();
-						$account->setCustomField("created", time());
-						$account->setCustomField("page_access", 3);
+						$account->setCustomField("page_access", 6);
 					}
 					$_SESSION['account'] = 1;
 					$_SESSION['password'] = $newpass;
 					$logged = TRUE;
 					$account->setCustomField("page_lastday", time());
-					echo '<h1>Admin account number: 1<br>Admin account password: '.$_POST['newpass'].'</h1><br/><h3>It\'s end of first part of installation. Installation is blocked. From now don\'t modify file config.ini!<br>Press links to STEPs 6-9 in menu.</h3>'; 
+					echo '<h1>Admin account number: 1<br>Admin account password: '.$_POST['newpass'].'</h1><br/><h3>It\'s end of first part of installation. Installation is blocked. From now don\'t modify file config.ini!<br>Press links to STEPs 6 and 7 in menu.</h3>'; 
 					$config['site']['install'] = 'no';
 					saveconfig_ini($config['site']);
 				}

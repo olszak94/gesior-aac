@@ -1,6 +1,7 @@
 Progres
 <hr>
 ||Section||File||Percent End||
+||Index||index.php<br>config-and-functions.php||95%<br>95%||
 ||Install||install.php||100%||
 ||Account||accountmanagement.php<br>creatureaccount.php<br>lostaccount.php||80%<br>100%<br>100%||
 ||News||latestnews.php<br>archive.php||100%<br>100%||

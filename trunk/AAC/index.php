@@ -64,6 +64,11 @@ if(empty($_REQUEST['subtopic'])) {
 	$subtopic = "latestnews";
 }
 switch($_REQUEST['subtopic']) {
+  	case "credits":
+ 	    $topic = "Credits";
+    	$subtopic = "credits";
+    	include("credits.php");
+ 	break; 
   	case "bans":
  	    $topic = "Banishments";
     	$subtopic = "bans";

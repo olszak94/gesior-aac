@@ -225,7 +225,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function load($id)
     {
         // SELECT query on database
-        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('premend') . ', ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('deleted') . ', ' . $this->db->fieldName('warned') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('salt') . ', ' . $this->db->fieldName('premdays') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('warnings') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
     }
 
 /**
@@ -305,7 +305,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         }
 
         // UPDATE query on database
-        $this->db->query('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName('password') . ' = ' . $this->db->quote($this->data['password']) . ', ' . $this->db->fieldName('email') . ' = ' . $this->db->quote($this->data['email']) . ', ' . $this->db->fieldName('premend') . ' = ' . $this->data['premend'] . ', ' . $this->db->fieldName('blocked') . ' = ' . (int) $this->data['blocked'] . ', ' . $this->db->fieldName('deleted') . ' = ' . (int) $this->data['deleted'] . ', ' . $this->db->fieldName('warned') . ' = ' . (int) $this->data['warned'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+        $this->db->query('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName('password') . ' = ' . $this->db->quote($this->data['password']) . ', ' . $this->db->fieldName('salt') . ' = ' . $this->db->quote($this->data['salt']) . ', ' . $this->db->fieldName('premdays') . ' = ' . $this->data['premdays'] . ', ' . $this->db->fieldName('email') . ' = ' . $this->db->quote($this->data['email']) . ', ' . $this->db->fieldName('blocked') . ' = ' . (int) $this->data['blocked'] . ', ' . $this->db->fieldName('warnings') . ' = ' . (int) $this->data['warnings'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
     }
 
 /**
@@ -347,6 +347,122 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $groups = new OTS_Groups_List();
         $groups->rewind();
         return $groups->current();
+    }
+	
+/**
+ * Other Account Information.
+ * 
+ * <p>
+ * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded} exception instead of triggering E_USER_WARNING.
+ * </p>
+ * 
+ * @version 0.0.3
+ * @return int Account Information.
+ * @throws E_OTS_NotLoaded If account is not loaded.
+ */
+ 
+	public function getRLName()
+    {
+        if( !isset($this->data['rlname']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['rlname'];
+    }
+	
+    public function getLocation()
+    {
+        if( !isset($this->data['location']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['location'];
+    }
+	
+    public function getPageAccess()
+    {
+        if( !isset($this->data['page_access']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['page_access'];
+    }
+	
+    public function getPremDays()
+    {
+        if( !isset($this->data['premdays']) || !isset($this->data['lastday']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
+    }
+	
+    public function getLastLogin()
+    {
+        if( !isset($this->data['lastday']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['lastday'];
+    }
+	
+    public function isPremium()
+    {
+        return ($this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday'])) > 0);
+    }
+
+    public function getCreated()
+    {
+        if( !isset($this->data['created']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['created'];
+    }
+
+	public function getRecoveryKey()
+    {
+        if( !isset($this->data['key']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['key'];
+    }
+	public function getPremiumPoints()
+    {
+        if( !isset($this->data['premium_points']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['premium_points'];
+    }
+
+    public function setRLName($rlname)
+    {
+        $this->data['rlname'] = (string) $rlname;
+    }
+	
+    public function setLocation($loc)
+    {
+        $this->data['location'] = (string) $loc;
+    }
+	
+    public function setRecoveryKey($rec_key)
+    {
+        $this->data['key'] = (string) $rec_key;
+    }
+	
+    public function setPremiumPoints($premium_points)
+    {
+        $this->data['premium_points'] = (string) $premium_points;
     }
 
 /**

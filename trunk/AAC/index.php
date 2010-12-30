@@ -21,17 +21,13 @@ if($action == "logout")
 //##### LOGIN #####
 //check is player logged
 $logged = FALSE;
-if(isset($_SESSION['account'])) 
-{
+if(isset($_SESSION['account'])) {
 	$account_logged = $ots->createObject('Account');
 	$account_logged->load($_SESSION['account']);
-	if($account_logged->isLoaded() && $account_logged->getPassword() == $_SESSION['password']) 
-	{
+	if($account_logged->isLoaded() && $account_logged->getPassword() == $_SESSION['password']) {
 		$logged = TRUE;
 		$group_id_of_acc_logged = $account_logged->getPageAccess();
-	}
-	else
-	{
+	} else {
 		$logged = FALSE;
 		unset($_SESSION['account']);
 		unset($account_logged);
@@ -39,21 +35,18 @@ if(isset($_SESSION['account']))
 }
 $login_account = strtoupper(trim($_POST['account_login']));
 $login_password = trim($_POST['password_login']);
-if(!$logged && !empty($login_account) && !empty($login_password)) 
-{
+if(!$logged && !empty($login_account) && !empty($login_password)) {
 	$login_password = password_ency($login_password);
 	$account_logged = $ots->createObject('Account');
 	$account_logged->find($login_account);
-	if($account_logged->isLoaded()) 
-	{
-		if($login_password == $account_logged->getPassword()) 
-		{
+	if($account_logged->isLoaded()) {
+		if($login_password == $account_logged->getPassword()) {
 			$_SESSION['account'] = $account_logged->getId();
 			$_SESSION['password'] = $login_password;
 			$logged = TRUE;
 			$account_logged->setCustomField("page_lastday", time());
 			$group_id_of_acc_logged = $account_logged->getPageAccess();
-		} else 
+		} else
 			$logged = FALSE;
 	}
 }
@@ -64,162 +57,121 @@ if(empty($_REQUEST['subtopic'])) {
 	$subtopic = "latestnews";
 }
 switch($_REQUEST['subtopic']) {
-	case "changelog";
-   		 $topic = "Changelog";
-  		 $subtopic = "changelog";
-  		  include("changelog.php");
-	break;  
-
   	case "bans":
- 	         $topic = "Banishments";
-    	         $subtopic = "bans";
-    		  include("bans.php");
- 	break;  
-
-  	case "signature":
- 	         $topic = "Signature";
-    	         $subtopic = "signature";
-    		  include("signature.php");
+ 	    $topic = "Banishments";
+    	$subtopic = "bans";
+    	include("bans.php");
  	break; 
-
-  	case "signatures":
- 	         $topic = "Signature Generator";
-    	         $subtopic = "signatures";
-    		  include("signatures.php");
- 	break; 
-
   	case "shopadmin":
- 	         $topic = "Shopadmin";
-    	         $subtopic = "shopadmin";
-    		  include("shopadmin.php");
+ 	    $topic = "Shopadmin";
+    	$subtopic = "shopadmin";
+    	include("shopadmin.php");
  	break; 
-
 	case "paypal";
 		$subtopic = "paypal";
 		$topic = "Paypal";
 		include("paypal.php");
 	break;
-
 	case "namelock";
 		$subtopic = "namelock";
 		$topic = "Namelock Manager";
 		include("namelocks.php");
 	break;
-	
 	case "archive";
 		$subtopic = "archive";
 		$topic = "News Archives";
 		include("archive.php");
 	break;
-
 	case "latestnews":
 		$topic = "Latest News";
 		$subtopic = "latestnews";
 		include("latestnews.php");
 	break;
-	
 	case "creatures";
 		$topic = "Creatures";
 		$subtopic = "creatures";
 		include("creatures.php");
 	break;
-	
 	case "spells";
 		$topic = "Spells";
 		$subtopic = "spells";
 		include("spells.php");
 	break;
-	
 	case "experiencetable";
 		$topic = "Experience Table";
 		$subtopic = "experiencetable";
 		include("experiencetable.php");
 	break;
-	
 	case "characters";
 		$topic = "Characters";
 		$subtopic = "characters";
 		include("characters.php");
 	break;
-	
 	case "whoisonline";
 		$topic = "Who is online?";
 		$subtopic = "whoisonline";
 		include("whoisonline.php");
 	break;
-	
 	case "highscores";
 		$topic = "Highscores";
 		$subtopic = "highscores";
 		include("highscores.php");
 	break;
-	
 	case "killstatistics";
 		$topic = "Last Kills";
 		$subtopic = "killstatistics";
 		include("killstatistics.php");
 	break;
-	
 	case "houses";
 		$topic = "Houses";
 		$subtopic = "houses";
 		include("houses.php");
 	break;
-	
 	case "guilds";
 		$topic = "Guilds";
 		$subtopic = "guilds";
 		include("guilds.php");
 	break;
-	
 	case "accountmanagement";
 		$topic = "Account Management";
 		$subtopic = "accountmanagement";
 		include("accountmanagement.php");
 	break;
-	
 	case "createaccount";
 		$topic = "Create Account";
 		$subtopic = "createaccount";
 		include("createaccount.php");
 	break;
-	
 	case "lostaccount";
 		$topic = "Lost Account Interface";
 		$subtopic = "lostaccount";
 		include("lostaccount.php");
 	break;
-
 	case "tibiarules";
 		$topic = "Server Rules";
 		$subtopic = "tibiarules";
 		include("tibiarules.php");
 	break;
-
 	case "adminpanel":
 		$topic = "Admin Panel";
 		$subtopic = "adminpanel";
 		include("adminpanel.php");
 	break;
-	
 	case "forum":
 		$topic = "Forum";
 		$subtopic = "forum";
 		include("forum.php");
 	break;
-	
 	case "team";
 		$subtopic = "team";
 		$topic = "Gamemasters List";
 		include("team.php");
 	break;
-
 	case "downloads";
 		$subtopic = "downloads";
 		$topic = "Downloads";
 		include("downloads.php");
 	break;
-
 	case "serverinfo";
 		$subtopic = "serverinfo";
 		$topic = "Server Info";

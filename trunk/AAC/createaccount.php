@@ -65,52 +65,53 @@ if($action == "")
 
 		function validate_required(field,alerttxt)
 		{
-		with (field)
-		{
-		if (value==null||value==""||value==" ")
-		  {alert(alerttxt);return false;}
-		else {return true}
-		}
+			with (field)
+			{
+				if (value==null||value==""||value==" ")
+					{alert(alerttxt);return false;}
+				else {return true}
+			}
 		}
 
 		function validate_email(field,alerttxt)
 		{
-		with (field)
-		{
-		apos=value.indexOf("@");
-		dotpos=value.lastIndexOf(".");
-		if (apos<1||dotpos-apos<2) 
-		  {alert(alerttxt);return false;}
-		else {return true;}
-		}
+			with (field)
+			{
+				apos=value.indexOf("@");
+				dotpos=value.lastIndexOf(".");
+				if (apos<1||dotpos-apos<2) 
+					{alert(alerttxt);return false;}
+				else {return true;}
+			}
 		}
 
 		function validate_form(thisform)
 		{
-		with (thisform)
-		{
-		if (validate_required(account_name,"Please enter name of new account!")==false)
-		  {account_name.focus();return false;}
-		if (validate_required(email,"Please enter your e-mail!")==false)
-		  {email.focus();return false;}
-		if (validate_email(email,"Invalid e-mail format!")==false)
-		  {email.focus();return false;}
-		if (verifpass==1) 
-		{
-			if (validate_required(passor,"Please enter password!")==false)
-				{passor.focus();return false;}
-			if (validate_required(passor2,"Please repeat password!")==false)
-				{passor2.focus();return false;}
-			if (passor2.value!=passor.value)
-				{alert(\'Repeated password is not equal to password!\');return false;}
-		}
-		if (verifya==1) {
-		if (validate_required(verify,"Please enter verification code!")==false)
-		  {verify.focus();return false;}
-		}
-		if(rules.checked==false)
-		  {alert(\'To create account you must accept server rules!\');return false;}
-		}
+			with (thisform)
+			{
+				if (validate_required(account_name,"Please enter name of new account!")==false)
+					{account_name.focus();return false;}
+				if (validate_required(email,"Please enter your e-mail!")==false)
+					{email.focus();return false;}
+				if (validate_email(email,"Invalid e-mail format!")==false)
+					{email.focus();return false;}
+				if (verifpass==1) 
+				{
+					if (validate_required(passor,"Please enter password!")==false)
+						{passor.focus();return false;}
+					if (validate_required(passor2,"Please repeat password!")==false)
+						{passor2.focus();return false;}
+					if (passor2.value!=passor.value)
+						{alert(\'Repeated password is not equal to password!\');return false;}
+				}
+				if (verifya==1) 
+				{
+					if (validate_required(verify,"Please enter verification code!")==false)
+						{verify.focus();return false;}
+				}
+				if(rules.checked==false)
+					{alert(\'To create account you must accept server rules!\');return false;}
+			}
 		}
 	</script>';
 	$main_content .= 'To play on '.$config['server']['serverName'].' you need an account. 
@@ -175,7 +176,7 @@ if($action == "")
 									<TABLE BORDER=0 CELLSPACING=5 CELLPADDING=0>
 										<TR>
 											<TD>
-												<INPUT TYPE="checkbox" NAME="rules" id="rules" value="true" /><label for="rules"><u> I agree to the '.$config['server']['serverName'].' Rules.</u></lable><BR>
+												<INPUT TYPE="checkbox" NAME="rules" id="rules" value="true" /><label for="rules"><u> I agree to the <a href="index.php?subtopic=tibiarules">'.$config['server']['serverName'].' Rules</a>.</u></lable><BR>
 												<INPUT TYPE="checkbox" NAME="rules" id="rules" value="true" /><label for="rules"><u> I agree to the Tibia Rules.</u></lable><BR>
 											</TD>
 										</TR>

@@ -25,7 +25,7 @@ foreach($news_DB as $news)
 		</div>
 		<table style=\'clear:both\' border=0 cellpadding=0 cellspacing=0 width=\'100%\'><tr>
 		<td><img src="'.$layout_name.'/images/global/general/blank.gif" width=10 height=1 border=0 alt=\'\' /></td>
-<td width="100%"><font size=2>'.stripslashes(nl2br($news['text'])).'<br></font><br></td>
+		<td width="100%"><font size=2>'.stripslashes(nl2br($news['text'])).'<br></font><br></td>
 		<td><img src="'.$layout_name.'/images/global/general/blank.gif" width=10 height=1 border=0 alt=\'\' /></td>
 		</tr></table>';
 		$main_content .= '<br><a href="index.php?subtopic=archive"><font size="2"><b>Go to Archive</b></font></a>';

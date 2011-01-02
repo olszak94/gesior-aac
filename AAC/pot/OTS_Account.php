@@ -39,7 +39,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @var array
  * @version 0.1.5
  */
-    private $data = array('email' => '', 'key' => '', 'premium_points' => 0, 'blocked' => false, 'warnings' => false, 'rlname' => '', 'location' => '', 'page_access' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
+    private $data = array('email' => '', 'key' => '', 'premium_points' => 0, 'blocked' => false, 'warned' => false, 'rlname' => '', 'location' => '', 'page_access' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
 
 /**
  * Creates new account.
@@ -88,7 +88,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         }
 
         // saves blank account info
-        $this->db->query('INSERT INTO ' . $this->db->tableName('accounts') . ' (' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ') VALUES (' . $this->db->quote($name) . ', \'\', \'\')');
+        $this->db->query('INSERT INTO ' . $this->db->tableName('accounts') . ' (' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ', ) VALUES (' . $this->db->quote($name) . ', \'\', \'\')');
 
         // reads created account's ID
         $this->data['id'] = $this->db->lastInsertId();
@@ -225,7 +225,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function load($id)
     {
         // SELECT query on database
-		$this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('rlname') . ', ' . $this->db->fieldName('location') . ', ' . $this->db->fieldName('key') . ', ' . $this->db->fieldName('premium_points') . ', ' . $this->db->fieldName('page_access') . ', ' . $this->db->fieldName('premdays') . ', ' . $this->db->fieldName('lastday') . ',  ' . $this->db->fieldName('created') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+       $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('rlname') . ', ' . $this->db->fieldName('location') . ', ' . $this->db->fieldName('key') . ', ' . $this->db->fieldName('premium_points') . ', ' . $this->db->fieldName('page_access') . ', ' . $this->db->fieldName('premdays') . ', ' . $this->db->fieldName('lastday') . ',  ' . $this->db->fieldName('created') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
     }
 
 /**

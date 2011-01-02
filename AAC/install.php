@@ -32,17 +32,11 @@ function password_ency($password)
 {
 	$ency = $GLOBALS['encryptionType'];
 	if($ency == 'sha1') 
-	{
 		return sha1($password);
-	}
 	if($ency == 'md5') 
-	{
 		return md5($password);
-	}
 	if($ency == '') 
-	{
 		return $password;
-	}
 }
 
 if($_REQUEST['page'] == '' && !isset($_REQUEST['step'])) 
@@ -89,13 +83,10 @@ if($_REQUEST['page'] == 'step')
 				$mysqldatabase = $config['server']['sqlDatabase'];
 			}
 			$sqlitefile = $config['server']['sqliteDatabase'];
-			$encryptionType = '';
-			if(strtolower($config['server']['encryptionType']) == 'md5') {
+			if(strtolower($config['server']['encryptionType']) == 'md5')
 				$encryptionType = 'md5';
-			}
-			if(strtolower($config['server']['encryptionType']) == 'sha1') {
+			if(strtolower($config['server']['encryptionType']) == 'sha1')
 				$encryptionType = 'sha1';
-			}
 			// loads #####POT mainfile#####
 			include('pot/OTS.php');
 			// PDO and POT connects to database

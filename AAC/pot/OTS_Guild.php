@@ -196,7 +196,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
 
         return $this->data['id'];
     }
-	public function getWorld()
+    public function getWorld()
     {
         if( !isset($this->data['world_id']) )
         {

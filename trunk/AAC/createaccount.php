@@ -111,6 +111,8 @@ if($action == "")
 				}
 				if(rules.checked==false)
 					{alert(\'To create account you must accept server rules!\');return false;}
+				if(rulesServer.checked==false)
+					{alert(\'To create account you must accept server rules!\');return false;}
 			}
 		}
 	</script>';
@@ -121,75 +123,54 @@ if($action == "")
 		<FORM ACTION="index.php?subtopic=createaccount&action=saveaccount" onsubmit="return validate_form(this)" METHOD=post>
 			<TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=4>
 				<TR>
-					<TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Create a '.$config['server']['serverName'].' Account</B></TD>
+					<TD colspan="2" BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Create a '.$config['server']['serverName'].' Account</B></TD>
 				</TR>
-				<TR>
-					<TD BGCOLOR="'.$config['site']['darkborder'].'">
-						<TABLE BORDER=0 CELLSPACING=8 CELLPADDING=0>
-							<TR>
-								<TD>
-									<TABLE BORDER=0 CELLSPACING=5 CELLPADDING=0>
-										<script type="text/javascript">var accountcustom=1;</script>
-										<TR>
-											<TD width="150" valign="top"><B>Account Name: </B></TD><TD colspan="2"><INPUT id="account_name" NAME="reg_name" OnKeyUp="checkAccount();" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Select your account number)</font></TD>
-										</TR>
-										<TR>
-											<TD width="150"><b>Name status:</b></TD><TD colspan="2"><b><div id="acc_name_check">Please enter your account name.</div></b></TD>
-										</TR>
-										<TR>
-											<TD width="150" valign="top"><B>Email address: </B></TD><TD colspan="2"><INPUT id="email" NAME="reg_email" onkeyup="checkEmail();" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Your email address is required to recovery a '.$config['server']['serverName'].' account)</font></TD>
-										</TR>
-										<TR>
-											<TD width="150"><b>Email status:</b></TD><TD colspan="2"><b><div id="email_check">Please enter your e-mail.</div></b></TD>
-										</TR>';
-										if(!$config['site']['create_account_verify_mail'])
-										$main_content .= '<script type="text/javascript">var verifpass=1;</script>
-										<TR>
-											<TD width="150" valign="top"><B>Password: </B></TD><TD colspan="2"><INPUT TYPE="password" id="passor" NAME="reg_password" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Here write your password to new account on '.$config['server']['serverName'].')</font></TD>
-										</TR>
-										<TR>
-											<TD width="150" valign="top"><B>Repeat password: </B></TD><TD colspan="2"><INPUT TYPE="password" id="passor2" NAME="reg_password2" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Repeat your password)</font></TD>
-										</TR>';
-										if($config['site']['verify_code'])
-										{	
-											require_once('recaptchalib.php');
-											$main_content .= '<script type="text/javascript">var verifya=1;</script><TR><TD width="150"><B>Code: </B></TD><TD colspan="2"><TR><TD width="150"><B>Code: </B></TD><TD colspan="2">'.recaptcha_get_html($config['site']['publickey']).'</TD></TR>';
-										} else
-											$main_content .= '<script type="text/javascript">var verifya=0;</script>';
-										$main_content .= '</TABLE>
-								</TD>
-							</TR>
-							<TR>
-								<TD>
-									<TABLE BORDER=0 CELLSPACING=5 CELLPADDING=0>
-										<TR>
-											<TD>Please review the following terms and state your agreement below.</TD>
-										</TR>
-										<TR>
-											<TD><B>'.$config['server']['serverName'].' Rules</B><BR></TD>
-										</TR>
-									</TABLE>
-								</TD>
-							</TR>
-							<TR>
-								<TD>
-									<TABLE BORDER=0 CELLSPACING=5 CELLPADDING=0>
-										<TR>
-											<TD>
-												<INPUT TYPE="checkbox" NAME="rules" id="rules" value="true" /><label for="rules"><u> I agree to the <a href="index.php?subtopic=tibiarules">'.$config['server']['serverName'].' Rules</a>.</u></lable><BR>
-												<INPUT TYPE="checkbox" NAME="rules" id="rules" value="true" /><label for="rules"><u> I agree to the Tibia Rules.</u></lable><BR>
-											</TD>
-										</TR>
-										<TR>
-											<TD>
-												If you fully agree to these terms, click on the "I Agree" button in order to create a '.$config['server']['serverName'].' account.<BR>
-												If you do not agree to these terms or do not want to create a '.$config['server']['serverName'].' account, please click on the "Cancel" button.
-											</TD>
-										</TR>
-									</TABLE>
-								</TD>
-							</TR>
-						</TABLE>
+				<script type="text/javascript">var accountcustom=1;</script>
+				<TR BGCOLOR="'.$config['site']['darkborder'].'">
+					<TD align="center" valign="baseline" width="30%" valign="top"><B>Account Name: </B></TD>
+					<TD><INPUT id="account_name" NAME="reg_name" OnKeyUp="checkAccount();" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica"><b><div id="acc_name_check">(Select your account number)</div></b></font></TD>
+				</TR>
+				<TR BGCOLOR="'.$config['site']['darkborder'].'">
+					<TD align="center" valign="baseline" width="30%" valign="top"><B>Email address: </B></TD>
+					<TD><INPUT id="email" NAME="reg_email" onkeyup="checkEmail();" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica"><b><div id="email_check">(Your email address is required to recovery a '.$config['server']['serverName'].' account)</div></b></font></TD>
+				</TR>';
+				if(!$config['site']['create_account_verify_mail'])
+					$main_content .= '<script type="text/javascript">var verifpass=1;</script>
+				<TR BGCOLOR="'.$config['site']['darkborder'].'">
+					<TD align="center" valign="baseline" width="30%" valign="top"><B>Password: </B></TD>
+					<TD><INPUT TYPE="password" id="passor" NAME="reg_password" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Here write your password to new account on '.$config['server']['serverName'].')</font></TD>
+				</TR>
+				<TR BGCOLOR="'.$config['site']['darkborder'].'">
+					<TD align="center" valign="baseline" width="30%" valign="top"><B>Repeat password: </B></TD>
+					<TD><INPUT TYPE="password" id="passor2" NAME="reg_password2" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Repeat your password)</font></TD>
+				</TR>';
+				if($config['site']['verify_code'])
+				{	
+					require_once('recaptchalib.php');
+					$main_content .= '<script type="text/javascript">var verifya=1;</script>
+					<TR BGCOLOR="'.$config['site']['darkborder'].'">
+						<TD align="center" valign="baseline" colspan="2"><B>Verification Code</B></TD>
+					</TR>
+					<TR BGCOLOR="'.$config['site']['darkborder'].'">
+						<TD align="center" valign="baseline" colspan="2">'.recaptcha_get_html($config['site']['publickey']).'</TD>
+					</TR>';
+				} 
+				else
+					$main_content .= '<script type="text/javascript">var verifya=0;</script>';
+				$main_content .= '
+				<TR BGCOLOR="'.$config['site']['darkborder'].'">
+					<TD colspan="2">Please review the following terms and state your agreement below.</TD>
+				</TR>
+				<TR BGCOLOR="'.$config['site']['darkborder'].'">
+					<TD colspan="2">
+						<INPUT TYPE="checkbox" NAME="rulesServer" id="rulesServer" value="true" /><label for="rulesServer"> <u>I agree to the <a href="index.php?subtopic=tibiarules">'.$config['server']['serverName'].' Rules</a>.</u></lable><BR>
+						<INPUT TYPE="checkbox" NAME="rules" id="rules" value="true" /><label for="rules"> <u>I agree to the Tibia Rules.</u></lable><BR>
+					</TD>
+				</TR>
+				<TR BGCOLOR="'.$config['site']['darkborder'].'">
+					<TD colspan="2">
+						If you fully agree to these terms, click on the "I Agree" button in order to create a '.$config['server']['serverName'].' account.<BR>
+						If you do not agree to these terms or do not want to create a '.$config['server']['serverName'].' account, please click on the "Cancel" button.
 					</TD>
 				</TR>
 			</TABLE><BR>

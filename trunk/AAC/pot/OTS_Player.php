@@ -6,7 +6,7 @@
 
 /**
  * @package POT
- * @version 0.1.6
+ * @version 0.1.5
  * @author Wrzasq <wrzasq@gmail.com>
  * @copyright 2007 - 2008 (C) by Wrzasq
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
@@ -16,7 +16,7 @@
  * OTServ character abstraction.
  * 
  * @package POT
- * @version 0.1.6
+ * @version 0.1.5
  * @property string $name Character name.
  * @property OTS_Account $account Account to which character belongs.
  * @property OTS_Group $group Group of which character is member.
@@ -71,10 +71,10 @@ class OTS_Player extends OTS_Row_DAO
 /**
  * Player data.
  * 
- * @version 0.1.6
+ * @version 0.1.2
  * @var array
  */
-    private $data = array('sex' => POT::SEX_FEMALE, 'vocation' => 0, 'experience' => 0, 'level' => 1, 'maglevel' => 0, 'health' => 100, 'healthmax' => 100, 'mana' => 100, 'manamax' => 100, 'manaspent' => 0, 'soul' => 0, 'direction' => POT::DIRECTION_NORTH, 'lookbody' => 10, 'lookfeet' => 10, 'lookhead' => 10, 'looklegs' => 10, 'looktype' => 136, 'lookaddons' => 0, 'posx' => 0, 'posy' => 0, 'posz' => 0, 'cap' => 0, 'lastlogin' => 0, 'lastlogout' => 0, 'lastip' => 0, 'save' => true, 'redskulltime' => 0, 'redskull' => false, 'guildnick' => '', 'loss_experience' => 10, 'loss_mana' => 10, 'loss_skills' => 10, 'loss_items' => 10, 'balance' => 0, 'stamina' => 201660000);
+    private $data = array('sex' => POT::SEX_FEMALE, 'vocation' => 0, 'experience' => 0, 'level' => 1, 'maglevel' => 0, 'health' => 100, 'healthmax' => 100, 'mana' => 100, 'manamax' => 100, 'manaspent' => 0, 'soul' => 0, 'direction' => POT::DIRECTION_NORTH, 'lookbody' => 10, 'lookfeet' => 10, 'lookhead' => 10, 'looklegs' => 10, 'looktype' => 136, 'lookaddons' => 0, 'posx' => 0, 'posy' => 0, 'posz' => 0, 'cap' => 0, 'lastlogin' => 0, 'lastip' => 0, 'save' => true, 'skull' => 0, 'guildnick' => '', 'loss_experience' => 10, 'loss_mana' => 10, 'loss_skills' => 10, 'loss_items' => 10, 'balance' => 0, 'deleted' => 0, 'promotion' => 0, 'online' => 0, 'marriage' => 0, 'comment' => '', 'created' => 0, 'hide_char' => 0, 'old_name' => '', 'world_id' => 0);
 
 /**
  * Player skills.
@@ -102,7 +102,7 @@ class OTS_Player extends OTS_Row_DAO
 /**
  * Loads player with given id.
  * 
- * @version 0.1.6
+ * @version 0.1.2
  * @param int $id Player's ID.
  * @throws PDOException On PDO operation error.
  */
@@ -169,7 +169,7 @@ class OTS_Player extends OTS_Row_DAO
  * If player is not loaded to represent any existing group it will create new row for it.
  * </p>
  * 
- * @version 0.1.6
+ * @version 0.1.2
  * @throws PDOException On PDO operation error.
  */
     public function save()
@@ -268,6 +268,7 @@ class OTS_Player extends OTS_Row_DAO
         return $this->data['name'];
     }
 
+	
     public function getOldName()
     {
         if( !isset($this->data['old_name']) )
@@ -277,7 +278,6 @@ class OTS_Player extends OTS_Row_DAO
 
         return $this->data['old_name'];
     }
-
 /**
  * Sets players's name.
  * 
@@ -452,6 +452,7 @@ class OTS_Player extends OTS_Row_DAO
 
         return $this->data['comment'];
     }
+
 /**
  * Sets player gender.
  * 
@@ -487,6 +488,7 @@ class OTS_Player extends OTS_Row_DAO
         return $this->data['vocation'];
     }
 
+	
     public function getPromotion()
     {
         if( !isset($this->data['promotion']) )
@@ -496,7 +498,6 @@ class OTS_Player extends OTS_Row_DAO
 
         return $this->data['promotion'];
     }
-
 /**
  * Sets player proffesion.
  * 
@@ -1783,40 +1784,6 @@ class OTS_Player extends OTS_Row_DAO
     }
 
 /**
- * Stamina.
- * 
- * @version 0.1.6
- * @since 0.1.6
- * @return int Miliseconds of stamina left.
- * @throws E_OTS_NotLoaded If player is not loaded.
- */
-    public function getStamina()
-    {
-        if( !isset($this->data['stamina']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
-
-        return $this->data['stamina'];
-    }
-
-/**
- * Sets stamina time left.
- * 
- * <p>
- * This method only updates object state. To save changes in database you need to use {@link OTS_Player::save() save() method} to flush changed to database.
- * </p>
- * 
- * @version 0.1.6
- * @since 0.1.6
- * @param int $stamina Miliseconds of stamina.
- */
-    public function setStamina($stamina)
-    {
-        $this->data['stamina'] = (int) $stamina;
-    }
-
-/**
  * Reads custom field.
  * 
  * <p>
@@ -2442,7 +2409,7 @@ class OTS_Player extends OTS_Row_DAO
         }
 
         // deletes row from database
-        $this->db->query('DELETE FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+        $this->db->query('UPDATE ' . $this->db->tableName('players') . ' SET ' . $this->db->fieldName('deleted') . ' = 1 WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
 
         // resets object handle
         unset($this->data['id']);
@@ -2726,7 +2693,7 @@ class OTS_Player extends OTS_Row_DAO
 /**
  * Magic PHP5 method.
  * 
- * @version 0.1.6
+ * @version 0.1.5
  * @since 0.1.0
  * @param string $name Property name.
  * @return mixed Property value.
@@ -2887,7 +2854,7 @@ class OTS_Player extends OTS_Row_DAO
 /**
  * Magic PHP5 method.
  * 
- * @version 0.1.6
+ * @version 0.1.5
  * @since 0.1.0
  * @param string $name Property name.
  * @param mixed $value Property value.

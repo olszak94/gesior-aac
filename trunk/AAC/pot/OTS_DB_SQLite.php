@@ -51,12 +51,16 @@ class OTS_DB_SQLite extends OTS_Base_DB
         }
 
         // PDO constructor
-        parent::__construct('sqlite:' . $params['database']);
+	try
+	{
+		parent::__construct('sqlite:' . $params['database']);
+	}
+	catch(PDOException $error)
+	{
+		echo 'Can\'t connect to SQLite database.</font>';
+			exit;
+	}
 
-        // this class will drop quotes from field names
-        $this->setAttribute(PDO_ATTR_STATEMENT_CLASS, array('OTS_SQLite_Results') );
-//        $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('OTS_SQLite_Results') );
-    }
 }
 
 /**#@-*/

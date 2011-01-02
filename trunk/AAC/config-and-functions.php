@@ -20,15 +20,10 @@ if(isset($config['server']['sqlHost']))
 	$mysqldatabase = $config['server']['sqlDatabase'];
 }
 $sqlitefile = $config['server']['sqliteDatabase'];
-$encryptionType = '';
 if(strtolower($config['server']['encryptionType']) == 'md5')
-{
 	$encryptionType = 'md5';
-}
 if(strtolower($config['server']['encryptionType']) == 'sha1')
-{
 	$encryptionType = 'sha1';
-}
 // loads #####POT mainfile#####
 include('pot/OTS.php');
 // PDO and POT connects to database

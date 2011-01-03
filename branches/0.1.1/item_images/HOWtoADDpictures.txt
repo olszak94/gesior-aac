@@ -1,0 +1,4 @@
+1.You can add only pictures to items/containers, not PACC
+2.Put in this directory image with name:
+<ID of offer in database>.jpg
+It will be loaded by script.

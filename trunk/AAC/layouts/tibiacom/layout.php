@@ -622,8 +622,8 @@
 					</div>
 					<div id="Footer">
 						<?PHP
-						$time_end = microtime_float();
-						$time = $time_end - $time_start;
+							$time_end = microtime_float();
+							$time = $time_end - $time_start;
 						?>
 						<?PHP echo getFooter() ?><br/>Page has been viewed <?PHP echo $page_views; ?> times. Load time: <?PHP echo round($time, 4); ?> seconds
 					</div>
@@ -652,7 +652,6 @@
 						</div>
 						<?PHP
 						if($group_id_of_acc_logged >= $config['site']['access_admin_panel']) 
-						{
 							echo '
 							<div id="NewcomerBox" class="Themebox" style="background-image:url('.$layout_name.'/images/themeboxes/admin/admin.png);">
 								<div id="lool" CLASS=white>
@@ -664,7 +663,6 @@
 								</div>
 								<div class="Bottom" style="background-image:url('.$layout_name.'/images/general/box-bottom.gif);"></div>
 							</div>';
-						 }
 						 ?>
 						<script type="text/javascript">InitializePage();</script>
 					</div>

@@ -71,8 +71,8 @@ if($config['site']['send_emails'])
 		else
 			$main_content .= 'Invalid player name format. If you have other characters on account try with other name.';
 		$main_content .= '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-					<a href="index.php?subtopic=lostaccount" border="0"><IMG SRC="'.$layout_name.'/images/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
-					</TD></TR></FORM></TABLE></TABLE>';
+			<a href="index.php?subtopic=lostaccount" border="0"><IMG SRC="'.$layout_name.'/images/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
+			</TD></TR></FORM></TABLE></TABLE>';
 	}
 	elseif($action == 'sendcode')
 	{
@@ -406,18 +406,21 @@ if($config['site']['send_emails'])
 		$character = stripslashes(trim($_REQUEST['character']));
 		if(empty($code) || empty($character))
 			$main_content .= 'Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
-					<FORM ACTION="index.php?subtopic=lostaccount&action=checkcode" METHOD=post>
+				<FORM ACTION="index.php?subtopic=lostaccount&action=checkcode" METHOD=post>
 					<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
-					<TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Code & character name</B></TD></TR>
-					<TR><TD BGCOLOR="'.$config['site']['darkborder'].'">
-					Your code:&nbsp;<INPUT TYPE=text NAME="code" VALUE="" SIZE="40")><BR />
-					Character:&nbsp;<INPUT TYPE=text NAME="character" VALUE="" SIZE="40")><BR />
-					</TD></TR>
+						<TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Code & character name</B></TD></TR>
+						<TR><TD BGCOLOR="'.$config['site']['darkborder'].'">
+						Your code:&nbsp;<INPUT TYPE=text NAME="code" VALUE="" SIZE="40")><BR />
+						Character:&nbsp;<INPUT TYPE=text NAME="character" VALUE="" SIZE="40")><BR />
+						</TD></TR>
 					</TABLE>
 					<BR>
 					<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-					<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$layout_name.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
-					</TD></TR></FORM></TABLE></TABLE>';
+						<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$layout_name.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+						</TD></TR>
+					</TABLE>
+				</FORM>
+				</TABLE>';
 		else
 		{
 			$player = new OTS_Player();
@@ -596,5 +599,7 @@ if($config['site']['send_emails'])
 	}
 }
 else
-	$main_content .= '<b>Account maker is not configured to send e-mails, you can\'t use Lost Account Interface. Contact with admin to get help.</b>';
+	$main_content .= '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$layout_name.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$layout_name.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$layout_name.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$layout_name.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
+	$main_content .= '<ul><li>Account maker is not configured to send e-mails, you can\'t use Lost Account Interface. Contact with admin to get help.</li></ul>';
+	$main_content .= '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$layout_name.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
 ?>

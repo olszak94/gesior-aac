@@ -1,9 +1,12 @@
-Progres
+Progres Gesior-AAC 0.1.1
 <hr>
 ||Section||File||Percent End||
 ||Index||index.php<br>config-and-functions.php||100%<br>95%||
 ||Install||install.php||100%||
-||Admin||adminpanel.php<br>namelocks.php||%<br>%||
-||Account||accountmanagement.php<br>creatureaccount.php<br>lostaccount.php||100%<br>100%<br>100%||
+||Admin||adminpanel.php<br>namelocks.php||%<br>100%||
 ||News||latestnews.php<br>archive.php||100%<br>100%||
+||Library||spells.php<br>creatures.php<br>experiencetable.php||%<br>%<br>100%||
 ||Community||characters.php<br>whoisonline.php<br>highscores.php<br>killstatistics.php<br>bans.php<br>houses.php<br>guilds.php||95%<br>100%<br>100%<br>100%<br>100%<br>50%<br>100%||
+||Forum||forum.php||100%||
+||Account||accountmanagement.php<br>creatureaccount.php<br>lostaccount.php||100%<br>100%<br>100%||
+||Support||team.php<br>tibiarules.php||%<br>100%||

@@ -28,7 +28,7 @@ if(isset($_SESSION['account']))
 	if($account_logged->isLoaded() && $account_logged->getPassword() == $_SESSION['password']) 
 	{
 		$logged = TRUE;
-		$group_id_of_acc_logged = $account_logged->getCustomField("page_access");
+		$group_id_of_acc_logged = $account_logged->getPageAccess();
 	} 
 	else 
 	{
@@ -52,8 +52,9 @@ if(!$logged && !empty($login_account) && !empty($login_password))
 			$_SESSION['password'] = $login_password;
 			$logged = TRUE;
 			$account_logged->setCustomField("page_lastday", time());
-			$group_id_of_acc_logged = $account_logged->getCustomField("page_access");
-		} else
+			$group_id_of_acc_logged = $account_logged->getPageAccess();
+		} 
+		else
 			$logged = FALSE;
 	}
 }
@@ -74,16 +75,6 @@ switch($_REQUEST['subtopic']) {
     	$subtopic = "bans";
     	include("bans.php");
  	break; 
-  	case "shopadmin":
- 	    $topic = "Shopadmin";
-    	$subtopic = "shopadmin";
-    	include("shopadmin.php");
- 	break; 
-	case "paypal";
-		$subtopic = "paypal";
-		$topic = "Paypal";
-		include("paypal.php");
-	break;
 	case "namelock";
 		$subtopic = "namelock";
 		$topic = "Namelock Manager";
@@ -190,7 +181,7 @@ switch($_REQUEST['subtopic']) {
 		include("serverinfo.php");
 	break;
 }
-//generate title of page
+// ##### generate title of page
 if(empty($topic)) 
 {
 	$title = $GLOBALS['config']['server']["serverName"]." - OTS";
@@ -200,8 +191,14 @@ else
 {
 	$title = $GLOBALS['config']['server']["serverName"]." - ".$topic;
 }
-//#####LAYOUT#####
-
+// ##### ADD Fotter for Credits
+$time_end = microtime_float();
+$time = $time_end - $time_start;
+function getFooter()
+{
+	echo 'Account maker by <a href="index.php?subtopic=credits">Credits</a>. Layout by '.$config['site']['layout'].'.';
+}
+// ##### LAYOUT
 $layout_header = '<script type=\'text/javascript\'>
 function GetXmlHttpObject()
 {

@@ -81,7 +81,7 @@ $main_content .= '<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%><TR><TD
 	if(count($config['site']['worlds']) > 1)
 	{
 		$main_content .= '<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%><TR><TD>
-		<FORM ACTION="?subtopic=highscores" METHOD=get><INPUT TYPE=hidden NAME=subtopic VALUE=highscores><INPUT TYPE=hidden NAME=list VALUE=experience>
+		<FORM ACTION="index.php?subtopic=highscores" METHOD=get><INPUT TYPE=hidden NAME=subtopic VALUE=highscores><INPUT TYPE=hidden NAME=list VALUE=experience>
 		<TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=4><TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>World Selection</B></TD></TR><TR><TD BGCOLOR="'.$config['site']['lightborder'].'">
 		<TABLE BORDER=0 CELLPADDING=1><TR><TD>World: </TD><TD><SELECT SIZE="1" NAME="world"><OPTION VALUE="" SELECTED>(choose world)</OPTION>';
 		foreach($config['site']['worlds'] as $id => $world_n)

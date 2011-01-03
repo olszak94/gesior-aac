@@ -194,8 +194,9 @@ if($action == "")
 </TABLE>';
 }
 //CREATE ACCOUNT PAGE (save account in database)
-if($action == "saveaccount") {
-	$posted_reg_account = (int) trim($_POST['reg_name']);
+if($action == "saveaccount") 
+{
+	$reg_name = strtoupper(trim($_POST['reg_name']));
 	$reg_email = trim($_POST['reg_email']);
 	$reg_password = trim($_POST['reg_password']);
 	$reg_code = trim($_POST['reg_code']);

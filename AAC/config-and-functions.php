@@ -162,12 +162,24 @@ function check_name($name)//sprawdza name
 {
 	$temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- [ ] '");
 	if ($temp != strlen($name)) 
-	{
 		return false;
-	}
 	else
 	{
 		$ok = "/[a-zA-Z ']{1,25}/";
+		return (preg_match($ok, $name))? true: false;
+	}
+}
+// is it valid account name
+function check_account_name($name) 
+{
+	$temp = strspn("$name", "QWERTYUIOPASDFGHJKLZXCVBNM0123456789");
+	if ($temp != strlen($name))
+		return false;
+	if(strlen($name) > 32)
+		return false;
+	else 
+	{
+		$ok = "/[A-Z0-9]/";
 		return (preg_match($ok, $name))? true: false;
 	}
 }

@@ -6,4 +6,4 @@ Progres
 ||Admin||adminpanel.php<br>namelocks.php||%<br>%||
 ||Account||accountmanagement.php<br>creatureaccount.php<br>lostaccount.php||100%<br>100%<br>100%||
 ||News||latestnews.php<br>archive.php||100%<br>100%||
-||Community||characters.php<br>whoisonline.php<br>highscores.php<br>killstatistics.php<br>bans.php<br>houses.php<br>guilds.php||%<br>%<br>%<br>%<br>%<br>%<br>%||
+||Community||characters.php<br>whoisonline.php<br>highscores.php<br>killstatistics.php<br>bans.php<br>houses.php<br>guilds.php||%<br>%<br>100%<br>%<br>%<br>%<br>%||

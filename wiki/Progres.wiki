@@ -5,7 +5,7 @@ Progres Gesior-AAC 0.1.1
 ||Install||install.php||100%||
 ||Admin||adminpanel.php<br>namelocks.php||100%<br>100%||
 ||News||latestnews.php<br>archive.php||100%<br>100%||
-||Library||spells.php<br>creatures.php<br>experiencetable.php||%<br>%<br>100%||
+||Library||spells.php<br>creatures.php<br>experiencetable.php||100%<br>100%<br>100%||
 ||Community||characters.php<br>whoisonline.php<br>highscores.php<br>killstatistics.php<br>bans.php<br>houses.php<br>guilds.php||95%<br>100%<br>100%<br>100%<br>100%<br>100%<br>100%||
 ||Forum||forum.php||100%||
 ||Account||accountmanagement.php<br>creatureaccount.php<br>lostaccount.php||100%<br>100%<br>100%||

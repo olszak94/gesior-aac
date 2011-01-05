@@ -1,4 +1,7 @@
 #labels Featured,Phase-Requirements
+ToDo in 0.1
+  * Clear first version
+
 ToDo in 0.2
   * Clear Code more file
   * Add show flag configure in config.php

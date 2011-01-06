@@ -13,9 +13,9 @@ if($config['site']['credits_page'])
 		Kowol<br>
 		Gesior<br>
 	<hr>
-		Korzystaj¹c z tego oprogramowania zgadzasz siê na nasz¹ licencjê i terminów. Ten program nie ma ¿adnych gwarancji, chodzi jak to jest.
+		KorzystajÄ…c z tego oprogramowania zgadzasz sie na nasza licencjc i terminow. Ten program nie ma zadnych gwarancji, chodzi jak to jest.
 		<br><br>
-		Jeœli link do tej strony nie jest widoczna na stronie internetowej, prosimy o kontakt z twórców Gesior-AAC natychmiast. 
+		Jesli link do tej strony nie jest widoczna na stronie internetowej, prosimy o kontakt z tworcami Gesior-AAC natychmiast. 
 	<hr>
 	';
 }

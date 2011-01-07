@@ -11,3 +11,9 @@ Progres Gesior-AAC 0.1.1
 ||Forum||forum.php||100%||
 ||Account||accountmanagement.php<br>creatureaccount.php<br>lostaccount.php||100%<br>100%<br>100%||
 ||Support||team.php<br>tibiarules.php||100%<br>100%||
+<hr>
+Progres Gesior-AAC 0.2
+<hr>
+||Section||File||Percent end||
+||Flag||install.php||%||
+||Issue||install.php||100%||

@@ -2,5 +2,5 @@
 Progres Gesior-AAC 0.2
 <hr>
 ||Section||File||Percent end||
-||Flag||install.php<br>characters.php<br>guilds.php<br>highsocers.php<br>config/config.php||%||
+||Flag||install.php<br>characters.php<br>guilds.php<br>team.php<br>highsocers.php<br>config/config.php||%<br>%<br>%<br>%<br>%<br>%||
 ||Issue||install.php||100%||

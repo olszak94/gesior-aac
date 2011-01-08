@@ -307,23 +307,24 @@ if($_REQUEST['page'] == 'step')
 				elseif($config['server']['sqlType'] == "mysql")
 				{
 					//if mysql
-					try { $SQL->query("ALTER TABLE `accounts` ADD `page_lastday` INT( 11 ) NOT NULL;"); } catch(PDOException $error) {}
+					try { $SQL->query("ALTER TABLE `accounts` ADD `premium_points` INT( 11 ) NOT NULL DEFAULT '0';"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `accounts` ADD `email_new` VARCHAR( 255 ) NOT NULL;"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `accounts` ADD `email_new_time` INT( 15 ) NOT NULL;"); } catch(PDOException $error) {}
-					try { $SQL->query("ALTER TABLE `accounts` ADD `created` INT( 11 ) NOT NULL;"); } catch(PDOException $error) {}
-					try { $SQL->query("ALTER TABLE `accounts` ADD `rlname` VARCHAR( 255 ) NOT NULL;"); } catch(PDOException $error) {}
-					try { $SQL->query("ALTER TABLE `accounts` ADD `location` VARCHAR( 255 ) NOT NULL;"); } catch(PDOException $error) {}
-					try { $SQL->query("ALTER TABLE `accounts` ADD `page_access` INT( 11 ) NOT NULL DEFAULT '0';"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `accounts` ADD `email_code` VARCHAR( 255 ) NOT NULL DEFAULT '0';"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `accounts` ADD `next_email` INT( 11 ) NOT NULL DEFAULT '0';"); } catch(PDOException $error) {}
-					try { $SQL->query("ALTER TABLE `accounts` ADD `premium_points` INT( 11 ) NOT NULL DEFAULT '0';"); } catch(PDOException $error) {}
+					try { $SQL->query("ALTER TABLE `accounts` ADD `created` INT( 11 ) NOT NULL;"); } catch(PDOException $error) {}
+					try { $SQL->query("ALTER TABLE `accounts` ADD `page_lastday` INT( 11 ) NOT NULL;"); } catch(PDOException $error) {}
+					try { $SQL->query("ALTER TABLE `accounts` ADD `page_access` INT( 11 ) NOT NULL DEFAULT '0';"); } catch(PDOException $error) {}
+					try { $SQL->query("ALTER TABLE `accounts` ADD `rlname` VARCHAR( 255 ) NOT NULL;"); } catch(PDOException $error) {}
+					try { $SQL->query("ALTER TABLE `accounts` ADD `location` VARCHAR( 255 ) NOT NULL;"); } catch(PDOException $error) {}
+					try { $SQL->query("ALTER TABLE `accounts` ADD `flag` VARCHAR( 255 ) NOT NULL;"); } catch(PDOException $error) {}
 					echo "Added columns to table <b>accounts</b><br/>";
 					try { $SQL->query('ALTER TABLE `guilds` ADD `description` TEXT NOT NULL;'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE `guilds` ADD `logo_gfx_name` VARCHAR( 255 ) NOT NULL;'); } catch(PDOException $error) {}
 					echo "Added columns to table <b>guilds</b>.<br/>";
 					try { $SQL->query("ALTER TABLE `players` ADD `created` INT( 11 ) NOT NULL;"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `players` ADD `nick_verify` VARCHAR( 5 ) NOT NULL;"); } catch(PDOException $error) {}
-					try { $SQL->query('ALTER TABLE players ADD "old_name" VARCHAR(255) NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
+					try { $SQL->query('ALTER TABLE `players` ADD `old_name` VARCHAR(255) NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `players` ADD `hide_char` INT( 11 ) NOT NULL DEFAULT '0';"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `players` ADD `comment` TEXT NOT NULL;"); } catch(PDOException $error) {}
 					echo "Added columns to table <b>players</b><br/>";
@@ -391,9 +392,7 @@ if($_REQUEST['page'] == 'step')
 				echo "Added first news ticker.<br/>";
 			} 
 			else 
-			{
 				echo "News ticker sample is already in database. New sample is not needed.<br/>";
-			}
 			$check_news = $SQL->query('SELECT * FROM z_news_big WHERE author = "Gesior" LIMIT 1 OFFSET 0')->fetch();
 			if(!isset($check_news['author'])) 
 			{
@@ -402,9 +401,7 @@ if($_REQUEST['page'] == 'step')
 				echo "Added first news.<br/>";
 			} 
 			else 
-			{
 				echo "News sample is already in database. New sample is not needed.<br/>";
-			}
 			$check_voc_0 = $SQL->query('SELECT * FROM players WHERE name = "Rook Sample" LIMIT 1 OFFSET 0')->fetch();
 			if(!isset($check_voc_0['name'])) 
 			{
@@ -413,9 +410,7 @@ if($_REQUEST['page'] == 'step')
 				echo "Added 'Rook Sample' character.<br/>";
 			} 
 			else 
-			{
 				echo "Character 'Rook Sample' already in database.<br/>";
-			}
 			$check_voc_1 = $SQL->query('SELECT * FROM players WHERE name = "Sorcerer Sample" LIMIT 1 OFFSET 0')->fetch();
 			if(!isset($check_voc_1['name'])) 
 			{
@@ -424,9 +419,7 @@ if($_REQUEST['page'] == 'step')
 				echo "Added 'Sorcerer Sample' character.<br/>";
 			} 
 			else 
-			{
 				echo "Character 'Sorcerer Sample' already in database.<br/>";
-			}
 			$check_voc_2 = $SQL->query('SELECT * FROM players WHERE name = "Druid Sample" LIMIT 1 OFFSET 0')->fetch();
 			if(!isset($check_voc_2['name'])) 
 			{
@@ -435,9 +428,7 @@ if($_REQUEST['page'] == 'step')
 				echo "Added 'Druid Sample' character.<br/>";
 			} 
 			else 
-			{
 				echo "Character 'Druid Sample' already in database.<br/>";
-			}
 			$check_voc_3 = $SQL->query('SELECT * FROM players WHERE name = "Paladin Sample" LIMIT 1 OFFSET 0')->fetch();
 			if(!isset($check_voc_3['name'])) 
 			{
@@ -446,9 +437,7 @@ if($_REQUEST['page'] == 'step')
 				echo "Added 'Paladin Sample' character.<br/>";
 			} 
 			else 
-			{
 				echo "Character 'Paladin Sample' already in database.<br/>";
-			}
 			$check_voc_4 = $SQL->query('SELECT * FROM players WHERE name = "Knight Sample" LIMIT 1 OFFSET 0')->fetch();
 			if(!isset($check_voc_4['name'])) 
 			{
@@ -457,12 +446,10 @@ if($_REQUEST['page'] == 'step')
 				echo "Added 'Knight Sample' character.<br/>";
 			} 
 			else 
-			{
 				echo "Character 'Knight Sample' already in database.<br/>";
 			$config['site']['install'] = 5;
 			saveconfig_ini($config['site']);
 			echo 'All samples added to database. Now you can go to <a href="install.php?page=step&step=5&server_conf=yes">STEP 5 - Set Admin Account</a><br/>';
-			}
 		}
 		if($step == '5') 
 		{

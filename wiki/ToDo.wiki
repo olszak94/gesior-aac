@@ -6,4 +6,4 @@ ToDo in 0.2
   * Clear Code more file
   * Add show flag configure in config.php
   * Shop System and Histori
-  * Create Nwe ServerInfo.php
+  * Create new ServerInfo.php

@@ -1,7 +1,8 @@
 #labels Featured,Phase-Implementation
-Progres Gesior-AAC 0.1
+Progres Gesior-AAC
 <hr>
 ||Section||File||Percent End||
+||||||0.1||
 ||Index||index.php<br>config-and-functions.php||100%<br>100%||
 ||Install||install.php||100%||
 ||Admin||adminpanel.php<br>namelocks.php||100%<br>100%||
@@ -11,4 +12,6 @@ Progres Gesior-AAC 0.1
 ||Forum||forum.php||100%||
 ||Account||accountmanagement.php<br>creatureaccount.php<br>lostaccount.php||100%<br>100%<br>100%||
 ||Support||team.php<br>tibiarules.php||100%<br>100%||
-<hr>
+||||||0.2||
+||Flag||install.php<br>createaccount.php<br>characters.php<br>guilds.php<br>team.php<br>highsocers.php<br>config/config.php||100%<br>100%<br>%<br>%<br>%<br>%<br>100%||
+||Issue||install.php||100%||

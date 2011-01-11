@@ -7,3 +7,5 @@ ToDo in 0.2
   * Add show flag configure in config.php
   * Shop System and Histori
   * Create new ServerInfo.php
+* add buypoints.php
+* fixed install.php to work in SqLite

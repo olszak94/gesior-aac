@@ -13,5 +13,5 @@ Progres Gesior-AAC
 ||Account||accountmanagement.php<br>creatureaccount.php<br>lostaccount.php||100%<br>100%<br>100%||
 ||Support||team.php<br>tibiarules.php||100%<br>100%||
 ||||||0.2||
-||Flag||install.php<br>createaccount.php<br>characters.php<br>guilds.php<br>team.php<br>highsocers.php<br>config/config.php||100%<br>100%<br>%<br>%<br>%<br>%<br>100%||
-||Issue||install.php||100%||
+||Flag||install.php<br>createaccount.php<br>characters.php<br>guilds.php<br>team.php<br>highsocers.php<br>config/config.php||100%<br>100%<br>%<br>%<br>100%<br>%<br>100%||
+||Issue||install.php||80%||

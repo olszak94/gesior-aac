@@ -14,6 +14,6 @@ Progres Gesior-AAC
 ||Support||team.php<br>tibiarules.php||100%<br>100%||
 ||||||0.2||
 ||Flag||install.php<br>createaccount.php<br>characters.php<br>guilds.php<br>team.php<br>highsocers.php<br>config/config.php||100%<br>100%<br>%<br>%<br>100%<br>%<br>100%||
-||Shop||config/config.php<br>buypoints.php<br>shopsystem.php||100%<br>100%<br>%||
+||Shop||layour/tibiacom/layout.php<br>config/config.php<br>buypoints.php<br>shopsystem.php||%<br>100%<br>100%<br>%||
 ||ServerInfo||serverinfo.php||%||
 ||Issue||install.php||80%||

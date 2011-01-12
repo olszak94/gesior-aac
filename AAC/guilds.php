@@ -202,7 +202,12 @@ if($action == 'show')
 					<TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%>';
 				foreach($players_with_rank as $player)
 				{
-					$main_content .= '<TR><TD><FORM ACTION="index.php?subtopic=guilds&action=change_nick&name='.$player->getName().'" METHOD=post><A HREF="index.php?subtopic=characters&name='.$player->getName().'">'.$player->getName().'</A>';
+					if($config['site']['show_flag'])
+					{
+						$account = $SQL->query('SELECT * FROM `accounts` WHERE id = '.$player->getAccount().'')->fetch();
+						$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
+					}
+					$main_content .= '<TR><TD><FORM ACTION="index.php?subtopic=guilds&action=change_nick&name='.$player->getName().'" METHOD=post>'.$flag.'<A HREF="index.php?subtopic=characters&name='.$player->getName().'">'.$player->getName().'</A>';
 					$guild_nick = $player->getGuildNick();
 					if($logged)
 					{
@@ -243,7 +248,12 @@ if($action == 'show')
 						if($player_from_acc->getName() == $invited_player->getName())
 							$show_accept_invite++;
 				if(is_int($showed_invited / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $showed_invited++;
-				$main_content .= '<TR bgcolor="'.$bgcolor.'"><TD><a href="index.php?subtopic=characters&name='.$invited_player->getName().'">'.$invited_player->getName().'</a>';
+				if($config['site']['show_flag'])
+				{
+					$account = $SQL->query('SELECT * FROM `accounts` WHERE id = '.$invited_player->getAccount().'')->fetch();
+					$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
+				}
+				$main_content .= '<TR bgcolor="'.$bgcolor.'"><TD>'.$flag.'<a href="index.php?subtopic=characters&name='.$invited_player->getName().'">'.$invited_player->getName().'</a>';
 				if($guild_vice)
 					$main_content .= '  (<a href="index.php?subtopic=guilds&action=deleteinvite&guild='.$guild->getName().'&name='.$invited_player->getName().'">Cancel Invitation</a>)';
 				$main_content .= '</TD></TR>'; 

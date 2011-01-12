@@ -59,7 +59,7 @@ $offset = $page * 100;
 //jesli chodzi o skilla
 if(isset($id)) 
 {
-	$skills = $SQL->query('SELECT name, value, world_id FROM players, player_skills WHERE players.world_id = '.$world_id.' AND players.deleted = 0 AND players.group_id < '.$config['site']['players_group_id_block'].' AND players.id = player_skills.player_id AND player_skills.skillid = '.$id.' AND players.account_id != 1 ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset);
+	$skills = $SQL->query('SELECT * FROM players, player_skills WHERE players.world_id = '.$world_id.' AND players.deleted = 0 AND players.group_id < '.$config['site']['players_group_id_block'].' AND players.id = player_skills.player_id AND player_skills.skillid = '.$id.' AND players.account_id != 1 ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset);
 }
 else
 {
@@ -67,11 +67,11 @@ else
 	if($list == "magic") 
 	{
 		$list_name = 'Magic Level';
-		$skills = $SQL->query('SELECT name, maglevel, world_id FROM players WHERE players.world_id = '.$world_id.' AND players.deleted = 0 AND players.group_id < '.$config['site']['players_group_id_block'].' AND account_id != 1 ORDER BY maglevel DESC, manaspent DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $SQL->query('SELECT * FROM players WHERE players.world_id = '.$world_id.' AND players.deleted = 0 AND players.group_id < '.$config['site']['players_group_id_block'].' AND account_id != 1 ORDER BY maglevel DESC, manaspent DESC LIMIT 101 OFFSET '.$offset);
 	}
 	else
 	{
-		$skills = $SQL->query('SELECT name, level, experience, world_id FROM players WHERE players.world_id = '.$world_id.' AND players.deleted = 0 AND players.group_id < '.$config['site']['players_group_id_block'].' AND account_id != 1 ORDER BY level DESC, experience DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $SQL->query('SELECT * FROM players WHERE players.world_id = '.$world_id.' AND players.deleted = 0 AND players.group_id < '.$config['site']['players_group_id_block'].' AND account_id != 1 ORDER BY level DESC, experience DESC LIMIT 101 OFFSET '.$offset);
 		$list_name = 'Experience';
 		$list = 'experience';
 	}
@@ -99,6 +99,11 @@ if($list == "experience")
 $main_content .= '</TR><TR>';
 foreach($skills as $skill)  
 {
+	if($config['site']['show_flag'])
+	{
+		$account = $SQL->query('SELECT * FROM accounts WHERE id = '.$skill['account_id'].'')->fetch();
+		$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
+	}
 	if($number_of_rows < 100) 
 	{
 		if($list == "magic") 
@@ -108,7 +113,7 @@ foreach($skills as $skill)
 		if(!is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
 		$main_content .= '<tr bgcolor="'.$bgcolor.'">
 			<td>'.($offset + $number_of_rows).'.</td>
-			<td><a href="index.php?subtopic=characters&name='.$skill['name'].'">'.$skill['name'].'</a></td>
+			<td>'.$flag.'<a href="index.php?subtopic=characters&name='.$skill['name'].'">'.$skill['name'].'</a></td>
 			<td>'.$skill['value'].'</td>';
 		if($list == "experience") 
 			$main_content .= '<td>'.$skill['experience'].'</td>';

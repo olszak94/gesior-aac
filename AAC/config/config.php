@@ -1,5 +1,5 @@
 <?PHP
-// Admin Option
+// Admin option
 $config['site']['access_admin_panel'] = 6;
 
 // World option
@@ -26,10 +26,10 @@ $config['site']['email_days_to_change'] = 1;
 	$config['site']['generate_new_reckey'] = 0; // let player generate new recovery key, he will receive e-mail with new rec key (not display on page, hacker can't generate rec key)
 	$config['site']['generate_new_reckey_price'] = 5; // you can get some Premium Points for new rec key
 	// New Character option
-		// if rook only:	$config['site']['newchar_vocations'][getWorld]
+		// If rook only:	$config['site']['newchar_vocations'][getWorld]
 		$config['site']['newchar_vocations'][0] = array(1 => 'Sorcerer Sample', 2 => 'Druid Sample', 3 => 'Paladin Sample', 4 => 'Knight Sample');
 		$config['site']['newchar_vocations'][1] = array(0 => 'Rook Sample');
-		// if you want choose many town 
+		// If you want choose many town 
 		$config['site']['newchar_towns'][0] = array(1, 2, 3, 4, 5);
 		$config['site']['newchar_towns'][1] = array(1);
 	
@@ -67,7 +67,7 @@ $config['site']['email_lai_sec_interval'] = 300;
 	$config['site']['credits_page'] = 1;
 	$config['site']['forum_link'] = "";
 	// Info
-	$config['site']['show_flag'] = 0;
+	$config['site']['show_flag'] = 1;
 	$config['site']['show_creationdate'] = 1;
 	$config['site']['players_group_id_block'] = 2;
 		// Limit
@@ -82,9 +82,14 @@ $config['site']['email_lai_sec_interval'] = 300;
 		$towns_list[1] = array(1 => 'Venore');
 
 // Shop option
-$config['site']['shop_system'] = 0;
-$config['site']['verify_code_shop'] = 0;
-
+$config['site']['shop_system'] = 1;
+	// Option for buy points
+	$config['site']['paypal_active'] = 0;
+	$config['site']['zaypay_active'] = 0;
+	$config['site']['dotpay_active'] = 0;
+	$config['site']['daopay_active'] = 0;
+	$config['site']['homepayActive'] = 0;
+	
 // Layout option
 $config['site']['layout'] = "tibiacom";
 ?>

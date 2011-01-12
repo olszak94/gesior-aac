@@ -49,8 +49,14 @@ if(count($config['site']['worlds']) > 1)
 }
 $players_online_data = $SQL->query('SELECT * FROM players WHERE online > 0 AND world_id = '.$world_id.' ORDER BY '.$orderby);
 $number_of_players_online = 0;
-foreach($players_online_data as $player) {
+foreach($players_online_data as $player) 
+{
 	$number_of_players_online++;
+	if($config['site']['show_flag'])
+	{
+		$account = $SQL->query('SELECT * FROM accounts WHERE id = '.$player['account_id'].'')->fetch();
+		$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
+	}
 	if(is_int($number_of_players_online / 2)) 
 	{
 		$bgcolor = $config['site']['darkborder'];
@@ -61,12 +67,13 @@ foreach($players_online_data as $player) {
 	}
 	$players_rows .= '
 	<TR BGCOLOR='.$bgcolor.'>
-		<TD WIDTH=70%><A HREF="index.php?subtopic=characters&name='.urlencode($player['name']).'">'.$player['name'].'</A></TD>
+		<TD WIDTH=70%>'.$flag.'<A HREF="index.php?subtopic=characters&name='.urlencode($player['name']).'">'.$player['name'].'</A></TD>
 		<TD WIDTH=10%>'.$player['level'].'</TD>
 		<TD WIDTH=20%>'.$vocation_name[$player['world_id']][$player['promotion']][$player['vocation']].'</TD>
 	</TR>';
 }
-if($number_of_players_online == 0) {
+if($number_of_players_online == 0) 
+{
 	//server status - server empty
 	$main_content .= '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR="'.$config['site']['vdarkborder'].'"><TD CLASS=white><B>Server Status</B></TD></TR><TR BGCOLOR='.$config['site']['darkborder'].'><TD><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1><TR><TD>Currently no one is playing on '.$config['server']['serverName'].'.</TD></TR></TABLE></TD></TR></TABLE><BR>';
 }

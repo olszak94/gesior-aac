@@ -67,7 +67,7 @@ $config['site']['email_lai_sec_interval'] = 300;
 	$config['site']['credits_page'] = 1;
 	$config['site']['forum_link'] = "";
 	// Info
-	$config['site']['show_flag'] = 1;
+	$config['site']['show_flag'] = 0;
 	$config['site']['show_creationdate'] = 1;
 	$config['site']['players_group_id_block'] = 2;
 		// Limit
@@ -82,7 +82,7 @@ $config['site']['email_lai_sec_interval'] = 300;
 		$towns_list[1] = array(1 => 'Venore');
 
 // Shop option
-$config['site']['shop_system'] = 1;
+$config['site']['shop_system'] = 0;
 	// Option for buy points
 	$config['site']['paypal_active'] = 0;
 	$config['site']['zaypay_active'] = 0;

@@ -439,7 +439,7 @@ if($_REQUEST['page'] == 'step')
 							`account_id` int(20) NOT NULL,
 							`status` varchar(255) NOT NULL,
 							PRIMARY KEY  (`payID`)
-						) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
+						) ENGINE=MyISAM DEFAULT CHARSET=latin1;"); } catch(PDOException $error) {}
 					echo "Added table <b>zaypay_payment</b> (shopsystem).<br/>";
 				}
 				$config['site']['install'] = 4;

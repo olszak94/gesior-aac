@@ -17,4 +17,5 @@ Progres Gesior-AAC
 ||Shop||layour/tibiacom/layout.php<br>config/config.php<br>buypoints.php<br>shopsystem.php<br>install.php||95%<br>100%<br>100%<br>100%<br>100%||
 ||ServerInfo||serverinfo.php||%||
 ||Issue||install.php||100%||
+||||||0.3||
 ||SqLite||install.php||%||

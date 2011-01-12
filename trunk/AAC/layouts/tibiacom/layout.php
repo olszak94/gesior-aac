@@ -10,7 +10,7 @@
 		<link rel="icon" href="<?PHP echo $layout_name; ?>/images/server.ico" type="image/x-icon">
 		<?PHP echo $layout_header; ?>
 		<link href="<?PHP echo $layout_name; ?>/basic.css" rel="stylesheet" type="text/css">
-		<script type='text/javascript'> var IMAGES=0; IMAGES='http://static.tibia.com/images'; var g_FormField='';</script>
+		<script type='text/javascript'> var IMAGES=0; IMAGES='http://static.tibia.com/images'; var g_FormField=''; var LINK_ACCOUNT=0; LINK_ACCOUNT='';</script>
 		<SCRIPT TYPE="text/javascript">
 			<!-- // Framekiller
 			setTimeout ("changePage()", 6000);
@@ -139,7 +139,7 @@
 				document.getElementById("ActiveSubmenuItemIcon_"+activeSubmenuItem).style.visibility = "visible";
 				if(self.name.lastIndexOf("&") == -1) 
 				{
-					self.name = "news=1&account=0&community=0&library=0&forum=0<?PHP if($config['site']['shop_system'] == 1) echo "&shops=0"; ?>&";
+					self.name = "news=1&library=0&community=0&forum=0&account=0&support=0<?PHP if($config['site']['shop_system'] == 1) echo "&shops=0"; ?>&";
 				}
 				FillMenuArray();
 				InitializeMenu();
@@ -593,6 +593,54 @@
 								?>
 							</div>
 						</div>
+						<?PHP
+						if($config['site']['shop_system'] == 1)
+						{
+							echo "<div id='shops' class='menuitem'>
+								<span onClick=\"MenuItemAction('shops')\">
+									<div class='MenuButton' style='background-image:url(".$layout_name."/images/menu/button-background.gif);'>
+										<div onMouseOver='MouseOverMenuItem(this);' onMouseOut='MouseOutMenuItem(this);'>
+											<div class='Button' style='background-image:url(".$layout_name."/images/menu/button-background-over.gif);'></div>
+											<span id='shops_Lights' class='Lights'>
+												<div class='light_lu' style='background-image:url(".$layout_name."/images/menu/green-light.gif);'></div>
+												<div class='light_ld' style='background-image:url(".$layout_name."/images/menu/green-light.gif);'></div>
+												<div class='light_ru' style='background-image:url(".$layout_name."/images/menu/green-light.gif);'></div>
+											</span>
+											<div id='shops_Icon' class='Icon' style='background-image:url(".$layout_name."/images/menu/icon-account.gif);'></div>
+											<div id='shops_Label' class='Label' style='background-image:url(".$layout_name."/images/menu/label-account.gif);'></div>
+											<div id='shops_Extend' class='Extend' style='background-image:url(".$layout_name."/images/general/plus.gif);'></div>
+										</div>
+									</div>
+								</span>
+								<div id='shops_Submenu' class='Submenu'>
+									<a href='?subtopic=buypoints'>
+										<div id='submenu_buypoints' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+											<div class='LeftChain' style='background-image:url(".$layout_name."/images/general/chain.gif);'></div>
+											<div id='ActiveSubmenuItemIcon_buypoints' class='ActiveSubmenuItemIcon' style='background-image:url(".$layout_name."/images/menu/icon-activesubmenu.gif);'></div>
+											<div class='SubmenuitemLabel'>Buy Points</div>
+											<div class='RightChain' style='background-image:url(".$layout_name."/images/general/chain.gif);'></div>
+										</div>
+									</a>
+									<a href='?subtopic=shopsystem'>
+										<div id='submenu_shopsystem' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+											<div class='LeftChain' style='background-image:url(".$layout_name."/images/general/chain.gif);'></div>
+											<div id='ActiveSubmenuItemIcon_shopsystem' class='ActiveSubmenuItemIcon' style='background-image:url(".$layout_name."/images/menu/icon-activesubmenu.gif);'></div>
+											<div class='SubmenuitemLabel'>Ofert Shop</div>
+											<div class='RightChain' style='background-image:url(".$layout_name."images/general/chain.gif);'></div>
+										</div>
+									</a>";
+							if($logged)
+								echo "<a href='?subtopic=shopsystem&action=show_history'>
+									<div id='submenu_shopsystem' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+										<div class='LeftChain' style='background-image:url(".$layout_name."/images/general/chain.gif);'></div>
+										<div id='ActiveSubmenuItemIcon_shopsystem' class='ActiveSubmenuItemIcon' style='background-image:url(".$layout_name."/images/menu/icon-activesubmenu.gif);'></div>
+										<div class='SubmenuitemLabel'>Trans. History</div>
+										<div class='RightChain' style='background-image:url(".$layout_name."/images/general/chain.gif);'></div>
+									</div>
+								</a>";
+							echo "</div></div>";
+						}
+						?>
 						<div id='MenuBottom' style='background-image:url(<?PHP echo $layout_name; ?>/images/general/box-bottom.gif);'></div>
 					</div>
 				</div>

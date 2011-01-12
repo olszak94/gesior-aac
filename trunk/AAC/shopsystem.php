@@ -4,13 +4,9 @@
 if($config['site']['shop_system'] == 1)
 {
 	if($logged)
-	{
 		$user_premium_points = $account_logged->getCustomField('premium_points');
-	}
 	else
-	{
 		$user_premium_points = 'Login first';
-	}
 	function getItemByID($id)
 	{
 		$id = (int) $id;
@@ -169,12 +165,12 @@ if($config['site']['shop_system'] == 1)
 	if($action == '')
 	{
 		unset($_SESSION['viewed_confirmation_page']);
-		$main_content .= '<h2><center>Welcome to '.$config['server']['serverName'].' shop.</center></h2>';
+		$main_content .= '<h2><center>Welcome to '.$config['server']['serverName'].' shop.</center></h2><center>';
 		$offer_list = getOfferArray();
-		//show list of items offers
+		//show list of pacc offers
 		if(count($offer_list['pacc']) > 0)
 		{
-			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="650"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Pacc</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
+			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Pacc</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 			foreach($offer_list['pacc'] as $pacc)
 			{
 				$main_content .= '<tr bgcolor="gold"><td align="center"><font color="black">'.$pacc['days'].'</td><td><font color="black"<b>'.$pacc['name'].'</b> ('.$pacc['points'].' points)<br />'.$pacc['description'].'</td><td align="center">';
@@ -190,9 +186,10 @@ if($config['site']['shop_system'] == 1)
 			}
 			$main_content .= '</table><br />';
 		}
+		//show list of items offers
 		if(count($offer_list['item']) > 0)
 		{
-			$main_content .= '<center><table border="0" cellpadding="1" cellspacing="1" width="650"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;ITEMS</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
+			$main_content .= '<center><table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;ITEMS</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 			foreach($offer_list['item'] as $item)
 			{
 				$main_content .= '<tr bgcolor="gold"><td align="center"><img src="item_images/'.$item['id'].'.jpg"></td><td><b>'.$item['name'].'</b> ('.$item['points'].' points)<br />'.$item['description'].'</td><td align="center">';
@@ -208,9 +205,26 @@ if($config['site']['shop_system'] == 1)
 			}
 			$main_content .= '</table><br />';
 		}
+		// show list of containers offers
+		if(count($offer_list['container']) > 0) 
+		{
+			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="#505050"><td colspan="3"><font color="white" size="4"><b>&nbsp;CONTAINERS WITH ITEMS</b></font></td></tr><tr bgcolor="#D4C0A1"><td width="50" align="center"><b>Picture</b></td><td width="350" align="left"><b>Description</b></td><td width="250" align="center"><b>Select product</b></td></tr>';
+
+			foreach($offer_list['container'] as $container) 
+			{
+				$main_content .= '<tr bgcolor="#F1E0C6"><td align="center"><img src="item_images/'.$container['id'].'.jpg"></td><td><b>'.$container['name'].'</b> ('.$container['points'].' points)<br />'.$container['description'].'</td><td align="center">';
+				if(!$logged)
+					$main_content .= '<b>Login to buy</b>';
+				else 
+					$main_content .= '<form action="?subtopic=shopsystem&action=select_player" method=POST><input type="hidden" name="buy_id" value="'.$container['id'].'"><input type="submit" value="Buy '.$container['name'].'"><br><b>for '.$container['points'].' points</b></form>';
+				$main_content .= '</td></tr>';
+			}
+			$main_content .= '</table><br />';
+		}
+		//show list of itemlogout offers
 		if(count($offer_list['itemlogout']) > 0)
 		{
-			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="650"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Receive Item on Logout</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
+			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Receive Item on Logout</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 			foreach($offer_list['itemlogout'] as $itemlogout)
 			{
 				$main_content .= '<tr bgcolor="gold"><td align="center"><img src="item_images/'.$itemlogout['id'].'.jpg"></td><td><b>'.$itemlogout['name'].'</b> ('.$itemlogout['points'].' points)<br />'.$itemlogout['description'].'</td><td align="center">';
@@ -226,7 +240,8 @@ if($config['site']['shop_system'] == 1)
 			}
 			$main_content .= '</table><br />';
 		}
-		$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="650"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Others</b></font></td></tr><tr width="650" bgcolor="black"></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b></b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
+		if(count($offer_list['changename']) > 0 or count($offer_list['pacc']) > 0 or count($offer_list['redskull']) > 0 or count($offer_list['unban']) > 0 )
+			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Others</b></font></td></tr><tr width="650" bgcolor="black"></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b></b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 		if(count($offer_list['changename']) > 0)
 			foreach($offer_list['changename'] as $changename)
 			{
@@ -271,6 +286,7 @@ if($config['site']['shop_system'] == 1)
 				$main_content .= '</td></tr>';
 			}
 			$main_content .= '</table><br />';
+		$main_content .= '</center>';
 	}
 	elseif($action == 'select_player')
 	{
@@ -691,7 +707,7 @@ if($config['site']['shop_system'] == 1)
 				$main_content .= 'You did not buy/receive any item or PACC.';
 		}
 	}
-	$main_content .= '<br><br><b><font color="green">You have premium points: </font></b>'.$user_premium_points;
+	$main_content .= '<br><br><b><center>You have premium points: </font></b>'.$user_premium_points.'</center>';
 }
 else
 	$main_content .= 'Shop system is blocked on this server. Admin must install this script (LUA and in database only, PHP is installed) on server and set <b>shop_system = "1"</b> in config.ini file';

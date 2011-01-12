@@ -606,8 +606,8 @@
 												<div class='light_ld' style='background-image:url(".$layout_name."/images/menu/green-light.gif);'></div>
 												<div class='light_ru' style='background-image:url(".$layout_name."/images/menu/green-light.gif);'></div>
 											</span>
-											<div id='shops_Icon' class='Icon' style='background-image:url(".$layout_name."/images/menu/icon-account.gif);'></div>
-											<div id='shops_Label' class='Label' style='background-image:url(".$layout_name."/images/menu/label-account.gif);'></div>
+											<div id='shops_Icon' class='Icon' style='background-image:url(".$layout_name."/images/menu/icon-shops.gif);'></div>
+											<div id='shops_Label' class='Label' style='background-image:url(".$layout_name."/images/menu/label-shops.gif);'></div>
 											<div id='shops_Extend' class='Extend' style='background-image:url(".$layout_name."/images/general/plus.gif);'></div>
 										</div>
 									</div>
@@ -625,8 +625,8 @@
 										<div id='submenu_shopsystem' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
 											<div class='LeftChain' style='background-image:url(".$layout_name."/images/general/chain.gif);'></div>
 											<div id='ActiveSubmenuItemIcon_shopsystem' class='ActiveSubmenuItemIcon' style='background-image:url(".$layout_name."/images/menu/icon-activesubmenu.gif);'></div>
-											<div class='SubmenuitemLabel'>Ofert Shop</div>
-											<div class='RightChain' style='background-image:url(".$layout_name."images/general/chain.gif);'></div>
+											<div class='SubmenuitemLabel'>Shop Offer</div>
+											<div class='RightChain' style='background-image:url(".$layout_name."/images/general/chain.gif);'></div>
 										</div>
 									</a>";
 							if($logged)

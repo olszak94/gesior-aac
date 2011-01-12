@@ -11,3 +11,7 @@ ToDo in 0.2
 
 ToDo in 0.3
   * fixed install.php to work in SqLite
+  * add wars.php and modifited
+  * add bugtracker
+  * add chanlogs
+  * configure to work TFS 0.3.6pl1

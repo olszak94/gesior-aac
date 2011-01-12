@@ -63,9 +63,14 @@ if($action == '')
 		foreach($guilds_list as $guild) 
 		{
 			if(is_int($showed_guilds / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $showed_guilds++;
-				$guild_logo = $guild->getCustomField('logo_gfx_name');
-			if(empty($guild_logo) || !file_exists("guilds/".$guild_logo))
+			foreach (array("/", "\\", "..") as $char) 
+			{
+				$guild_logo = str_replace($char, "", $guild->getCustomField('logo_gfx_name'));
+			}
+			if (empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
+			{
 				$guild_logo = "default_logo.gif";
+			}
 			$description = $guild->getCustomField('description');
 			$newlines   = array("\r\n", "\n", "\r");
 			$description_with_lines = str_replace($newlines, '<br />', $description, $count);
@@ -164,9 +169,14 @@ if($action == 'show')
 			}
 		}
 		//show guild page
-		$guild_logo = $guild->getCustomField('logo_gfx_name');
-		if(empty($guild_logo) || !file_exists("guilds/".$guild_logo))
+		foreach (array("/", "\\", "..") as $char) 
+		{
+			$guild_logo = str_replace($char, "", $guild->getCustomField('logo_gfx_name'));
+		}
+		if (empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
+		{
 			$guild_logo = "default_logo.gif";
+		}
 		$description = $guild->getCustomField('description');
 		$newlines   = array("\r\n", "\n", "\r");
 		$description_with_lines = str_replace($newlines, '<br />', $description, $count);
@@ -1337,8 +1347,11 @@ if($action == 'changelogo')
 					}
 					if(empty($upload_errors)) 
 					{
-						$guild_logo = $guild->getCustomField('logo_gfx_name');
-						if(empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
+						foreach (array("/", "\\", "..") as $char) 
+						{
+							$guild_logo = str_replace($char, "", $guild->getCustomField('logo_gfx_name'));
+						}
+						if (empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
 						{
 							$guild_logo = "default_logo.gif";
 						}
@@ -1346,6 +1359,7 @@ if($action == 'changelogo')
 						{
 							unlink('guilds/'.$guild_logo);
 						}
+						
 					}
 					//show errors or save file
 					if(!empty($upload_errors)) 
@@ -1360,8 +1374,11 @@ if($action == 'changelogo')
 						$guild->setCustomField('logo_gfx_name', $save_file_name.'.'.$extension);
 					}
 				}
-				$guild_logo = $guild->getCustomField('logo_gfx_name');
-				if(empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
+				foreach (array("/", "\\", "..") as $char) 
+				{
+					$guild_logo = str_replace($char, "", $guild->getCustomField('logo_gfx_name'));
+				}
+				if (empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
 				{
 					$guild_logo = "default_logo.gif";
 				}

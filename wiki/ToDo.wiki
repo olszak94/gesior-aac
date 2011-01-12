@@ -8,4 +8,6 @@ ToDo in 0.2
   * Shop System and Histori
   * Create new ServerInfo.php
   * add buypoints.php
+
+ToDo in 0.3
   * fixed install.php to work in SqLite

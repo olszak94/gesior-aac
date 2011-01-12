@@ -361,13 +361,13 @@ foreach(explode("*", str_replace(" ", "", $config['server']['statusTimeout'])) a
 		$statustimeout = $statustimeout * $status_var;
 
 $statustimeout = $statustimeout / 1000;
-$config['status'] = parse_ini_file('config/serverstatus');
+$config['status'] = parse_ini_file('cache/serverstatus');
 if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
 {
 	$config['status']['serverStatus_checkInterval'] = $statustimeout+3;
 	$config['status']['serverStatus_lastCheck'] = time();
 	$info = chr(6).chr(0).chr(255).chr(255).'info';
-	$sock = @fsockopen("127.0.0.1", $config['server']['statusProtocolPort'], $errno, $errstr, 1);
+	$sock = @fsockopen("127.0.0.1", $config['server']['statusPort'], $errno, $errstr, 1);
 	if ($sock)
 	{
 		fwrite($sock, $info); 
@@ -385,14 +385,19 @@ if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
 		$config['status']['serverStatus_uptime'] = $h.'h '.$m.'m';
 		preg_match('/monsters total="(\d+)"/', $data, $matches);
 		$config['status']['serverStatus_monsters'] = $matches[1];
+		preg_match('/npc total="(\d+)"/', $data, $matches);
+		$config['status']['serverStatus_npc'] = $matches[1];
 	}
 	else
 	{
 		$config['status']['serverStatus_online'] = 0;
 		$config['status']['serverStatus_players'] = 0;
 		$config['status']['serverStatus_playersMax'] = 0;
+		$config['status']['serverStatus_monsters'] = 0;
+		$config['status']['serverStatus_uptime'] = 0;
+		$config['status']['serverStatus_npc'] = 0;
 	}
-	$file = fopen("config/serverstatus", "w");
+	$file = fopen("cache/serverstatus", "w");
 	foreach($config['status'] as $param => $data)
 	{
 $file_data .= $param.' = "'.str_replace('"', '', $data).'"
@@ -403,7 +408,7 @@ $file_data .= $param.' = "'.str_replace('"', '', $data).'"
 	fclose($file);
 }
 //PAGE VIEWS COUNTER :)
-$views_counter = "usercounter.dat";
+$views_counter = "cache/usercounter.dat";
 // checking if the file exists
 if (file_exists($views_counter)) 
 {

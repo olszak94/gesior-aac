@@ -180,6 +180,16 @@ switch($_REQUEST['subtopic']) {
 		$topic = "Server Info";
 		include("serverinfo.php");
 	break;
+	case "shopsystem";
+		$subtopic = "shopsystem";
+		$topic = "Shop System";
+		include("shopsystem.php");
+	break;
+	case "buypoints";
+		$subtopic = "buypoints";
+		$topic = "Buy Points";
+		include("buypoints.php");
+	break;
 }
 // ##### generate title of page
 if(empty($topic)) 

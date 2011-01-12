@@ -1,7 +1,14 @@
 <?PHP
 $name = stripslashes(ucwords(strtolower(trim($_REQUEST['name']))));
 if(empty($name))
-		$main_content .= 'Here you can get detailed information about a certain player on '.$config['server']['serverName'].'.<BR>  <FORM ACTION="?subtopic=characters" METHOD=post><TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=4><TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Search Character</B></TD></TR><TR><TD BGCOLOR="'.$config['site']['darkborder'].'"><TABLE BORDER=0 CELLPADDING=1><TR><TD>Name:</TD><TD><INPUT NAME="name" VALUE=""SIZE=29 MAXLENGTH=29></TD><TD><INPUT TYPE=image NAME="Submit" SRC="'.$layout_name.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></TD></TR></TABLE></TD></TR></TABLE></FORM>';
+		$main_content .= 'Here you can get detailed information about a certain player on '.$config['server']['serverName'].'.<BR>  <FORM ACTION="?subtopic=characters" METHOD=post><TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=4><TR><TD BGCOLOR="'.$config['site']['vdarkborder'].'" CLASS=white><B>Search Character</B></TD></TR><TR><TD BGCOLOR="'.$config['site']['darkborder'].'">
+		<TABLE BORDER=0 CELLPADDING=1>
+			<TR>
+				<TD>Name:</TD>
+				<TD><input name="name" maxlength="30" type="text" class="custom-field" value="" /></TD>
+				<TD><INPUT TYPE=image NAME="Submit" SRC="'.$layout_name.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></TD>
+			</TR>
+		</TABLE></TD></TR></TABLE></FORM>';
 else
 {
 	if(check_name($name)) 
@@ -11,9 +18,15 @@ else
 		if($player->isLoaded()) 
 		{
 			$account = $player->getAccount();
+			if($config['site']['show_flag'])
+			{
+				$account_db = new OTS_Account();
+				$flagg = $account->getCustomField("flag");
+				$flag = '<image src="http://images.boardhost.com/flags/'.$flagg.'.png"/> ';
+			}
 			$main_content .= '<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%><TR><TD></TD><TD><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Character Information</B></TD></TR>';
 			if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
-				$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD WIDTH=20%>Name:</TD><TD><font color="';
+				$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD WIDTH=20%>Name:</TD><TD>'.$flag.'<font color="';
 				$main_content .= ($player->isOnline()) ? 'green' : 'red';
 				$main_content .= '"><b>'.$player->getName().'</b></font>';
 				if($player->isDeleted())

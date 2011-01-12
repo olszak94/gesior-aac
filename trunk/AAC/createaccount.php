@@ -166,7 +166,7 @@ if($action == "")
 							<TD><INPUT TYPE="password" id="passor2" NAME="reg_password2" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Repeat your password)</font></TD>
 						</TR>'; 
 				else
-					$main_content .= '<script type="text/javascript">var verifya=0;</script>';
+					$main_content .= '<script type="text/javascript">var verifpass=0;</script>';
 				if($config['site']['verify_code'])
 				{	
 					require_once('recaptchalib.php');

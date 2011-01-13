@@ -8,6 +8,11 @@ ToDo in 0.2
   * Shop System and Histori
   * Create new ServerInfo.php
   * add buypoints.php
+   * add DotPay
+   * add DaoPay
+   * add HomePay
+   * add ZayPay
+   * add PayPal 
 
 ToDo in 0.3
   * fixed install.php to work in SqLite

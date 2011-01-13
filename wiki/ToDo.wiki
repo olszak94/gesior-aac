@@ -6,16 +6,16 @@ ToDo in 0.2
   * Clear Code more file
   * Add show flag configure in config.php
   * Shop System and Histori
-  * Create new ServerInfo.php
+  * Create new serverInfo.php
   * add buypoints.php
-   * add DotPay
-   * add DaoPay
-   * add HomePay
-   * add ZayPay
-   * add PayPal 
+   * add dotpay
+   * add daopay
+   * add homepay
+   * add zaypay
+   * add paypal 
 
 ToDo in 0.3
-  * fixed install.php to work in SqLite
+  * fixed install.php to work in sqlite
   * add wars.php and modifited
   * add bugtracker
   * add chanlogs

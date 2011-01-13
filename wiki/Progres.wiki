@@ -14,8 +14,13 @@ Progres Gesior-AAC
 ||Support||team.php<br>tibiarules.php||100%<br>100%||
 ||||||0.2||
 ||Flag||install.php<br>createaccount.php<br>characters.php<br>whoisonline.php<br>guilds.php<br>team.php<br>highsocers.php<br>config/config.php||100%<br>100%<br>100%<br>100%<br>100%<br>100%<br>100%<br>100%||
-||Shop||layour/tibiacom/layout.php<br>config/config.php<br>buypoints.php<br>shopsystem.php<br>install.php||100%<br>100%<br>100%<br>100%<br>100%||
-||ServerInfo||serverinfo.php||100%||
+||Shop||layout/tibiacom/layout.php<br>config/config.php<br>buypoints.php<br>shopsystem.php<br>install.php||100%<br>100%<br>100%<br>100%<br>100%||
+||Serverinfo||serverinfo.php||100%||
 ||Issue||install.php||100%||
 ||||||0.3||
-||SqLite||install.php||%||
+||Sqlite||install.php||100%||
+||transfer buy points<br>(buy points log)||buypoints.php<br>paypal/ipn/ipn.php<br>zaypay/report.php<br>install.php||100%<br>100%<br>100%<br>100%||
+||changelog||changelog.php<br>install.php||%<br>%||
+||Tracker||tracker.php<br>install.php||%<br>%||
+||War Info||wars.php||%||
+||configure<br>0.3.6pl1||install.php||%||

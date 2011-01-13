@@ -20,3 +20,4 @@ ToDo in 0.3
   * add bugtracker
   * add chanlogs
   * configure to work TFS 0.3.6pl1
+  * delet folder trans and add new table in base z_histori_buy_points

@@ -22,5 +22,4 @@ Progres Gesior-AAC
 ||transfer buy points<br>(buy points log)||buypoints.php<br>paypal/ipn/ipn.php<br>zaypay/report.php<br>install.php||100%<br>100%<br>100%<br>100%||
 ||changelog||changelog.php<br>install.php||%<br>%||
 ||Tracker||tracker.php<br>install.php||100%<br>100%||
-||War Info||wars.php||%||
 ||configure<br>0.3.6pl1||install.php||100%||

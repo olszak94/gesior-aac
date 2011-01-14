@@ -20,6 +20,6 @@ Progres Gesior-AAC
 ||||||0.3||
 ||Sqlite||install.php||100%||
 ||transfer buy points<br>(buy points log)||buypoints.php<br>paypal/ipn/ipn.php<br>zaypay/report.php<br>install.php||100%<br>100%<br>100%<br>100%||
-||changelog||changelog.php<br>install.php||%<br>%||
+||changelog||changelog.php<br>install.php||100%<br>100%||
 ||Tracker||tracker.php<br>install.php||100%<br>100%||
 ||configure<br>0.3.6pl1||install.php||100%||

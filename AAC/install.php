@@ -545,6 +545,7 @@ if($_REQUEST['page'] == 'step')
 							`where` varchar(255) NOT NULL default '',
 							`date` int(11) NOT NULL default '0',
 							`description` varchar(255) NOT NULL,
+							`hide` int(11) NOT NULL,
 							PRIMARY KEY  (`id`)
 						) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;  "); } catch(PDOException $error) {}
 					echo "Added table <b>z_changelog</b> (support).<br/>";

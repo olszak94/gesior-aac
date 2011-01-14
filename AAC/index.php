@@ -170,6 +170,11 @@ switch($_REQUEST['subtopic']) {
 		$topic = "Tracker";
 		include("tracker.php");
 	break;
+	case "changelog";
+		$subtopic = "changelog";
+		$topic = "Change Log";
+		include("changelog.php");
+	break;
 	case "team";
 		$subtopic = "team";
 		$topic = "Gamemasters List";

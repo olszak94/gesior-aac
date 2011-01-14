@@ -417,7 +417,7 @@ if($_REQUEST['page'] == 'step')
 							`text` text NOT NULL,
 							`hide_ticker` tinyint(1) NOT NULL
 						) ENGINE=MyISAM DEFAULT CHARSET=latin1;"); } catch(PDOException $error) {}
-					echo "Added table <b>z_news_tickers</b> (tickers).<br/>"; 
+					echo "Added table <b>z_news_tickers</b> (news tickers).<br/>"; 
 					try { $SQL->query('CREATE TABLE `z_spells` (
 							`name` VARCHAR(255) NOT NULL,
 							`spell` VARCHAR(255) NOT NULL,
@@ -431,7 +431,7 @@ if($_REQUEST['page'] == 'step')
 							`conj_count` INTEGER NOT NULL DEFAULT 0,
 							`hide_spell` INTEGER NOT NULL DEFAULT 0
 						);'); } catch(PDOException $error) {}
-					echo 'Added table <b>z_spells</b> (spells list).<br/>';
+					echo 'Added table <b>z_spells</b> (libray).<br/>';
 					try { $SQL->query('CREATE TABLE `z_monsters` (
 							`hide_creature` tinyint(1) NOT NULL default \'0\',
 							`name` varchar(255) NOT NULL,
@@ -447,7 +447,7 @@ if($_REQUEST['page'] == 'step')
 							`race` varchar(255) NOT NULL,
 							`gfx_name` varchar(255) NOT NULL
 						) ENGINE=MyISAM DEFAULT CHARSET=latin1;'); } catch(PDOException $error) {}
-					echo 'Added table <b>z_monsters</b> (monsters list).<br/><br/>';
+					echo 'Added table <b>z_monsters</b> (libray).<br/><br/>';
 					try { $SQL->query("CREATE TABLE `z_ots_comunication` (
 							`id` int(11) NOT NULL auto_increment,
 							`name` varchar(255) NOT NULL,
@@ -538,7 +538,16 @@ if($_REQUEST['page'] == 'step')
 							`uid` int(11) NOT NULL AUTO_INCREMENT,
 							PRIMARY KEY (uid)
 						) ENGINE=MyISAM  DEFAULT CHARSET=latin1;"); } catch(PDOException $error) {}
-					echo "Added table <b>z_shop_points_bought</b> (shopsystem).<br/><br/>";
+					echo "Added table <b>z_tracker</b> (support).<br/>";
+					try { $SQL->query("CREATE TABLE IF NOT EXISTS `z_changelog` (
+							`id` int(11) NOT NULL auto_increment,
+							`type` varchar(255) NOT NULL default '',
+							`where` varchar(255) NOT NULL default '',
+							`date` int(11) NOT NULL default '0',
+							`description` varchar(255) NOT NULL,
+							PRIMARY KEY  (`id`)
+						) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;  "); } catch(PDOException $error) {}
+					echo "Added table <b>z_changelog</b> (support).<br/>";
 				}
 				$config['site']['install'] = 4;
 				saveconfig_ini($config['site']);

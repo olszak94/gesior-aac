@@ -65,31 +65,17 @@ if(empty($_REQUEST['subtopic'])) {
 	$subtopic = "latestnews";
 }
 switch($_REQUEST['subtopic']) {
-  	case "credits":
- 	    $topic = "Credits";
-    	$subtopic = "credits";
-    	include("credits.php");
- 	break; 
-  	case "bans":
- 	    $topic = "Banishments";
-    	$subtopic = "bans";
-    	include("bans.php");
- 	break; 
-	case "namelock";
-		$subtopic = "namelock";
-		$topic = "Namelock Manager";
-		include("namelocks.php");
+	case "latestnews":
+		$topic = "Latest News";
+		$subtopic = "latestnews";
+		include("latestnews.php");
 	break;
 	case "archive";
 		$subtopic = "archive";
 		$topic = "News Archives";
 		include("archive.php");
 	break;
-	case "latestnews":
-		$topic = "Latest News";
-		$subtopic = "latestnews";
-		include("latestnews.php");
-	break;
+
 	case "creatures";
 		$topic = "Creatures";
 		$subtopic = "creatures";
@@ -100,11 +86,17 @@ switch($_REQUEST['subtopic']) {
 		$subtopic = "spells";
 		include("spells.php");
 	break;
+	case "serverinfo";
+		$subtopic = "serverinfo";
+		$topic = "Server Info";
+		include("serverinfo.php");
+	break;
 	case "experiencetable";
 		$topic = "Experience Table";
 		$subtopic = "experiencetable";
 		include("experiencetable.php");
 	break;
+
 	case "characters";
 		$topic = "Characters";
 		$subtopic = "characters";
@@ -125,6 +117,11 @@ switch($_REQUEST['subtopic']) {
 		$subtopic = "killstatistics";
 		include("killstatistics.php");
 	break;
+  	case "bans":
+ 	    $topic = "Banishments";
+    	$subtopic = "bans";
+    	include("bans.php");
+ 	break;
 	case "houses";
 		$topic = "Houses";
 		$subtopic = "houses";
@@ -135,6 +132,13 @@ switch($_REQUEST['subtopic']) {
 		$subtopic = "guilds";
 		include("guilds.php");
 	break;
+
+	case "forum":
+		$topic = "Forum";
+		$subtopic = "forum";
+		include("forum.php");
+	break;
+
 	case "accountmanagement";
 		$topic = "Account Management";
 		$subtopic = "accountmanagement";
@@ -150,46 +154,54 @@ switch($_REQUEST['subtopic']) {
 		$subtopic = "lostaccount";
 		include("lostaccount.php");
 	break;
+	case "downloads";
+		$subtopic = "downloads";
+		$topic = "Downloads";
+		include("downloads.php");
+	break;
+
 	case "tibiarules";
 		$topic = "Server Rules";
 		$subtopic = "tibiarules";
 		include("tibiarules.php");
 	break;
-	case "adminpanel":
-		$topic = "Admin Panel";
-		$subtopic = "adminpanel";
-		include("adminpanel.php");
-	break;
-	case "forum":
-		$topic = "Forum";
-		$subtopic = "forum";
-		include("forum.php");
+	case "tracker";
+		$subtopic = "tracker";
+		$topic = "Tracker";
+		include("tracker.php");
 	break;
 	case "team";
 		$subtopic = "team";
 		$topic = "Gamemasters List";
 		include("team.php");
 	break;
-	case "downloads";
-		$subtopic = "downloads";
-		$topic = "Downloads";
-		include("downloads.php");
+	case "adminpanel":
+		$topic = "Admin Panel";
+		$subtopic = "adminpanel";
+		include("adminpanel.php");
 	break;
-	case "serverinfo";
-		$subtopic = "serverinfo";
-		$topic = "Server Info";
-		include("serverinfo.php");
+	case "namelock";
+		$subtopic = "namelock";
+		$topic = "Namelock Manager";
+		include("namelocks.php");
+	break;
+
+	case "buypoints";
+		$subtopic = "buypoints";
+		$topic = "Buy Points";
+		include("buypoints.php");
 	break;
 	case "shopsystem";
 		$subtopic = "shopsystem";
 		$topic = "Shop System";
 		include("shopsystem.php");
 	break;
-	case "buypoints";
-		$subtopic = "buypoints";
-		$topic = "Buy Points";
-		include("buypoints.php");
-	break;
+
+  	case "credits":
+ 	    $topic = "Credits";
+    	$subtopic = "credits";
+    	include("credits.php");
+ 	break;
 }
 // ##### generate title of page
 if(empty($topic)) 
@@ -202,11 +214,9 @@ else
 	$title = $GLOBALS['config']['server']["serverName"]." - ".$topic;
 }
 // ##### ADD Fotter for Credits
-$time_end = microtime_float();
-$time = $time_end - $time_start;
 function getFooter()
 {
-	echo 'Account maker by <a href="index.php?subtopic=credits">Credits</a>. Layout by '.$config['site']['layout'].'.';
+	echo 'Account maker by <a href="index.php?subtopic=credits">Credits</a>. Layout by '.$GLOBALS['config']['site']['layout'].'.';
 }
 // ##### LAYOUT
 $layout_header = '<script type=\'text/javascript\'>

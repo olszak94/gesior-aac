@@ -10,7 +10,7 @@ if($config['site']['serverinfo_page'])
 				<td colspan="2"><font class="white"><b>Status</b></font></td>
 			</tr>
 			<tr bgcolor="'.$config['site']['vdarkborder'].'">
-				<td><font class="white">Name</font></td><td><font class="white">Value</font></td>
+				<td width="50%"><font class="white">Name</font></td><td><font class="white">Value</font></td>
 			</tr>
 			<tr bgcolor="'.$config['site']['darkborder'].'">
 				<td>Server</td><td>'.(($config['status']['serverStatus_online'] == 1) ? '<font color="grenn"><b>OnLine</b></font>' : '<font color="red"><b>OffLine</b></font>').'</td>
@@ -67,7 +67,7 @@ if($config['site']['serverinfo_page'])
 				<td><font class="white">Name</font></td><td><font class="white">Value</font></td>
 			</tr>
 			<tr bgcolor="'.$config['site']['darkborder'].'">
-				<td width="45%">Experience</td><td>'.$rateExperience.'</td>
+				<td width="50%">Experience</td><td>'.$rateExperience.'</td>
 			</tr>
 			<tr bgcolor="'.$config['site']['lightborder'].'">
 				<td>Skill</td><td>'.$config['server']['rateSkill'].' x</td>
@@ -113,13 +113,13 @@ if($config['site']['serverinfo_page'])
 			<td colspan="2"><font class="white"><b>Info Server</b></font></td>
 		</tr>
 		<tr bgcolor="'.$config['site']['vdarkborder'].'">
-			<td><font class="white">Name</font></td><td><font class="white">Value</font></td>
+			<td width="50%"><font class="white">Name</font></td><td><font class="white">Value</font></td>
 		</tr>
 		<tr bgcolor="'.$config['site']['darkborder'].'">
 			<td>World Type</td><td>'.$config['server']['worldType'].'</td>
 		</tr>
 		<tr bgcolor="'.$config['site']['lightborder'].'">
-			<td></td><td>'.$version.'</td>
+			<td>Client Version</td><td>'.$version.'</td>
 		</tr>
 		<tr bgcolor="'.$config['site']['darkborder'].'">
 			<td>Server motd</td><td>'.$config['server']['motd'].'</td>
@@ -167,7 +167,7 @@ if($config['site']['serverinfo_page'])
 				$main_content .= '<td>'.$command["words"].'</td></tr>';
 			else
             {
-				$main_content .= '<tr align="center" bgcolor="'.$bgcolor.'"><td>'.$command["words"].'</td>';
+				$main_content .= '<tr align="center" bgcolor="'.$bgcolor.'"><td width="50%">'.$command["words"].'</td>';
 				$k++;
             }
 			$i++;
@@ -208,7 +208,7 @@ if($config['site']['serverinfo_page'])
 			<td colspan="2"><font class="white"><b>Frags</b></font></td>
 		</tr>
 		<tr bgcolor="'.$config['site']['vdarkborder'].'">
-			<td><font class="white">Name</font></td><td><font class="white">Value</font></td>
+			<td width="50%"><font class="white">Name</font></td><td><font class="white">Value</font></td>
 		</tr>
 		<tr bgcolor="'.$config['site']['darkborder'].'">
 			<td>White Skull Time</td><td>'.$whiteSkullTime.'</td>
@@ -253,7 +253,7 @@ if($config['site']['serverinfo_page'])
 			<td colspan="2"><font class="white"><b>Onther information</b></font></td>
 		</tr>
 		<tr bgcolor="'.$config['site']['vdarkborder'].'">
-			<td><font class="white">Name</font></td><td><font class="white">Value</font></td>
+			<td width="50%"><font class="white">Name</font></td><td><font class="white">Value</font></td>
 		</tr>
 		<tr bgcolor="'.$config['site']['darkborder'].'">
 			<td>Premium</td><td>'.$freePremium.'</td>

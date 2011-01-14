@@ -16,7 +16,7 @@ $config['dotpay_active'] = $config['site']['dotpay_active']; #active dotpay syst
 	$config['dotpay'][0]['addpoints'] = 100; # ile premium punktow daje dany sms
 	$config['dotpay'][0]['sms_number'] = 73068; # numer na jaki nalezy wyslac kod
 	$config['dotpay'][0]['sms_text'] = "AP.DEB3"; # tresc jaka ma byc w SMSie
-	$config['dotpay'][0]['sms_cost'] = "3.66 zl brutto"; # cena za wyslanie sms
+	$config['dotpay'][0]['sms_cost'] = "3.69 zl brutto"; # cena za wyslanie sms
 	# przykladowy konfig dla przelewu bankowego/karty kredytowej
 	$config['dotpay'][1]['id'] = 21468;       # numer ID zarejestrowanego klienta
 	$config['dotpay'][1]['code'] = "DEBT"; # identyfikator uslug SMS
@@ -59,20 +59,13 @@ $config['homepay_active'] = $config['site']['homepayActive'];
 	$config['homepay'][1]['przelew_text']="NASZAUSLUGA";
 	$config['homepay'][1]['przelew_cost']="10.00 zl brutto";
 #################################################################################
-function save_trans($file, $acc, $code)
-{
-	$hak = fopen($file, "a");
-	fwrite($hak, $code.'='.$acc.'
-');
-	fclose($hak);
-}
-
 function check_code_daopay($appcode, $prodcode, $pin)
 {
     $handle = fopen("https://daopay.com/svc/pincheck?appcode=".$appcode."&prodcode=".$prodcode."&pin=".$pin, 'r');  
-        if(ereg('[^0-9A-Za-z]',$appcode) || ereg('[^0-9A-Za-z]',$prodcode) || ereg('[^0-9A-Za-z]',$pin))  {
-                die("You what a duplikat point your are a loser");
-        }
+	if(ereg('[^0-9A-Za-z]',$appcode) || ereg('[^0-9A-Za-z]',$prodcode) || ereg('[^0-9A-Za-z]',$pin))  
+	{
+		die("You what a duplikat point your are a loser");
+	}
     if ($handle)
     {
         $status = fgets($handle, 128);
@@ -89,8 +82,9 @@ function check_code_daopay($appcode, $prodcode, $pin)
 
 function check_code_dotpay($code, $posted_code, $user_id, $type)
 {
-    if(ereg('[^0-9A-Za-z]',$code) || ereg('[^0-9A-Za-z]',$posted_code) || ereg('[^0-9A-Za-z]',$user_id) || ereg('[^0-9A-Za-z]',$type))  {
-		die("odejdz duchu nieczysty");
+    if(ereg('[^0-9A-Za-z]',$code) || ereg('[^0-9A-Za-z]',$posted_code) || ereg('[^0-9A-Za-z]',$user_id) || ereg('[^0-9A-Za-z]',$type))  
+	{
+		die("You what a duplikat point your are a loser");
     }
     $handle = fopen("http://dotpay.pl/check_code.php?id=".$user_id."&code=".$code."&check=".$posted_code."&type=".$type."&del=0", 'r');
     $status = fgets($handle, 8);
@@ -190,8 +184,8 @@ elseif ($_REQUEST['system'] == 'daopay' && $config['daopay_active'])
 			{
 				if(add_points($account, $config['daopay'][$offer_id]['addpoints']))
 				{
-					save_trans('trans/daopay.log', $account->getId(), $posted_pincode);
-					$main_content .= '<h2><font color="red">Good PIN code. Added '.$config['daopay'][$offer_id]['addpoints'].' Premium Points to account of: '.$to_user.' !</font></h2>';
+					$executedaopaylog = $SQL->query("INSERT INTO `z_shop_points_bought` (`id` ,`amount` ,`type` ,`accountid` , `code`, `paypalmail`, `date`) VALUES (NULL , '".$config['daopay'][$offer_id]['addpoints']."', 'Daopay', '".$account->getId()."', '".$posted_pincode."', 'N/A',CURRENT_TIMESTAMP);");
+                    $main_content .= '<h2><font color="red">Good PIN code. Added '.$config['daopay'][$offer_id]['addpoints'].' Premium Points to account of: '.$to_user.' !</font></h2>';
 				}
 				else
 					$errors[] = 'Error occured, try again.';
@@ -268,7 +262,7 @@ elseif ($_REQUEST['system'] == 'homepay' && $config['homepay_active'])
 				{
 					if(add_points($account, $config['homepay'][$sms_type]['addpoints']))
 					{
-						save_trans('trans/homepay.log', $account->getId(), $posted_code); 
+						$executehomepaylog = $SQL->query("INSERT INTO `z_shop_points_bought` (`id` ,`amount` ,`type` ,`accountid` , `code`, `paypalmail`, `date`) VALUES (NULL , '".$config['homepay'][$sms_type]['addpoints']."', 'Homepay', '".$account->getId()."', '".$posted_code."', 'N/A', CURRENT_TIMESTAMP);");
 						$main_content .= '<h1><font color="red">Dodano '.$config['homepay'][$sms_type]['addpoints'].' punktow premium do konta: '.$to_user.' !</font></h1>';
 					}
 					else
@@ -366,9 +360,9 @@ elseif ($_REQUEST['system'] == 'dotpay' && $config['dotpay_active'])
 			{
 				if(add_points($account, $config['dotpay'][$sms_type]['addpoints']))
 				{
-					save_trans('trans/dotpay.log', $account->getId(), $posted_code);
 					$code_info = delete_code_dotpay($config['dotpay'][$sms_type]['code'], $posted_code, $config['dotpay'][$sms_type]['id'], $config['dotpay'][$sms_type]['type']);
-					$main_content .= '<h1><font color="red">Dodano '.$config['dotpay'][$sms_type]['addpoints'].' punktow premium do konta: '.$to_user.' !</font></h1>';
+					$executedotpaylog = $SQL->query("INSERT INTO `z_shop_points_bought` (`id` ,`amount` ,`type` ,`accountid` , `code`, `paypalmail`, `date`) VALUES (NULL , '".$config['dotpay'][$sms_type]['addpoints']."', 'Dotpay', '".$account->getId()."', '".$posted_code."', 'N/A', CURRENT_TIMESTAMP);");
+                    $main_content .= '<h1><font color="red">Dodano '.$config['dotpay'][$sms_type]['addpoints'].' punktow premium do konta: '.$to_user.' !</font></h1>';
 				}
 				else
 					$errors[] = 'Wystapil blad podczas dodawania punktow do konta, sproboj ponownie.';

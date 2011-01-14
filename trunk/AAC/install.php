@@ -2,7 +2,8 @@
 $config['site'] = parse_ini_file('config/config.ini');
 session_start();
 //save config in ini file
-function saveconfig_ini($config) {
+function saveconfig_ini($config) 
+{
 	$file = fopen("config/config.ini", "w");
 	foreach($config as $param => $data) 
 	{
@@ -83,6 +84,7 @@ if($_REQUEST['page'] == 'step')
 				$mysqldatabase = $config['server']['sqlDatabase'];
 			}
 			$sqlitefile = $config['server']['sqliteDatabase'];
+			$encryptionType = '';
 			if(strtolower($config['server']['encryptionType']) == 'md5')
 				$encryptionType = 'md5';
 			if(strtolower($config['server']['encryptionType']) == 'sha1')
@@ -146,9 +148,11 @@ if($_REQUEST['page'] == 'step')
 				$config['site']['server_path'] = str_replace("\\", "/", $config['site']['server_path']);
 				$config['site']['server_path'] = str_replace("//", "/", $config['site']['server_path']);
 				saveconfig_ini($config['site']);
-				if(file_exists($config['site']['server_path'].'config.lua')) {
+				if(file_exists($config['site']['server_path'].'config.lua')) 
+				{
 					$config['server'] = parse_ini_file($config['site']['server_path'].'config.lua');
-					if(isset($config['server']['sqlType'])) {
+					if(isset($config['server']['sqlType'])) 
+					{
 						$config['site']['install'] = 2;
 						saveconfig_ini($config['site']);
 						echo 'File <b>config.lua</b> loaded from <font color="red"><i>'.$config['site']['server_path'].'config.lua</i></font> and looks like fine server config file. Now you can check database('.$config['server']['sqlType'].') connection: <a href="install.php?page=step&step=2">STEP 2 - check database connection</a>';
@@ -185,14 +189,10 @@ if($_REQUEST['page'] == 'step')
 			}
 			$sqlitefile = $config['server']['sqliteDatabase'];
 			$encryptionType = '';
-			if(strtolower($config['server']['encryptionType']) == 'md5') 
-			{
+			if(strtolower($config['server']['encryptionType']) == 'md5')
 				$encryptionType = 'md5';
-			}
 			if(strtolower($config['server']['encryptionType']) == 'sha1') 
-			{
 				$encryptionType = 'sha1';
-			}
 			// loads #####POT mainfile#####
 			include('pot/OTS.php');
 			// PDO and POT connects to database
@@ -238,7 +238,8 @@ if($_REQUEST['page'] == 'step')
 			echo '<h1>STEP '.$step.'</h1>Add tables and columns to DB<br>';
 			echo 'Installer try to add new tables and columns to database.<br>';
 				$config['server'] = parse_ini_file($config['site']['server_path'].'config.lua');
-				if($config['server']['sqlType'] == "sqlite") {
+				if($config['server']['sqlType'] == "sqlite") 
+				{
 					//if sqlite
 					try { $SQL->query('ALTER TABLE accounts ADD "page_lastday" INTEGER(11) NOT NULL DEFAULT 0;'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE accounts ADD "email_new" VARCHAR(255) NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
@@ -250,59 +251,130 @@ if($_REQUEST['page'] == 'step')
 					try { $SQL->query('ALTER TABLE accounts ADD "email_code" VARCHAR(255) NOT NULL DEFAULT 0;'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE accounts ADD "next_email" INTEGER(11) NOT NULL DEFAULT 0;'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE accounts ADD "premium_points" INTEGER(11) NOT NULL DEFAULT 0;'); } catch(PDOException $error) {}
+					try { $SQL->query('ALTER TABLE accounts ADD "flag" VARCHAR( 255 ) NOT NULL;'); } catch(PDOException $error) {}
 					echo "Added columns to table <b>accounts</b>.<br/>";
 					try { $SQL->query('ALTER TABLE guilds ADD "description" TEXT NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE guilds ADD "logo_gfx_name" VARCHAR(255) NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
 					echo "Added columns to table <b>guilds</b>.<br/>";
 					try { $SQL->query('ALTER TABLE players ADD "created" INTEGER(11) NOT NULL DEFAULT 0;'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE players ADD "nick_verify" VARCHAR(5) NOT NULL DEFAULT 0;'); } catch(PDOException $error) {}
+					try { $SQL->query('ALTER TABLE players ADD "old_name" VARCHAR(255) NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE players ADD "hide_char" INTEGER(11) NOT NULL DEFAULT 0;'); } catch(PDOException $error) {}
 					try { $SQL->query('ALTER TABLE players ADD "comment" TEXT NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
 					echo "Added columns to table <b>players</b>.<br/>";
 					try { $SQL->query('CREATE TABLE "z_news_big" (
-								"hide_news" INTEGER NOT NULL DEFAULT 0,
-								"date" INTEGER NOT NULL,
-								"author" VARCHAR(255) NOT NULL,
-								"author_id" INTEGER NOT NULL,
-								"image_id" INTEGER NOT NULL DEFAULT 0,
-								"topic" VARCHAR(255) NOT NULL,
-								"text" TEXT NOT NULL);'); } catch(PDOException $error) {}
+						"hide_news" INTEGER NOT NULL DEFAULT 0,
+						"date" INTEGER NOT NULL,
+						"author" VARCHAR(255) NOT NULL,
+						"author_id" INTEGER NOT NULL,
+						"image_id" INTEGER NOT NULL DEFAULT 0,
+						"topic" VARCHAR(255) NOT NULL,
+						"text" TEXT NOT NULL);'); } catch(PDOException $error) {}
 					echo "Added table <b>z_news_big</b> (news).<br/>";
 					try { $SQL->query('CREATE TABLE "z_news_tickers" (
-								"date" INTEGER NOT NULL,
-								"author" INTEGER NOT NULL,
-								"image_id" INTEGER NOT NULL DEFAULT 0,
-								"text" TEXT NOT NULL,
-								"hide_ticker" INTEGER NOT NULL DEFAULT 0);'); } catch(PDOException $error) {}
+						"date" INTEGER NOT NULL,
+						"author" INTEGER NOT NULL,
+						"image_id" INTEGER NOT NULL DEFAULT 0,
+						"text" TEXT NOT NULL,
+						"hide_ticker" INTEGER NOT NULL DEFAULT 0);'); } catch(PDOException $error) {}
 					echo "Added table <b>z_news_tickers</b> (tickers).<br/>";
 					try { $SQL->query('CREATE TABLE "z_spells" (
-								"name" VARCHAR(255) NOT NULL,
-								"spell" VARCHAR(255) NOT NULL,
-								"spell_type" VARCHAR(255) NOT NULL,
-								"mana" INTEGER NOT NULL DEFAULT 0,
-								"lvl" INTEGER NOT NULL DEFAULT 0,
-								"mlvl" INTEGER NOT NULL DEFAULT 0,
-								"soul" INTEGER NOT NULL DEFAULT 0,
-								"pacc" VARCHAR(255) NOT NULL,
-								"vocations" VARCHAR(255) NOT NULL,
-								"conj_count" INTEGER NOT NULL DEFAULT 0,
-								"hide_spell" INTEGER NOT NULL DEFAULT 0);'); } catch(PDOException $error) {}
+						"name" VARCHAR(255) NOT NULL,
+						"spell" VARCHAR(255) NOT NULL,
+						"spell_type" VARCHAR(255) NOT NULL,
+						"mana" INTEGER NOT NULL DEFAULT 0,
+						"lvl" INTEGER NOT NULL DEFAULT 0,
+						"mlvl" INTEGER NOT NULL DEFAULT 0,
+						"soul" INTEGER NOT NULL DEFAULT 0,
+						"pacc" VARCHAR(255) NOT NULL,
+						"vocations" VARCHAR(255) NOT NULL,
+						"conj_count" INTEGER NOT NULL DEFAULT 0,
+						"hide_spell" INTEGER NOT NULL DEFAULT 0);'); } catch(PDOException $error) {}
 					echo "Added table <b>z_spells</b> (spells list).<br/>";
 					try { $SQL->query('CREATE TABLE "z_monsters" (
-					  "hide_creature" INTEGER NOT NULL DEFAULT 0,
-					  "name" VARCHAR(255) NOT NULL,
-					  "mana" INTEGER NOT NULL,
-					  "exp" INTEGER NOT NULL,
-					  "health" INTEGER NOT NULL,
-					  "speed_lvl" INTEGER NOT NULL DEFAULT 1,
-					  "use_haste" INTEGER NOT NULL,
-					  "voices" text NOT NULL,
-					  "immunities" VARCHAR(255) NOT NULL,
-					  "summonable" INTEGER NOT NULL,
-					  "convinceable" INTEGER NOT NULL,
-					  "race" VARCHAR(255) NOT NULL,
-					  "gfx_name" VARCHAR(255) NOT NULL)'); } catch(PDOException $error) {}
-					echo 'Added table <b>z_monsters</b> (monsters list).<br/>';
+						"hide_creature" INTEGER NOT NULL DEFAULT 0,
+						"name" VARCHAR(255) NOT NULL,
+						"mana" INTEGER NOT NULL,
+						"exp" INTEGER NOT NULL,
+						"health" INTEGER NOT NULL,
+						"speed_lvl" INTEGER NOT NULL DEFAULT 1,
+						"use_haste" INTEGER NOT NULL,
+						"voices" text NOT NULL,
+						"immunities" VARCHAR(255) NOT NULL,
+						"summonable" INTEGER NOT NULL,
+						"convinceable" INTEGER NOT NULL,
+						"race" VARCHAR(255) NOT NULL,
+						"gfx_name" VARCHAR(255) NOT NULL)'); } catch(PDOException $error) {}
+					echo 'Added table <b>z_monsters</b> (monsters list).<br/><br/>';
+					try { $SQL->query('CREATE TABLE "z_ots_comunication" (
+						"id" int(11) NOT NULL auto_increment,
+						"name" varchar(255) NOT NULL,
+						"type" varchar(255) NOT NULL,
+						"action" varchar(255) NOT NULL,
+						"param1" varchar(255) NOT NULL,
+						"param2" varchar(255) NOT NULL,
+						"param3" varchar(255) NOT NULL,
+						"param4" varchar(255) NOT NULL,
+						"param5" varchar(255) NOT NULL,
+						"param6" varchar(255) NOT NULL,
+						"param7" varchar(255) NOT NULL,
+						"delete_it" int(2) NOT NULL default "1",
+						PRIMARY KEY  ("id"))'); } catch(PDOException $error) {}
+					echo "Added table <b>z_ots_comunication</b> (shopsystem).<br/>";
+					try { $SQL->query('CREATE TABLE "z_shop_offer" (
+						"id" int(11) NOT NULL auto_increment,
+						"points" int(11) NOT NULL default 0,
+						"itemid1" int(11) NOT NULL default 0,
+						"count1" int(11) NOT NULL default 0,
+						"itemid2" int(11) NOT NULL default 0,
+						"count2" int(11) NOT NULL default 0,
+						"offer_type" varchar(255) default NULL,
+						"offer_description" text NOT NULL,
+						"offer_name" varchar(255) NOT NULL,
+						"pid" INT(11) NOT NULL DEFAULT 0,  
+						PRIMARY KEY  ("id"))'); } catch(PDOException $error) {}
+					echo "Added table <b>z_shop_offer</b> (shopsystem).<br/>";
+					try { $SQL->query('CREATE TABLE "z_shop_history_item" (
+						"id" int(11) NOT NULL auto_increment,
+						"to_name" varchar(255) NOT NULL default 0,
+						"to_account" int(11) NOT NULL default 0,
+						"from_nick" varchar(255) NOT NULL,
+						"from_account" int(11) NOT NULL default 0,
+						"price" int(11) NOT NULL default 0,
+						"offer_id" int(11) NOT NULL default 0,
+						"trans_state" varchar(255) NOT NULL,
+						"trans_start" int(11) NOT NULL default 0,
+						"trans_real" int(11) NOT NULL default 0,
+						PRIMARY KEY  ("id"))'); } catch(PDOException $error) {}
+					echo "Added table <b>z_shop_history_item</b> (shopsystem).<br/>";
+					try { $SQL->query('CREATE TABLE "z_shop_history_pacc" (
+						"id" int(11) NOT NULL auto_increment,
+						"to_name" varchar(255) NOT NULL default 0,
+						"to_account" int(11) NOT NULL default 0,
+						"from_nick" varchar(255) NOT NULL,
+						"from_account" int(11) NOT NULL default 0,
+						"price" int(11) NOT NULL default 0,
+						"pacc_days" int(11) NOT NULL default 0,
+						"trans_state" varchar(255) NOT NULL,
+						"trans_start" int(11) NOT NULL default 0,
+						"trans_real" int(11) NOT NULL default 0,
+						PRIMARY KEY  ("id"))');  } catch(PDOException $error) {}
+					echo "Added table <b>z_shop_history_pacc</b> (shopsystem).<br/>";
+					try { $SQL->query('CREATE TABLE "zaypay_payment" (
+						"payID" bigint(30) NOT NULL,
+						"account_id" int(20) NOT NULL,
+						"status" varchar(255) NOT NULL,
+						PRIMARY KEY  ("payID"))'); } catch(PDOException $error) {}
+					echo "Added table <b>zaypay_payment</b> (shopsystem).<br/>";
+					try { $SQL->query('CREATE TABLE "z_shop_points_bought" (
+						"id" INT( 15 ) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+						"amount" INT( 15 ) NOT NULL,
+						"type" VARCHAR( 255 ) NOT NULL,
+						"accountid" INT( 15 ) NOT NULL,
+						"code" VARCHAR( 255 ) NOT NULL,
+						"paypalmail" VARCHAR( 255 ) NOT NULL,
+						"date" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP )'); } catch(PDOException $error) {}
+					echo "Added table <b>z_shop_points_bought</b> (shopsystem).<br/>";
 				}
 				elseif($config['server']['sqlType'] == "mysql")
 				{
@@ -441,6 +513,32 @@ if($_REQUEST['page'] == 'step')
 							PRIMARY KEY  (`payID`)
 						) ENGINE=MyISAM DEFAULT CHARSET=latin1;"); } catch(PDOException $error) {}
 					echo "Added table <b>zaypay_payment</b> (shopsystem).<br/>";
+					try { $SQL->query("CREATE TABLE `z_shop_points_bought` (
+							`id` INT( 15 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+							`amount` INT( 15 ) NOT NULL ,
+							`type` VARCHAR( 255 ) NOT NULL ,
+							`accountid` INT( 15 ) NOT NULL ,
+							`code` VARCHAR( 255 ) NOT NULL ,
+							`paypalmail` VARCHAR( 255 ) NOT NULL ,
+							`date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
+						) ENGINE = MyISAM ;"); } catch(PDOException $error) {}
+					echo "Added table <b>z_shop_points_bought</b> (shopsystem).<br/><br/>";
+					try { $SQL->query("CREATE TABLE z_tracker (
+							`account` varchar(255) NOT NULL,
+							`type` int(11) NOT NULL,
+							`status` int(11) NOT NULL,
+							`text` text NOT NULL,
+							`id` int(11) NOT NULL,
+							`subject` varchar(255) NOT NULL,
+							`typetracker` int(11) NOT NULL,
+							`tag` int(11) NOT NULL,
+							`priority` int(11) NOT NULL,
+							`reply` int(11) NOT NULL,
+							`who` int(11) NOT NULL,
+							`uid` int(11) NOT NULL AUTO_INCREMENT,
+							PRIMARY KEY (uid)
+						) ENGINE=MyISAM  DEFAULT CHARSET=latin1;"); } catch(PDOException $error) {}
+					echo "Added table <b>z_shop_points_bought</b> (shopsystem).<br/><br/>";
 				}
 				$config['site']['install'] = 4;
 				saveconfig_ini($config['site']);
@@ -471,7 +569,7 @@ if($_REQUEST['page'] == 'step')
 			if(!isset($check_voc_0['name'])) 
 			{
 				$SQL->query('INSERT INTO players 	(name, world_id, group_id, account_id, level, vocation, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, rank_id, guildnick, lastlogout, blessings, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_containers, loss_items, premend, online, marriage, promotion, deleted, description, comment, created, hide_char, nick_verify) VALUES 
-													("Rook Sample", 0, 1, 1, 1, 0, 150, 150, 0, 44, 44, 44, 44, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 420, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
+													("Rook Sample", 0, 1, 1, 1, 0, 150, 150, 0, 44, 44, 44, 44, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 430, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
 				echo "Added 'Rook Sample' character.<br/>";
 			} 
 			else 
@@ -480,7 +578,7 @@ if($_REQUEST['page'] == 'step')
 			if(!isset($check_voc_1['name'])) 
 			{
 				$SQL->query('INSERT INTO players 	(name, world_id, group_id, account_id, level, vocation, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, rank_id, guildnick, lastlogout, blessings, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_containers, loss_items, premend, online, marriage, promotion, deleted, description, comment, created, hide_char, nick_verify) VALUES 
-													("Sorcerer Sample", 0, 1, 1, 1, 1, 150, 150, 0, 44, 44, 44, 44, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 420, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
+													("Sorcerer Sample", 0, 1, 1, 1, 8, 185, 185, 4200, 44, 44, 44, 44, 128, 0, 0, 35, 35, 0, 0, 0, 0, 0, 0, "", 470, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
 				echo "Added 'Sorcerer Sample' character.<br/>";
 			} 
 			else 
@@ -489,7 +587,7 @@ if($_REQUEST['page'] == 'step')
 			if(!isset($check_voc_2['name'])) 
 			{
 				$SQL->query('INSERT INTO players 	(name, world_id, group_id, account_id, level, vocation, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, rank_id, guildnick, lastlogout, blessings, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_containers, loss_items, premend, online, marriage, promotion, deleted, description, comment, created, hide_char, nick_verify) VALUES 
-													("Druid Sample", 0, 1, 1, 1, 2, 150, 150, 0, 44, 44, 44, 44, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 420, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
+													("Druid Sample", 0, 1, 1, 8, 2, 185, 185, 4200, 44, 44, 44, 44, 128, 0, 0, 35, 35, 0, 0, 0, 0, 0, 0, "", 470, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
 				echo "Added 'Druid Sample' character.<br/>";
 			} 
 			else 
@@ -498,7 +596,7 @@ if($_REQUEST['page'] == 'step')
 			if(!isset($check_voc_3['name'])) 
 			{
 				$SQL->query('INSERT INTO players 	(name, world_id, group_id, account_id, level, vocation, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, rank_id, guildnick, lastlogout, blessings, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_containers, loss_items, premend, online, marriage, promotion, deleted, description, comment, created, hide_char, nick_verify) VALUES 
-													("Paladin Sample", 0, 1, 1, 1, 3, 150, 150, 0, 44, 44, 44, 44, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 420, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
+													("Paladin Sample", 0, 1, 1, 8, 3, 185, 185, 4200, 44, 44, 44, 44, 128, 0, 0, 35, 35, 0, 0, 0, 0, 0, 0, "", 470, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
 				echo "Added 'Paladin Sample' character.<br/>";
 			} 
 			else 
@@ -507,7 +605,7 @@ if($_REQUEST['page'] == 'step')
 			if(!isset($check_voc_4['name'])) 
 			{
 				$SQL->query('INSERT INTO players 	(name, world_id, group_id, account_id, level, vocation, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, rank_id, guildnick, lastlogout, blessings, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_containers, loss_items, premend, online, marriage, promotion, deleted, description, comment, created, hide_char, nick_verify) VALUES 
-													("Knight Sample", 0, 1, 1, 1, 4, 150, 150, 0, 44, 44, 44, 44, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 420, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
+													("Knight Sample", 0, 1, 1, 8, 4, 185, 185, 4200, 44, 44, 44, 44, 128, 0, 0, 35, 35, 0, 0, 0, 0, 0, 0, "", 470, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
 				echo "Added 'Knight Sample' character.<br/>";
 			} 
 			else 

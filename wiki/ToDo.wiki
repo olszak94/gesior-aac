@@ -21,3 +21,11 @@ ToDo in 0.3
   * add chanlogs
   * configure to work TFS 0.3.6pl1
   * delet folder trans and add new table in base z_histori_buy_points
+
+ToDo in 0.4
+  * add referrer system
+  * add Language System
+  * fixed skull remover in shopsystem.php
+  * add section in character.php (vip list, quest list, statistic, victims)
+
+ToDo in 0.5

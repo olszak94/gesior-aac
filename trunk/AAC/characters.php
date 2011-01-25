@@ -18,9 +18,9 @@ else
 		if($player->isLoaded()) 
 		{
 			$account = $player->getAccount();
+			$account_db = new OTS_Account();
 			if($config['site']['show_flag'])
 			{
-				$account_db = new OTS_Account();
 				$flagg = $account->getCustomField("flag");
 				$flag = '<image src="http://images.boardhost.com/flags/'.$flagg.'.png"/> ';
 			}
@@ -107,9 +107,203 @@ else
 				$account_status .= ($account->isPremium()) ? 'Premium Account' : 'Free Account';
 				$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD>Account Status:</TD><TD>'.$account_status.'</TD></TR>';
 			$main_content .= '</TABLE>';
+			// Show Statistics
+			if($config['site']['showStatistic'])
+			{
+				$listaddon = array('128','129','130','131','132','133','134','135','136','137','138','139','140','141','142','143','144','145','146','147','148','149','150','151','152','153','154','155','158','159','251','252','268','269','270','273','278','279','288','289','302','324','325');
+				$lookadd = array('0','1','2','3');
+				foreach ($listaddon as $pid => $name)
+				{
+					foreach ($lookadd as $addo => $name) 
+					{
+						$addon1 = $SQL->query('SELECT * FROM players WHERE id = '.$player->getId().' AND looktype = '.$listaddon[$pid].' AND lookaddons = '.$lookadd[$addo].';')->fetch();
+						if($addon1[looktype] == true )
+						{
+							$finaddon = $addon1[looktype] + $addon1[lookaddons] * 300;
+							$playerOutfit .= '<img src="images/addons/'.$finaddon.'.gif"/>';
+						}
+					}
+				}
+				// Experience
+				$currentlevelexp = (50 * ($player->getLevel() - 1) * ($player->getLevel() - 1) * ($player->getLevel() - 1) - 150 * ($player->getLevel() - 1) * ($player->getLevel() - 1) + 400 * ($player->getLevel() - 1)) / 3; 
+				$nextlevel = ($player->getLevel() + 1); 
+				$nextLevelExp = (50 * ($player->getLevel()) * ($player->getLevel()) * ($player->getLevel()) - 150 * ($player->getLevel()) * ($player->getLevel()) + 400 * ($player->getLevel())) / 3; 
+				$leveldifference = ($nextLevelExp - $currentlevelexp); 
+				$partofcurrentexp = ($player->getExperience()-$currentlevelexp); 
+				$expBarPercentage = (($partofcurrentexp / $leveldifference)*100); 
+				// Spent Mana
+				$constantMana = $vocationConstantMana[$player->getWorld()][$player->getVocation()];
+				$spentMana = 1600 * force($constantMana, $player->getMagLevel()); 
+				$spentManaPer = $player->getManaSpent() / $spentMana * 100;
+				// Equip
+				$number_of_items = 1; 
+				$contentEquipment .= '<table with=100% style="background-image:url(\'images/equipment/bg.gif\'); border: solid 1px #888888;" CELLSPACING="1"><TR>';         
+				$list = array('2','1','3','6','4','5','9','7','10','8'); 
+				foreach ($list as $pid => $name) 
+				{ 
+					$top = $SQL->query('SELECT * FROM player_items WHERE player_id = '.$player->getId().' AND pid = '.$list[$pid].';')->fetch(); 
+					if($top[itemtype] == false) 
+					{ 
+						if($list[$pid] == '8') 
+						{ 
+							$contentEquipment .= '<td></td>'; 
+						}
+						if(is_int($number_of_items / 3))
+						{ 
+							$contentEquipment .= '<TD style="text-align: center;"><img src="images/equipment/'.$list[$pid].'.gif" width="32" higth="32" ></TD></tr><tr>'; 
+						} else { 
+							$contentEquipment .= '<TD style="text-align: center;"><img src="images/equipment/'.$list[$pid].'.gif" width="32" higth="32"></TD>'; 
+						} 
+						$number_of_items++; 
+					} 
+					else 
+					{ 
+						if($list[$pid] == '8') 
+						{ 
+							$contentEquipment .= '<td></td>'; 
+						} 
+						if(is_int($number_of_items / 3)) 
+							$contentEquipment .= '<TD style="background-image:url(\'images/equipment/0.gif\'); text-align: center;"><img src="images/items/'.$top[itemtype].'.gif" width="32" higth="32"/></TD></tr><tr>'; 
+						else 
+							$contentEquipment .= '<TD style="background-image:url(\'images/equipment/0.gif\'); text-align: center;"><img src="images/items/'.$top[itemtype].'.gif" width="32" higth="32"/></TD>'; 
+						$number_of_items++; 
+					} 
+					if($list[$pid] == '8') 
+					{ 
+						$contentEquipment .= '<td></td>'; 
+					} 
+				}
+				$contentEquipment .= '</TR></table>';
+				// Stamina
+				$staminaDefault = 151200000;
+				$staminaPlayer = $player->getCustomField("stamina");
+				function getTime($value)
+				{
+					$h = floor($value / 3600000);
+					$m = floor(($value - $h * 3600000) / 60000);
+					return $h.':'.$m;
+				}
+				if($staminaPlayer < 50400000)
+					$colorbg = 'red';
+				else
+					$colorbg = 'lime';
+				$stamminaPer = ($staminaPlayer / $staminaDefault) * 100;
+				$main_content .= '<br><table border=0 cellspacing=1 cellpadding=4 width=100%>
+					<tr bgcolor='.$config['site']['vdarkborder'].'>
+						<td align="left" colspan=4 class=white><B>Statistics</B></td>
+					</tr>
+					<tr bgcolor='.$config['site']['vdarkborder'].'>
+						<td align="left" class=white>Equipment</td>
+						<td align="left" class=white colspan=3>Skills</td>
+					</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td align="center" rowspan=5 width=30%>'.$contentEquipment.'</td>
+							<td width=15%>Level:</td>
+							<td>
+								'.$player->getLevel().', '.$player->getExperience().' of '.$nextLevelExp.'
+								<div title="'.number_format($expBarPercentage, 0).'%" style="width: 100%; height: 3px; border: 1px solid #000;"><div style="background: green; width: '.$expBarPercentage.'%; height: 3px;">
+							</td>
+							<td rowspan=2 width="68" height="68" align="right" valign="bottom">'.$playerOutfit.'</td>
+						</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td>Magic Level:</td>
+							<td>
+								'.$player->getMagLevel().', '.$player->getManaSpent().' of '.$spentMana.'
+								<div title="'.number_format($spentManaPer,0).'%" style="width: 100%; height: 3px; border: 1px solid #000;"><div style="background: green; width: '.$spentManaPer.'%; height: 3px;">
+							</td>
+						</tr>';
+					$hp = ($player->getHealth() / $player->getHealthMax() * 100);
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td>Hit Points:</td>
+							<td colspan=2>'.$player->getHealth().' of '.$player->getHealthMax().'<div title="'.number_format($hp,0).'%" style="width: 100%; height: 3px; border: 1px solid #000;"><div style="background: red; width: '.$hp.'%; height: 3px;"></td>
+						</tr>';
+					$mana = ($player->getMana() / $player->getManaMax() * 100);
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td>Magic Points:</td>
+							<td colspan=2>'.$player->getMana().' of '.$player->getManaMax().'<div title="'.number_format($mana,0).'%" style="width: 100%; height: 3px; border: 1px solid #000;"><div style="background: blue; width: '.$mana.'%; height: 3px;"></td>
+						</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td>Stamina:</td>
+							<td colspan=2>
+								'.getTime($staminaPlayer).' of '.getTime($staminaDefault).'
+								<div title="'.number_format($stamminaPer,0).'%" style="width: 100%; height: 3px; border: 1px solid #000;"><div style="background: '.$colorbg.'; width: '.$stamminaPer.'%; height: 3px;">
+							</td>
+						</tr>';
+				$main_content .= '</table>';
+			}
+			// Quest list show
+			if($config['site']['showQuests'])
+			{
+				$main_content .= '';               
+				$quests = $config['site']['quests'];
+				$questCount = count($config['site']['quests']);
+				$questCountDone = 0;
+				foreach($quests as $storage => $name) 
+				{
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+					$quest = $SQL->query('SELECT * FROM player_storage WHERE player_id = '.$player->getId().' AND `key` = '.$quests[$storage].';')->fetch();
+					$questList .= '<TR bgcolor="'.$bgcolor.'"><TD WIDTH=98%>'.$storage.'</TD>';
+					if($quest == false) 
+					{
+						$questList .= '<TD><img src="images/false.gif"/></TD></TR>';
+					}
+					else
+					{
+						$questList .= '<TD><img src="images/true.gif"/></TD></TR>';
+						$questCountDone++;
+					}
+				}
+				$ilosc_procent = ( $questCountDone / $questCount ) * 100;
+				$questComplet .= '<tr bgcolor='.$bgcolor.'><td colspan=2><table width=100%><tr><td width=50%><b>Quest Complet</b>: '.round($ilosc_procent, 0).'%</td><td><div title="'.round($ilosc_procent, 0).'%" style="width: 100%; height: 3px; border: 1px solid #000;"><div style="background: green; width: '.$ilosc_procent.'%; height: 3px;"></td></tr></table>
+					</td></tr>';
+				$main_content .= '<BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR bgcolor='.$config['site']['vdarkborder'].'><TD align="left" COLSPAN=2 CLASS=white><B>Quests</B></TD></TR>'.$questComplet.''.$questList.'</TABLE>';
+			}
+			// Vip List show
+			if($config['site']['showVipList'])
+			{
+				// Table player_viplist: player_id, vip_id
+				// Table account_viplist: account_id, world_id, player_id
+				$vip = 0;
+				if($config['server']['separateVipListPerCharacter'] == false)
+					$vipLists = $SQL->query('SELECT * FROM `account_viplist` WHERE `account_id` = '.$account->getId().';');
+				else
+					$vipLists = $SQL->query('SELECT * FROM `player_viplist` WHERE `player_id` = '.$player->getId().';');
+				foreach($vipLists as $vipList) 
+				{
+					if($config['server']['separateVipListPerCharacter'] == false)
+						$result = $SQL->query('SELECT * FROM `players` WHERE `id` = '.$vipList['player_id'].';');
+					else
+						$result = $SQL->query('SELECT * FROM `players` WHERE `id` = '.$vipList['vip_id'].';');
+					foreach($result as $listVip)
+					{
+						$vip++;
+						if($config['site']['show_flag'])
+						{
+							$accounts = $SQL->query('SELECT * FROM accounts WHERE id = '.$listVip['account_id'].'')->fetch();
+							$flags = '<image src="http://images.boardhost.com/flags/'.$accounts['flag'].'.png"/> ';
+						}
+						if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+							$vipResult .= '<tr bgcolor='.$bgcolor.'>
+								<td>'.$vip.'</td>
+								<td>
+									'.$flags.'<a href="index.php?subtopic=characters&name='.urlencode($listVip['name']).'">'.$listVip['name'].'</a>';
+									if($config['site']['showMoreInfo'])
+										$vipResult .= '<br><small>Level: '.$listVip['level'].', '.$vocation_name[$listVip['world_id']][$listVip['promotion']][$listVip['vocation']].', '.$config['site']['worlds'][$listVip['world_id']].'</small>';
+								$vipResult .= '</td>
+							</tr>';
+					}
+				}
+				if($vip > 0)
+					$main_content .= '<br><table border=0 cellspacing=1 cellpadding=4 width=100%><TR bgcolor='.$config['site']['vdarkborder'].'><TD align="left" COLSPAN=2 CLASS=white><B>Vip List</B></TD></TR>'.$vipResult.'</table>';
+			}
+			// Deaths list
 			$deads = 0;
-			//deaths list
-			$player_deaths = $SQL->query('SELECT `id`, `date`, `level` FROM `player_deaths` WHERE `player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,10;');
+			$player_deaths = $SQL->query('SELECT `id`, `date`, `level` FROM `player_deaths` WHERE `player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,'.$config['site']['limitDeath'].';');
 			foreach($player_deaths as $death)
 			{
 				if(is_int($number_of_rows / 2))
@@ -163,6 +357,28 @@ else
 			}
 			if($deads > 0)
 				$main_content .= '<BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Deaths</B></TD></TR>' . $dead_add_content . '</TABLE>';
+			// Show Victims/Frags
+			if($config['site']['showVictims'])
+			{
+				$player_frags = $SQL->query('SELECT `player_deaths`.*, `players`.`name`, `killers`.`unjustified` FROM `player_deaths` LEFT JOIN `killers` ON `killers`.`death_id` = `player_deaths`.`id` LEFT JOIN `player_killers` ON `player_killers`.`kill_id` = `killers`.`id` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `player_killers`.`player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,'.$config['site']['limitVictims'].';'); 
+				if(count($player_frags)) 
+				{
+					$frags = 0; 
+					foreach($player_frags as $frag) 
+					{
+						$frags++; 
+						if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
+						$number_of_rows++; 
+						$frag_add_content .= '<tr bgcolor='.$bgcolor.'> 
+							<td width=25% align=left>'.date("d.m.Y, H:i:s", $frag['date']).'</td> 
+							<td>'.(($player->getSex() == 0) ? 'She' : 'He').' fragged <a href=index.php?subtopic=characters&name='.$frag[name].'>'.$frag[name].'</a> at level '.$frag[level].''; 
+						$frag_add_content .= ' ('.(($frag['unjustified'] == 0) ? '<font size=2 color=green>Justified</font>' : '<font size=2 color=red>Unjustified</font>').').</td></tr>'; 
+					}
+					if($frags >= 1) 
+						$main_content .= '<br><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR><TD>Victims</TD><td>Frags: </td></TR>'.$frag_add_content.'</TABLE>'; 
+				}
+			}
+			// onther info
 			if(!$player->getHideChar()) 
 			{
 				$main_content .= '<BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Account Information</B></TD></TR>';

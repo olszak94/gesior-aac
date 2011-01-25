@@ -1,5 +1,5 @@
 <?php  
-    if($groups = simplexml_load_file($config['site']['server_path'].'/data/XML/groups.xml') or die('<b>Could not load groups!</b>'))  
+    if($groups = simplexml_load_file($config['site']['server_path'].'data/XML/groups.xml') or die('<b>Could not load groups!</b>'))  
         foreach($groups->group as $g)    
             $groupList[(int)$g['id']] = $g['name'];  
     $list = $SQL->query("SELECT `name`, `online`, `group_id`, `world_id`, `account_id` FROM `players` WHERE `group_id` > 1 ORDER BY `group_id` DESC"); 

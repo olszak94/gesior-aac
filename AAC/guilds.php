@@ -67,7 +67,7 @@ if($action == '')
 			{
 				$guild_logo = str_replace($char, "", $guild->getCustomField('logo_gfx_name'));
 			}
-			if (empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
+			if (empty($guild_logo) || !file_exists("images/guilds/".$guild_logo)) 
 			{
 				$guild_logo = "default_logo.gif";
 			}
@@ -76,7 +76,7 @@ if($action == '')
 			$description_with_lines = str_replace($newlines, '<br />', $description, $count);
 			if($count < $config['site']['guild_description_lines_limit'])
 				$description = $description_with_lines;
-			$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD><IMG SRC="guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD>
+			$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD><IMG SRC="images/guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD>
 				<TD valign="top"><B>'.$guild->getName().'</B><BR/>'.$description.'';
 			if($group_id_of_acc_logged >= $config['site']['access_admin_panel'])
 				$main_content .= '<br /><a href="index.php?subtopic=guilds&action=deletebyadmin&guild='.$guild->getName().'">Delete this guild (for ADMIN only!)</a>';
@@ -87,7 +87,7 @@ if($action == '')
 		}
 	}
 	else
-		$main_content .= '<TR BGCOLOR='.$config['site']['lightborder'].'><TD><IMG SRC="guilds/default_logo.gif" WIDTH=64 HEIGHT=64></TD>
+		$main_content .= '<TR BGCOLOR='.$config['site']['lightborder'].'><TD><IMG SRC="images/guilds/default_logo.gif" WIDTH=64 HEIGHT=64></TD>
 			<TD valign="top"><B>Create guild</B><BR/>Actually there is no guild on server. Create first! Press button "Create Guild".</TD>
 			<TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="index.php?subtopic=guilds&action=createguild" METHOD=post><TR><TD>
 			<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
@@ -173,7 +173,7 @@ if($action == 'show')
 		{
 			$guild_logo = str_replace($char, "", $guild->getCustomField('logo_gfx_name'));
 		}
-		if (empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
+		if (empty($guild_logo) || !file_exists("images/guilds/".$guild_logo)) 
 		{
 			$guild_logo = "default_logo.gif";
 		}
@@ -186,14 +186,14 @@ if($action == 'show')
 		if($guild_owner->isLoaded())
 			$guild_owner = $guild_owner->getName();
 		$main_content .= '<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%><TR>
-			<TD><IMG SRC="'.$layout_name.'/images/general/blank.gif" WIDTH=10 HEIGHT=1 BORDER=0></TD><TD>
+			<TD>
 			<TABLE BORDER=0 WIDTH=100%>
-			<TR><TD WIDTH=64><IMG SRC="guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD>
+			<TR><TD WIDTH=64><IMG SRC="images/guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD>
 			<TD ALIGN=center WIDTH=100%><H1>'.$guild->getName().'</H1></TD>
-			<TD WIDTH=64><IMG SRC="guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD></TR>
+			<TD WIDTH=64><IMG SRC="images/guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD></TR>
 			</TABLE><BR>'.$description.'<BR><BR><a href="index.php?subtopic=characters&name='.$guild_owner.'"><b>'.$guild_owner.'</b></a> is guild leader of <b>'.$guild->getName().'</b>.<BR>The guild was founded on '.$config['server']['serverName'].' on '.date("j F Y", $guild->getCreationData()).'.';
 		if($guild_leader)
-			$main_content .= '&nbsp;&nbsp;&nbsp;<a href="index.php?subtopic=guilds&action=manager&guild='.$guild->getName().'"><IMG SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_manageguild.png" BORDER=0 WIDTH=120 HEIGHT=18 alt="Manage Guild"></a>';
+			$main_content .= '&nbsp;&nbsp;&nbsp;<a href="index.php?subtopic=guilds&action=manager&guild='.$guild->getName().'"><IMG SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_manageguild.png" BORDER=0 alt="Manage Guild"></a>';
 		$main_content .= '<BR><BR>
 			<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>
 			<TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=3 CLASS=white><B>Guild Members</B></TD></TR>
@@ -271,37 +271,35 @@ if($action == 'show')
 			$main_content .= '</TABLE>';
 		}
 		$main_content .= '<BR><BR>
-		<TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$layout_name.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD>';
+		<TABLE BORDER=0 WIDTH=100%><TR>';
 		if(!$logged)
-			$main_content .= '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="index.php?subtopic=guilds&action=login&guild='.$guild->getName().'&redirect=guild" METHOD=post><TR><TD>
-			<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$layout_name.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18>
-			</TD></TR></FORM></TABLE></TD>';
+			$main_content .= '<TD ALIGN=center><FORM ACTION="index.php?subtopic=guilds&action=login&guild='.$guild->getName().'&redirect=guild" METHOD=post>
+			<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$layout_name.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=110>
+			</FORM></TD>';
 		else
 		{
 			if($show_accept_invite > 0)
-				$main_content .= '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="index.php?subtopic=guilds&action=acceptinvite&guild='.$guild->getName().'" METHOD=post><TR><TD>
-					<INPUT TYPE=image NAME="Accept Invite" ALT="Accept Invite" SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_acceptinvite.png" BORDER=0 WIDTH=120 HEIGHT=18>
-					</TD></TR></FORM></TABLE></TD>';
+				$main_content .= '<TD ALIGN=center><FORM ACTION="index.php?subtopic=guilds&action=acceptinvite&guild='.$guild->getName().'" METHOD=post>
+					<INPUT TYPE=image NAME="Accept Invite" ALT="Accept Invite" SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_acceptinvite.png" BORDER=0 WIDTH=110>
+					</FORM></TD>';
 			if($guild_vice)
 			{
-				$main_content .= '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="index.php?subtopic=guilds&action=invite&guild='.$guild->getName().'" METHOD=post><TR><TD>
-					<INPUT TYPE=image NAME="Invite Player" ALT="Invite Player" SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_inviteplayer.png" BORDER=0 WIDTH=120 HEIGHT=18>
-					</TD></TR></FORM></TABLE></TD>';
-				$main_content .= '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="index.php?subtopic=guilds&action=changerank&guild='.$guild->getName().'" METHOD=post><TR><TD>
-					<INPUT TYPE=image NAME="Change Rank" ALT="Change Rank" SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_changerank.png" BORDER=0 WIDTH=120 HEIGHT=18>
-					</TD></TR></FORM></TABLE></TD>';
+				$main_content .= '<TD ALIGN=center><FORM ACTION="index.php?subtopic=guilds&action=invite&guild='.$guild->getName().'" METHOD=post>
+					<INPUT TYPE=image NAME="Invite Player" ALT="Invite Player" SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_inviteplayer.png" BORDER=0 WIDTH=110>
+					</FORM></TD>';
+				$main_content .= '<TD ALIGN=center><FORM ACTION="index.php?subtopic=guilds&action=changerank&guild='.$guild->getName().'" METHOD=post>
+					<INPUT TYPE=image NAME="Change Rank" ALT="Change Rank" SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_changerank.png" BORDER=0 WIDTH=110>
+					</FORM></TD>';
 			}
 			if($players_from_account_in_guild > 0)
-				$main_content .= '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="index.php?subtopic=guilds&action=leaveguild&guild='.$guild->getName().'" METHOD=post><TR><TD>
-					<INPUT TYPE=image NAME="Leave Guild" ALT="Leave Guild" SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_leaveguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
-					</TD></TR></FORM></TABLE></TD>';
+				$main_content .= '<TD ALIGN=center><FORM ACTION="index.php?subtopic=guilds&action=leaveguild&guild='.$guild->getName().'" METHOD=post>
+					<INPUT TYPE=image NAME="Leave Guild" ALT="Leave Guild" SRC="http://i63.photobucket.com/albums/h122/Mister_Dude/sbutton_leaveguild.png" BORDER=0 WIDTH=110>
+					</FORM></TD>';
 		}
-		$main_content .= '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="index.php?subtopic=guilds" METHOD=post><TR><TD>
-			<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$layout_name.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18>
-			</TD></TR></FORM></TABLE>
-			</TD><TD ALIGN=center><IMG SRC="'.$layout_name.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD></TR></TABLE>
-			</TD><TD><IMG src="'.$layout_name.'/images/general/blank.gif" WIDTH=10 HEIGHT=1 BORDER=0></TD>
-			</TR></TABLE></TABLE>';
+		$main_content .= '<TD ALIGN=center><FORM ACTION="index.php?subtopic=guilds" METHOD=post>
+			<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$layout_name.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=110>
+			</FORM></TD>
+			</TR></TABLE></TD></TR></TABLE></TABLE>';
 	}
 }
 
@@ -1169,21 +1167,17 @@ if($action == 'createguild')
 		</TABLE>
 		<BR>
 		<TABLE BORDER=0 WIDTH=100%>
-		  <TR><TD ALIGN=center>
-			<IMG SRC="'.$layout_name.'/images/general/blank.gif" WIDTH=120 HEIGHT=1 BORDER=0><BR>
-		  </TD><TD ALIGN=center VALIGN=top>
+		  <TR><TD ALIGN=center VALIGN=top>
 			<INPUT TYPE=image NAME="Submit" SRC="'.$layout_name.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 			</FORM>
 		  </TD><TD ALIGN=center>
 			<FORM  ACTION="index.php?subtopic=guilds" METHOD=post>
 			<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$layout_name.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 			</FORM>
-		  </TD><TD ALIGN=center>
-			<IMG SRC="/images/general/blank.gif" WIDTH=120 HEIGHT=1 BORDER=0><BR>
 		  </TD></TR>
 		</TABLE>
 		</TD>
-		<TD><IMG SRC="'.$layout_name.'/images/general/blank.gif" WIDTH=10 HEIGHT=1 BORDER=0></TD>
+		
 		</TR>
 		</TABLE>';
 	}
@@ -1351,13 +1345,13 @@ if($action == 'changelogo')
 						{
 							$guild_logo = str_replace($char, "", $guild->getCustomField('logo_gfx_name'));
 						}
-						if (empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
+						if (empty($guild_logo) || !file_exists("images/guilds/".$guild_logo)) 
 						{
 							$guild_logo = "default_logo.gif";
 						}
 						if($guild_logo != "default_logo.gif" && $guild_logo != $save_file_name.'.'.$extension) 
 						{
-							unlink('guilds/'.$guild_logo);
+							unlink('images/guilds/'.$guild_logo);
 						}
 						
 					}
@@ -1378,11 +1372,11 @@ if($action == 'changelogo')
 				{
 					$guild_logo = str_replace($char, "", $guild->getCustomField('logo_gfx_name'));
 				}
-				if (empty($guild_logo) || !file_exists("guilds/".$guild_logo)) 
+				if (empty($guild_logo) || !file_exists("images/guilds/".$guild_logo)) 
 				{
 					$guild_logo = "default_logo.gif";
 				}
-				$main_content .= '<center><h2>Change guild logo</h2></center>Here you can change logo of your guild.<BR>Actuall logo: <img src="guilds/'.$guild_logo.'" HEIGHT="64" WIDTH="64"><BR><BR>';
+				$main_content .= '<center><h2>Change guild logo</h2></center>Here you can change logo of your guild.<BR>Actuall logo: <img src="images/guilds/'.$guild_logo.'" HEIGHT="64" WIDTH="64"><BR><BR>';
 				$main_content .= '<form enctype="multipart/form-data" action="index.php?subtopic=guilds&guild='.$guild->getName().'&action=changelogo" method="POST">
 				<input type="hidden" name="todo" value="save" />
 				<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_image_size_b.'" />

@@ -24,11 +24,9 @@ if($config['site']['serverinfo_page'])
 			<tr bgcolor="'.$config['site']['lightborder'].'">
 				<td>Monster</td><td>'.$config['status']['serverStatus_monsters'].'</td>
 			</tr>
-			<!--
 			<tr bgcolor="'.$config['site']['darkborder'].'">
-				<td>NPC</td><td>'.$config['status']['serverStatus_npc'].'</td>
+				<td>NPC</td><td>'.$config['status']['serverStatus_npcs'].'</td>
 			</tr>
-			-->
 		</table>
 		<br>';
 	if($config['server']['experienceStages'] == false)

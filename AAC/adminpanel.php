@@ -107,9 +107,9 @@ foreach($monsters as $monster) {
 if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['lightborder']; } else { $bgcolor = $config['site']['darkborder']; } $number_of_rows++;
 $main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD>';
 if(file_exists('monsters/'.$monster['gfx_name'])) {
-$main_content .= '<img src="monsters/'.$monster['gfx_name'].'" height="40" width="40">';
+$main_content .= '<img src="images/monsters/'.$monster['gfx_name'].'" height="40" width="40">';
 } else {
-$main_content .= '<img src="monsters/nophoto.png" height="40" width="40">';
+$main_content .= '<img src="images/monsters/nophoto.png" height="40" width="40">';
 }
 $main_content .= '</TD><TD><a href="?subtopic=adminpanel&action=editmonsters&todo=editgfxlink&monster='.urlencode($monster['name']).'">Change image name</a></TD><TD>'.$monster['name'].'</TD><TD>'.$monster['health'].'</TD><TD>'.$monster['exp'].'</TD><TD><input type="checkbox" name="hide_array[]" value="'.$monster['name'].'"></TD>';
 }
@@ -122,9 +122,9 @@ foreach($monsters as $monster) {
 if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['lightborder']; } else { $bgcolor = $config['site']['darkborder']; } $number_of_rows++;
 $main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD>';
 if(file_exists('monsters/'.$monster['gfx_name'])) {
-$main_content .= '<img src="monsters/'.$monster['gfx_name'].'" height="40" width="40">';
+$main_content .= '<img src="images/monsters/'.$monster['gfx_name'].'" height="40" width="40">';
 } else {
-$main_content .= '<img src="monsters/nophoto.png" height="40" width="40">';
+$main_content .= '<img src="images/monsters/nophoto.png" height="40" width="40">';
 }
 $main_content .= '</TD><TD><a href="?subtopic=adminpanel&action=editmonsters&todo=editgfxlink&monster='.$monster['name'].'">Change image name</a></TD><TD>'.$monster['name'].'</TD><TD>'.$monster['health'].'</TD><TD>'.$monster['exp'].'</TD><TD><input type="checkbox" name="show_array[]" value="'.$monster['name'].'"></TD>';
 }

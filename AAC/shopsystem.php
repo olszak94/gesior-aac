@@ -192,7 +192,7 @@ if($config['site']['shop_system'] == 1)
 			$main_content .= '<center><table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;ITEMS</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 			foreach($offer_list['item'] as $item)
 			{
-				$main_content .= '<tr bgcolor="gold"><td align="center"><img src="item_images/'.$item['id'].'.jpg"></td><td><b>'.$item['name'].'</b> ('.$item['points'].' points)<br />'.$item['description'].'</td><td align="center">';
+				$main_content .= '<tr bgcolor="gold"><td align="center"><img src="images/shop/'.$item['id'].'.jpg"></td><td><b>'.$item['name'].'</b> ('.$item['points'].' points)<br />'.$item['description'].'</td><td align="center">';
 				if(!$logged)
 				{
 					$main_content .= '<b>Login to buy</b>';
@@ -212,7 +212,7 @@ if($config['site']['shop_system'] == 1)
 
 			foreach($offer_list['container'] as $container) 
 			{
-				$main_content .= '<tr bgcolor="#F1E0C6"><td align="center"><img src="item_images/'.$container['id'].'.jpg"></td><td><b>'.$container['name'].'</b> ('.$container['points'].' points)<br />'.$container['description'].'</td><td align="center">';
+				$main_content .= '<tr bgcolor="#F1E0C6"><td align="center"><img src="images/shop/'.$container['id'].'.jpg"></td><td><b>'.$container['name'].'</b> ('.$container['points'].' points)<br />'.$container['description'].'</td><td align="center">';
 				if(!$logged)
 					$main_content .= '<b>Login to buy</b>';
 				else 
@@ -227,7 +227,7 @@ if($config['site']['shop_system'] == 1)
 			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Receive Item on Logout</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 			foreach($offer_list['itemlogout'] as $itemlogout)
 			{
-				$main_content .= '<tr bgcolor="gold"><td align="center"><img src="item_images/'.$itemlogout['id'].'.jpg"></td><td><b>'.$itemlogout['name'].'</b> ('.$itemlogout['points'].' points)<br />'.$itemlogout['description'].'</td><td align="center">';
+				$main_content .= '<tr bgcolor="gold"><td align="center"><img src="images/shop/'.$itemlogout['id'].'.jpg"></td><td><b>'.$itemlogout['name'].'</b> ('.$itemlogout['points'].' points)<br />'.$itemlogout['description'].'</td><td align="center">';
 				if(!$logged)
 				{
 					$main_content .= '<b>Login to buy</b>';
@@ -259,7 +259,7 @@ if($config['site']['shop_system'] == 1)
 		//Remove Red Skull
 		foreach($offer_list['redskull'] as $redskull)
 		{
-			$main_content .= '<tr bgcolor="gold"><td align="center"><img src="item_images/'.$redskull['id'].'.jpg"></td><td><font color="black"<b>'.$redskull['name'].'</b> ('.$redskull['points'].' points)<br />'.$redskull['description'].'</td><td align="center">';
+			$main_content .= '<tr bgcolor="gold"><td align="center"><img src="images/shop/'.$redskull['id'].'.jpg"></td><td><font color="black"<b>'.$redskull['name'].'</b> ('.$redskull['points'].' points)<br />'.$redskull['description'].'</td><td align="center">';
 			if(!$logged)
 			{
 				$main_content .= '<b>Login to buy</b>';
@@ -271,22 +271,21 @@ if($config['site']['shop_system'] == 1)
 			$main_content .= '</td></tr>';
 		}
 		if(count($offer_list['unban']) > 0)
-			//Unban
-			foreach($offer_list['unban'] as $unban)
+		//Unban
+		foreach($offer_list['unban'] as $unban)
+		{
+			$main_content .= '<tr bgcolor="gold"><td align="center"><font color="black">Unban</td><td><font color="black"<b>'.$unban['name'].'</b> ('.$unban['points'].' points)<br />'.$unban['description'].'</td><td align="center">';
+			if(!$logged)
 			{
-				$main_content .= '<tr bgcolor="gold"><td align="center"><font color="black">Unban</td><td><font color="black"<b>'.$unban['name'].'</b> ('.$unban['points'].' points)<br />'.$unban['description'].'</td><td align="center">';
-				if(!$logged)
-				{
-					$main_content .= '<b>Login to buy</b>';
-				}
-				else
-				{
-					$main_content .= '<form action="index.php?subtopic=shopsystem&action=select_player" method=POST><input type="hidden" name="buy_id" value="'.$unban['id'].'"><input type="submit" value="Buy '.$unban['name'].'"><br><font color="black"<b>for '.$unban['points'].' points</b></form>';
-				}
-				$main_content .= '</td></tr>';
+				$main_content .= '<b>Login to buy</b>';
 			}
-			$main_content .= '</table><br />';
-		$main_content .= '</center>';
+			else
+			{
+				$main_content .= '<form action="index.php?subtopic=shopsystem&action=select_player" method=POST><input type="hidden" name="buy_id" value="'.$unban['id'].'"><input type="submit" value="Buy '.$unban['name'].'"><br><font color="black"<b>for '.$unban['points'].' points</b></form>';
+			}
+			$main_content .= '</td></tr>';
+		}
+		$main_content .= '</table><br /></center>';
 	}
 	elseif($action == 'select_player')
 	{
@@ -544,9 +543,10 @@ if($config['site']['shop_system'] == 1)
 										{
 											$my_acc_id = $buy_player->getCustomField('id');
 											$dataget = $SQL->query('SELECT * FROM '.$SQL->tableName('players').' WHERE '.$SQL->fieldName('id').' = '.$my_acc_id.';')->fetch();
-											if($dataget['redskull'] == '1' AND $dataget['online'] >= '0' AND $dataget['redskulltime'] > '0') 
+											if($dataget['skull'] >= '1' AND $dataget['online'] == '0' AND $dataget['skulltime'] > '0') 
 											{
-												$SQL->query('UPDATE players SET redskull=0, redskulltime=0 WHERE id='. $my_acc_id .';');
+												$SQL->query('UPDATE players SET skull=0, skulltime=0 WHERE id='. $my_acc_id .';');
+												$SQL->query('UPDATE `killers` SET `unjustified` = 0 WHERE `id` IN (SELECT `kill_id` FROM `player_killers` WHERE `player_id` = '. $my_acc_id .');');
 												$account_logged->setCustomField('premium_points', $user_premium_points-$buy_offer['points']);
 												$user_premium_points = $user_premium_points - $buy_offer['points'];
 												$main_content .= '<h2>RedSkull Removed!</h2><b>Your redskull has been removed to the player '.$buy_player->getName().',<br>

@@ -10,7 +10,7 @@ if($action == "")
 		{
 			if(document.getElementById("account_name").value=="")
 			{
-				document.getElementById("acc_name_check").innerHTML = \'<b><font color="red">Please enter account name.</font></b>\';
+				document.getElementById("acc_name_check").innerHTML = \'<image src="../images/false.gif"> <font color="red">Please enter account name.</font>\';
 				return;
 			}
 			accountHttp=GetXmlHttpObject();
@@ -40,7 +40,7 @@ if($action == "")
 		{
 			if(document.getElementById("email").value=="")
 			{
-				document.getElementById("email_check").innerHTML = \'<b><font color="red">Please enter e-mail.</font></b>\';
+				document.getElementById("email_check").innerHTML = \'<image src="../images/false.gif"> <font color="red">Please enter e-mail.</font>\';
 				return;
 			}
 			emailHttp=GetXmlHttpObject();
@@ -116,6 +116,7 @@ if($action == "")
 			}
 		}
 	</script>';
+	$referrers = $_REQUEST['ref'];
 	$main_content .= 'To play on '.$config['server']['serverName'].' you need an account. 
 		All you have to do to create your new account is to enter your email address, password to new account, verification code from picture and to agree to the terms presented below. 
 		If you have done so, your account number, password and e-mail address will be shown on the following page and your account and password will be sent 
@@ -127,19 +128,19 @@ if($action == "")
 				</TR>
 				<script type="text/javascript">var accountcustom=1;</script>
 				<TR BGCOLOR="'.$config['site']['darkborder'].'">
-					<TD align="center" valign="baseline" width="30%" valign="top"><B>Account Name: </B></TD>
-					<TD><INPUT id="account_name" NAME="reg_name" OnKeyUp="checkAccount();" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica"><b><div id="acc_name_check">(Select your account number)</div></b></font></TD>
+					<TD align="center" width="30%"><B>Account Name: </B></TD>
+					<TD><INPUT id="account_name" NAME="reg_name" OnKeyUp="checkAccount();" VALUE="" SIZE="31" MAXLENGTH="50"><font size="1" face="verdana,arial,helvetica"><div id="acc_name_check">(Select your account number)</div></font></TD>
 				</TR>
 				<TR BGCOLOR="'.$config['site']['darkborder'].'">
-					<TD align="center" valign="baseline" width="30%" valign="top"><B>Email address: </B></TD>
-					<TD><INPUT id="email" NAME="reg_email" onkeyup="checkEmail();" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica"><b><div id="email_check">(Your email address is required to recovery a '.$config['server']['serverName'].' account)</div></b></font></TD>
+					<TD align="center" width="30%"><B>Email address: </B></TD>
+					<TD><INPUT id="email" NAME="reg_email" onkeyup="checkEmail();" VALUE="" SIZE=31 MAXLENGTH=250><font size="1" face="verdana,arial,helvetica"><div id="email_check">(Your email address is required to recovery a '.$config['server']['serverName'].' account)</div></font></TD>
 				</TR>';
 				if($config['site']['choose_countr'])
 				{
 					$main_content .= '<TR BGCOLOR="'.$config['site']['darkborder'].'">
-						<TD  align="center" valign="baseline" width="30%" valign="top"><b>Select Country:</b></TD>
+						<TD  align="center" width="30%"><b>Select Country:</b></TD>
 						<TD colspan="2"><b>
-							<select name="country">
+							<select name="reg_country">
 								<option value="">(Please choose)</option><option value="af"> Afghanistan </option><option value="al"> Albania </option><option value="dz"> Algeria </option><option value="as"> American Samoa </option><option value="ad"> Andorra </option><option value="ao"> Angola </option><option value="ai"> Anguilla </option><option value="aq"> Antarctica </option><option value="ag"> Antigua and Barbuda </option><option value="ar"> Argentina </option>
 								<option value="am"> Armenia </option><option value="aw"> Aruba </option><option value="au"> Australia </option><option value="at"> Austria </option><option value="az"> Azerbaijan </option><option value="bs"> Bahamas </option><option value="bh"> Bahrain </option><option value="bd"> Bangladesh </option><option value="bb"> Barbados </option><option value="by"> Belarus </option><option value="be"> Belgium </option><option value="bz"> Belize </option><option value="bj"> Benin </option><option value="bm"> Bermuda </option><option value="bt"> Bhutan </option><option value="bo"> Bolivia </option><option value="ba"> Bosnia and Herzegowina </option><option value="bw"> Botswana </option><option value="bv"> Bouvet Island </option><option value="br"> Brazil </option><option value="io"> British Indian Ocean Territory </option><option value="bn"> Brunei Darussalam </option><option value="bg"> Bulgaria </option><option value="bf"> Burkina Faso </option><option value="bi"> Burundi </option>
 								<option value="kh"> Cambodia </option><option value="cm"> Cameroon </option><option value="ca"> Canada </option><option value="cv"> Cape Verde </option><option value="ky"> Cayman Islands </option><option value="cf"> Central African Republic </option><option value="td"> Chad </option><option value="cl"> Chile </option><option value="cn"> China </option><option value="cx"> Christmas Island </option><option value="cc"> Cocos Islands </option><option value="co"> Colombia </option><option value="km"> Comoros </option><option value="cd"> Congo </option><option value="cg"> Congo </option><option value="ck"> Cook Islands </option><option value="cr"> Costa Rica </option><option value="ci"> Cote DIvoire </option><option value="hr"> Croatia </option><option value="cu"> Cuba </option><option value="cy"> Cyprus </option><option value="cz"> Czech Republic </option><option value="dk"> Denmark </option><option value="dj"> Djibouti </option><option value="dm"> Dominica </option>
@@ -158,24 +159,29 @@ if($action == "")
 				if(!$config['site']['create_account_verify_mail'])
 					$main_content .= '<script type="text/javascript">var verifpass=1;</script>
 						<TR BGCOLOR="'.$config['site']['darkborder'].'">
-							<TD align="center" valign="baseline" width="30%" valign="top"><B>Password: </B></TD>
-							<TD><INPUT TYPE="password" id="passor" NAME="reg_password" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Here write your password to new account on '.$config['server']['serverName'].')</font></TD>
+							<TD align="center" width="30%"><B>Password: </B></TD>
+							<TD><INPUT TYPE="password" id="passor" NAME="reg_password" VALUE="" SIZE=31 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Here write your password to new account on '.$config['server']['serverName'].')</font></TD>
 						</TR>
 						<TR BGCOLOR="'.$config['site']['darkborder'].'">
-							<TD align="center" valign="baseline" width="30%" valign="top"><B>Repeat password: </B></TD>
-							<TD><INPUT TYPE="password" id="passor2" NAME="reg_password2" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Repeat your password)</font></TD>
+							<TD align="center" width="30%"><B>Repeat password: </B></TD>
+							<TD><INPUT TYPE="password" id="passor2" NAME="reg_password2" VALUE="" SIZE=31 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Repeat your password)</font></TD>
 						</TR>'; 
 				else
 					$main_content .= '<script type="text/javascript">var verifpass=0;</script>';
+				if($config['site']['referrer'])
+					$main_content .= '<TR BGCOLOR="'.$config['site']['darkborder'].'">
+							<TD align="center" width="30%"><B>Referrer: </B></TD>
+							<TD><INPUT TYPE="test" NAME="reg_referrer" VALUE="'.$referrers.'" SIZE=31 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Here write your password to new account on '.$config['server']['serverName'].')</font></TD>
+						</TR>';
 				if($config['site']['verify_code'])
 				{	
 					require_once('recaptchalib.php');
 					$main_content .= '<script type="text/javascript">var verifya=1;</script>
 					<TR BGCOLOR="'.$config['site']['darkborder'].'">
-						<TD align="center" valign="baseline" colspan="2"><B>Verification Code</B></TD>
+						<TD align="center" colspan="2"><B>Verification Code</B></TD>
 					</TR>
 					<TR BGCOLOR="'.$config['site']['darkborder'].'">
-						<TD align="center" valign="baseline" colspan="2">'.recaptcha_get_html($config['site']['publickey']).'</TD>
+						<TD align="center" colspan="2">'.recaptcha_get_html($config['site']['publickey']).'</TD>
 					</TR>';
 				} 
 				else
@@ -223,7 +229,11 @@ if($action == "saveaccount")
 	$reg_email = trim($_POST['reg_email']);
 	if($config['site']['choose_countr'])
 	{
-		$reg_country = trim($_POST['country']);
+		$reg_country = trim($_POST['reg_country']);
+	}
+	if($config['site']['referrer'])
+	{
+		$reg_referrer = (int) $_POST['reg_referrer'];
 	}
 	$reg_password = trim($_POST['reg_password']);
 	$reg_code = trim($_POST['reg_code']);
@@ -274,6 +284,14 @@ if($action == "saveaccount")
 		$account_db->find($reg_name);
 		if($account_db->isLoaded())
 			$reg_form_errors[] = 'Account with this name already exist.';
+		if($config['site']['referrer'])
+		{
+			$ref_check = $SQL->query('SELECT id FROM accounts WHERE id = '.$reg_referrer.' LIMIT 1')->fetch();
+			if (($reg_referrer > 0) && ($ref_check['id'] < 1))
+			{
+				$reg_form_errors[] = 'Uzywany przez Ciebie numer gracza, ktory polecil Ci nasz serwer nie istnieje. Popros go o poprawny link lub ponow rejestracje, aby kontynowac rejestracje bez polecajacego.';
+			}
+		}
 	}
 	// ----------creates account-------------(save in database)
 	if(empty($reg_form_errors))
@@ -293,14 +311,19 @@ if($action == "saveaccount")
 		{
 			$reg_account->setCustomField("flag", $reg_country);
 		}
+		if($config['site']['referrer'])
+		{
+			$reg_account->setCustomField("ref", $reg_referrer);
+			$SQL->query('INSERT INTO z_referers (account_id, ref_account_id) VALUES ('.$number.', '.$reg_referrer.')');
+		}
 		$reg_account->setPassword(password_ency($reg_password));
 		$reg_account->unblock();
 		$reg_account->save();
 		$reg_account->setCustomField("created", time());
+		$reg_account->setCustomField("lastday", time());
 		if($config['site']['newaccount_premdays'])
 		{
 			$reg_account->setCustomField("premdays", $config['site']['newaccount_premdays']);
-			$reg_account->setCustomField("lastday", time());
 		}		
 		//show information about registration
 		$main_content .= 'Your account has been created. Please write down the account number and password. See you in Tibia!<BR><BR>

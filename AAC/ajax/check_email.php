@@ -5,7 +5,7 @@ $config_ini = parse_ini_file('../config/config.ini');
 $email = stripslashes(trim($_REQUEST['email']));
 if(empty($email))
 {
-	echo '<font color="red">Please enter an e-mail.</font>';
+	echo '<image src="../images/false.gif"> <font color="red">Please enter an e-mail.</font>';
 	exit;
 }
 if(strlen($email) < 255)
@@ -36,17 +36,17 @@ if(strlen($email) < 255)
 			$email_db = new OTS_Account();
 			$email_db->find($email);
 			if($email_db->isLoaded())
-				echo '<font color="red">Account with this e-mail already exist.</font>';
+				echo '<image src="../images/false.gif"> <font color="red">Account with this e-mail already exist.</font>';
 			else
-				echo '<font color="green">Good e-mail.</font>';
+				echo '<image src="../images/true.gif"> <font color="green">Good e-mail.</font>';
 		}
 		else
-			echo '<font color="green">Good e-mail.</font>';
+			echo '<image src="../images/true.gif"> <font color="green">Good e-mail.</font>';
 	}
 	else
-		echo '<font color="red">Wrong e-mail format.</font>';
+		echo '<image src="../images/false.gif"> <font color="red">Wrong e-mail format.</font>';
 }
 else
-	echo '<font color="red">E-mail is too long (max. 255 chars).</font>';
+	echo '<image src="../images/false.gif"> <font color="red">E-mail is too long (max. 255 chars).</font>';
 
 ?>

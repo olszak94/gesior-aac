@@ -29,3 +29,5 @@ ToDo in 0.4
   * add section in character.php (vip list, quest list, statistic, victims)
 
 ToDo in 0.5
+  * add show skills character (axe, sword, club ...)
+  * probably add system signatur

@@ -451,7 +451,7 @@ if($_REQUEST['page'] == 'step')
 					echo 'Added table <b>z_monsters</b> (libray).<br/><br/>';
 					try { $SQL->query("CREATE TABLE `z_referers` (
 							`account_id` int(30) NOT NULL,
-							`ref_account_id` int(30) NOT NULL,
+							`ref_account_id` int(30) NOT NULL
 						) ENGINE=MyISAM DEFAULT CHARSET=latin1;"); } catch(PDOException $error) {}
 					echo "Added table <b>z_referers</b> (account).<br/><br/>";
 					try { $SQL->query("CREATE TABLE `z_ots_comunication` (
@@ -594,7 +594,7 @@ if($_REQUEST['page'] == 'step')
 			if(!isset($check_voc_1['name'])) 
 			{
 				$SQL->query('INSERT INTO players 	(name, world_id, group_id, account_id, level, vocation, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, rank_id, guildnick, lastlogout, blessings, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_containers, loss_items, premend, online, marriage, promotion, deleted, description, comment, created, hide_char, nick_verify) VALUES 
-													("Sorcerer Sample", 0, 1, 1, 1, 8, 185, 185, 4200, 44, 44, 44, 44, 128, 0, 0, 35, 35, 0, 0, 0, 0, 0, 0, "", 470, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
+													("Sorcerer Sample", 0, 1, 1, 8, 1, 185, 185, 4200, 44, 44, 44, 44, 128, 0, 0, 35, 35, 0, 0, 0, 0, 0, 0, "", 470, 1, "", "", 1, "", "", "", "", "", "", "", 151200000, "", "", "", "", "", "", "", "", "", "", "", "", "",'.time().',1,1)');
 				echo "Added 'Sorcerer Sample' character.<br/>";
 			} 
 			else 

@@ -56,6 +56,7 @@ $config['site']['email_days_to_change'] = 1;
 
 // character option
 $config['site']['showStatistic'] = 0;
+$config['site']['showAdvenceStatistic'] = 1;
 $config['site']['showQuests'] = 0;
 $config['site']['showVipList'] = 0;
 $config['site']['showVictims'] = 0;

@@ -66,11 +66,10 @@ else
 				else
 					$main_content .= 'single</TD></TR>';
 			$house = $SQL->query( 'SELECT `houses`.`name`, `houses`.`town`, `houses`.`lastwarning` FROM `houses` WHERE `houses`.`world_id` = '.$player->getWorld().' AND `houses`.`owner` = '.$player->getId().';' )->fetchAll();
-			if ( count( $house ) != 0 )
+			if(count($house) != 0)
 			{
 				if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
-					$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD>House:</TD><TD colspan="2">';
-					$main_content .= $house[0]['name'].' ('.$towns_list[$player->getWorld()][$house[0]['town']].') is paid until '.date("j M Y G:i", $house[0]['lastwarning']).'</TD></TR>';
+					$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD>House:</TD><TD colspan="2">'.$house[0]['name'].' ('.$towns_list[$player->getWorld()][$house[0]['town']].') is paid until '.date("M j Y", $house[0]['lastwarning']).'</TD></TR>';
 			}
 			$rank_of_player = $player->getRank();
 			if(!empty($rank_of_player))
@@ -79,7 +78,7 @@ else
 					$guild_id = $rank_of_player->getGuild()->getId();
 					$guild_name = $rank_of_player->getGuild()->getName();
 					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
-						$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD>Guild Membership:</TD><TD colspan="2">'.$rank_of_player->getName().' of the <a href="?subtopic=guilds&action=show&guild='.$guild_id.'">'.$guild_name.'</a></TD></TR>';
+						$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD>Guild Membership:</TD><TD colspan="2">'.$rank_of_player->getName().' of the <a href="?subtopic=guilds&action=show&guild='.$guild_name.'">'.$guild_name.'</a></TD></TR>';
 				}
 			}
 			if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
@@ -233,6 +232,49 @@ else
 								'.getTime($staminaPlayer).' of '.getTime($staminaDefault).'
 								<div title="'.number_format($stamminaPer,0).'%" style="width: 100%; height: 3px; border: 1px solid #000;"><div style="background: '.$colorbg.'; width: '.$stamminaPer.'%; height: 3px;">
 							</td>
+						</tr>';
+				$main_content .= '</table>';
+			}
+			// Show Statistics
+			if($config['site']['showAdvenceStatistic'])
+			{
+				$map = '<img src="generate.php?type=player&name='.urlencode($player->getName()).'">';
+				$main_content .= '<br><table border=0 cellspacing=1 cellpadding=4 width=100%>
+					<tr bgcolor='.$config['site']['vdarkborder'].'>
+						<td align="left" colspan=3 class=white><B>Advence statistics</B></td>
+					</tr>
+					<tr bgcolor='.$config['site']['vdarkborder'].'>
+						<td align="left" class=white>Maps</td>
+						<td align="left" class=white colspan=2>Skills</td>
+					</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td align="center" rowspan=7 width=30%>'.$map.'</td>
+							<td width=15%>Fist:</td><td>'.$player->getSkill(0).'</td>
+						</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td width=15%>Club:</td><td>'.$player->getSkill(1).'</td>
+						</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td width=15%>Sword:</td><td>'.$player->getSkill(2).'</td>
+						</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td width=15%>Axe:</td><td>'.$player->getSkill(3).'</td>
+						</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td width=15%>Distance:</td><td>'.$player->getSkill(4).'</td>
+						</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td width=15%>Shielding:</td><td>'.$player->getSkill(5).'</td>
+						</tr>';
+					if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
+						$main_content .= '<tr bgcolor='.$bgcolor.'>
+							<td width=15%>Fishing:</td><td>'.$player->getSkill(6).'</td>
 						</tr>';
 				$main_content .= '</table>';
 			}

@@ -240,7 +240,7 @@ if($config['site']['shop_system'] == 1)
 			}
 			$main_content .= '</table><br />';
 		}
-		if(count($offer_list['changename']) > 0 or count($offer_list['pacc']) > 0 or count($offer_list['redskull']) > 0 or count($offer_list['unban']) > 0 )
+		if(count($offer_list['changename']) > 0  or count($offer_list['redskull']) > 0 or count($offer_list['unban']) > 0 )
 			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Others</b></font></td></tr><tr width="650" bgcolor="black"></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b></b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 		if(count($offer_list['changename']) > 0)
 			foreach($offer_list['changename'] as $changename)
@@ -434,7 +434,7 @@ if($config['site']['shop_system'] == 1)
 										{
 											$player_premdays = $buy_player_account->getCustomField('premdays');
 											$player_lastlogin = $buy_player_account->getCustomField('lastday');
-											$save_transaction = 'INSERT INTO '.$SQL->tableName('z_shop_history_pacc').' (id, to_name, to_account, from_nick, from_account, price, pacc_days, trans_state, trans_start, trans_real) VALUES (NULL, '.$SQL->quote($buy_player->getName()).', '.$SQL->quote($buy_player_account->getId()).', '.$SQL->quote($buy_from).',  '.$SQL->quote($account_logged->getId()).', '.$SQL->quote($buy_offer['points']).', '.$SQL->quote($buy_offer['days']).', \'realized\', '.$SQL->quote(time()).', '.$SQL->quote(time()).');';
+											$save_transaction = 'INSERT INTO '.$SQL->tableName('z_shop_history_pacc').' (id, to_name, to_account, from_nick, from_account, price, pacc_days, trans_state, trans_start, trans_real) VALUES (NULL, '.$SQL->quote($buy_player->getName()).', '.$SQL->quote($buy_player_account->getId()).', '.$SQL->quote($buy_from).',  '.$SQL->quote($account_logged->getId()).', '.$SQL->quote($buy_offer['points']).', '.$SQL->quote($buy_offer['days']).', \'realized\', '.$SQL->quote(time()).', '.$SQL->quote(time()+$buy_offer['days']*24*60*60).');';
 											$SQL->query($save_transaction);
 											$buy_player_account->setCustomField('premdays', $player_premdays+$buy_offer['days']);
 											$account_logged->setCustomField('premium_points', $user_premium_points-$buy_offer['points']);
@@ -691,7 +691,7 @@ if($config['site']['shop_system'] == 1)
 						$paccs_received_text .= '<i>Your account</i>';
 					else
 						$paccs_received_text .= $pacc_received['from_nick'];
-					$paccs_received_text .= '</td><td>'.$pacc_received['pacc_days'].' days</td><td>'.$pacc_received['price'].' Points</td><td>'.date("j F Y, H:i:s", $pacc_received['trans_real']).'</td></tr>';
+					$paccs_received_text .= '</td><td>'.$pacc_received['pacc_days'].' days</td><td>'.$pacc_received['price'].' Points</td><td>'.date("j F Y, H:i:s", $pacc_received['trans_start']).'</td></tr>';
 				}
 			}
 			$main_content .= '<center><h1>Transactions History</h1></center>';

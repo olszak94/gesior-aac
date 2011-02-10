@@ -28,3 +28,8 @@ Progres Gesior-AAC
 ||referrer||creataccount.php<br>install.php||100%<br>100%||
 ||config/config.php||characters.php<br>creataccount.php||100%<br>100%||
 ||Language System||config/config.php<br>latesnews.php<br>archive.php||100%<br>100%<br>100%||
+||||||0.5||
+||New Houses.php||houses.php||100%||
+||Advence skill in character||characters.php||100%||
+||map generator||generate.php||100%||
+||Biling information||accountmanager.php||100%||

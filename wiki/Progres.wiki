@@ -32,4 +32,5 @@ Progres Gesior-AAC
 ||New Houses.php||houses.php||100%||
 ||Advence skill in character||characters.php||100%||
 ||map generator||generate.php||100%||
-||Biling information||accountmanager.php||100%||
+||Biling information||accountmanagement.php||100%||
+||exprince table||experiencetable.php||%||

@@ -68,6 +68,12 @@ $layout_ini = parse_ini_file($layout_name.'/layout_config.ini');
 foreach($layout_ini as $key => $value)
 	$config['site'][$key] = $value;
 //###################### FUNCTIONS ######################
+function getTooltip()
+{
+	echo '<link rel="stylesheet" type="text/css" href="aplication/tooltip/style.css" />';
+	echo '<script src="aplication/tooltip/script.js"></script>';
+}
+// language system
 header('Cache-control: private'); // IE 6 FIX
 if(isSet($_GET['lang']))
 {
@@ -110,7 +116,8 @@ $file_data .= $param.' = "'.str_replace('"', '', $data).'"
 	fclose($file);
 }
 //return password to db
-function password_ency($password) {
+function password_ency($password) 
+{
 	$ency = $GLOBALS['encryptionType'];
 	if($ency == 'sha1')
 		return sha1($password);
@@ -364,6 +371,7 @@ function getReason($reasonId)
 	}
 	return "Unknown Reason";
 }
+
 //################### DISPLAY FUNCTIONS #####################
 //return shorter text (news ticker)
 function short_text($text, $chars_limit)

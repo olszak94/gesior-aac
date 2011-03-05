@@ -60,11 +60,13 @@ if(!$logged && !empty($login_account) && !empty($login_password))
 }
 //#### LOAD PAGE ##########
 //load subtopic page
-if(empty($_REQUEST['subtopic'])) {
+if(empty($_REQUEST['subtopic'])) 
+{
 	$_REQUEST['subtopic'] = "latestnews";
 	$subtopic = "latestnews";
 }
-switch($_REQUEST['subtopic']) {
+switch($_REQUEST['subtopic']) 
+{
 	case "latestnews":
 		$topic = "Latest News";
 		$subtopic = "latestnews";
@@ -247,18 +249,25 @@ function GetXmlHttpObject()
 }
 function MouseOverBigButton(source)
 {
-  source.firstChild.style.visibility = "visible";
+	source.firstChild.style.visibility = "visible";
 }
 function MouseOutBigButton(source)
 {
-  source.firstChild.style.visibility = "hidden";
+	source.firstChild.style.visibility = "hidden";
 }
 function BigButtonAction(path)
 {
-  window.location = path;
+	window.location = path;
 }
 var';
-if($logged) { $layout_header .= "loginStatus=1; loginStatus='true';"; } else { $layout_header .= "loginStatus=0; loginStatus='false';"; };
+if($logged)
+{
+	$layout_header .= "loginStatus=1; loginStatus='true';"; 
+} 
+else 
+{ 
+	$layout_header .= "loginStatus=0; loginStatus='false';"; 
+}
 $layout_header .= " var activeSubmenuItem='".$subtopic."';</script>";
 include($layout_name."/layout.php");
 ob_end_flush();

@@ -13,9 +13,9 @@ function drawBorder(&$img, &$color, $thickness = 1)
         ImageRectangle($img, $x1++, $y1++, $x2--, $y2--, $color_black);
     }
 }
-if($_GET['type'] == 'player')
+if($_REQUEST['type'] == 'player')
 {
-	$name = stripslashes(ucwords(strtolower(trim($_GET['name']))));
+	$name = stripslashes(ucwords(strtolower(trim($_REQUEST['name']))));
 	$player = $ots->createObject('Player');
 	$player->find($name);
 	if($player->isLoaded())
@@ -54,7 +54,7 @@ if($_GET['type'] == 'player')
 		imagedestroy($image);
 	}
 }
-if($_GET['type'] == 'house')
+if($_REQUEST['type'] == 'house')
 {
 	$x = $_GET['x'];
 	$y = $_GET['y'];

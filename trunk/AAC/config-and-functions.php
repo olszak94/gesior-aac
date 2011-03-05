@@ -19,12 +19,6 @@ if(isset($config['server']['sqlHost']))
 	$mysqlpass = $config['server']['sqlPass'];
 	$mysqldatabase = $config['server']['sqlDatabase'];
 }
-$sqlitefile = $config['server']['sqliteDatabase'];
-	$encryptionType = '';
-if(strtolower($config['server']['encryptionType']) == 'md5')
-	$encryptionType = 'md5';
-if(strtolower($config['server']['encryptionType']) == 'sha1')
-	$encryptionType = 'sha1';
 // loads #####POT mainfile#####
 include('pot/OTS.php');
 // PDO and POT connects to database
@@ -118,12 +112,10 @@ $file_data .= $param.' = "'.str_replace('"', '', $data).'"
 //return password to db
 function password_ency($password) 
 {
-	$ency = $GLOBALS['encryptionType'];
-	if($ency == 'sha1')
-		return sha1($password);
-	elseif($ency == 'md5')
-		return md5($password);
-	elseif($ency == '')
+	$ency = $GLOBALS['config']['server']['encryptionType'];
+	if($ency != 'plain')
+		return hash($ency, $password);
+	elseif($ency == 'plain')
 		return $password;
 }
 //delete player with name

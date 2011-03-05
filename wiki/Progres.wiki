@@ -33,4 +33,6 @@ Progres Gesior-AAC
 ||Advence skill in character||characters.php||100%||
 ||map generator||generate.php||100%||
 ||Biling information||accountmanagement.php||100%||
+||||||0.6||
 ||exprince table||experiencetable.php||%||
+||new encryption password||config-and-functions.php||%||

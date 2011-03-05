@@ -24,7 +24,7 @@ Progres Gesior-AAC
 ||Tracker||tracker.php<br>install.php||100%<br>100%||
 ||configure<br>0.3.6pl1||install.php||100%||
 ||||||0.4||
-||characters.php||vip list<br>quest list<br>frags list<br>statistic||100%<br>100%<br>90%<br>100%||
+||characters.php||vip list<br>quest list<br>frags list<br>statistic||100%<br>100%<br>98%<br>100%||
 ||referrer||creataccount.php<br>install.php||100%<br>100%||
 ||config/config.php||characters.php<br>creataccount.php||100%<br>100%||
 ||Language System||config/config.php<br>latesnews.php<br>archive.php||100%<br>100%<br>100%||
@@ -35,4 +35,4 @@ Progres Gesior-AAC
 ||Biling information||accountmanagement.php||100%||
 ||||||0.6||
 ||exprince table||experiencetable.php||%||
-||new encryption password||config-and-functions.php||%||
+||new encryption password||config-and-functions.php||100%||

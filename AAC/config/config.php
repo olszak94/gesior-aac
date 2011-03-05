@@ -8,7 +8,7 @@ $config['site']['worlds'] = array(0 => 's1', 1 => 's2');
 // News option
 $config['site']['access_tickers'] = 5;
 $config['site']['access_news'] = 6;
-$config['site']['langSystem'] = 0;
+$config['site']['langSystem'] = 1;
 	// Limit show news on site
 	$config['site']['news_ticks_limit'] = 5;
 	$config['site']['news_big_limit'] = 10;
@@ -56,7 +56,7 @@ $config['site']['email_days_to_change'] = 1;
 
 // character option
 $config['site']['showStatistic'] = 0;
-$config['site']['showAdvenceStatistic'] = 1;
+$config['site']['showAdvenceStatistic'] = 0;
 $config['site']['showQuests'] = 0;
 $config['site']['showVipList'] = 0;
 $config['site']['showVictims'] = 0;
@@ -71,6 +71,9 @@ $config['site']['guild_image_size_kb'] = 50;
 $config['site']['guild_description_chars_limit'] = 1000;
 $config['site']['guild_description_lines_limit'] = 6;
 $config['site']['guild_motd_chars_limit'] = 150;
+	// Show statistics Guild
+	$config['site']['showStat'] = 0;
+	$config['site']['showAdvenceStat'] = 0;
 
 // Page option
 	// Page
@@ -94,13 +97,13 @@ $config['site']['guild_motd_chars_limit'] = 150;
 		$vocation_name[1][1] = array(1 => 'Master Sorcerer', 2 => 'Elder Druid', 3 => 'Royal Paladin', 4 => 'Elite Knight'); 
 		// Show name town in world -- $towns_list[getWorld][getTownId]
 		$towns_list[0] = array(1 => 'Venore', 2 => 'Edron', 3 => 'Thais', 4 => 'Carlin');
-		$towns_list[1] = array(1 => 'Venore');
+		$towns_list[1] = array(1 => 'Venore', 2 => 'Elion');
 		// Constant Mana -- $vocationConstantMana[getWorld][getVocation]
 		$vocationConstantMana[0] = array(0 => 4.0, 1 => 1.1, 2 => 1.1, 3 => 1.4, 4 => 3.0);
 		$vocationConstantMana[1] = array(0 => 4.0, 1 => 1.1, 2 => 1.1, 3 => 1.4, 4 => 3.0);
 
 // Shop option
-$config['site']['shop_system'] = 0;
+$config['site']['shop_system'] = 1;
 	// Option for buy points
 	$config['site']['paypal_active'] = 0;
 	$config['site']['zaypay_active'] = 0;

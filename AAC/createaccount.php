@@ -324,6 +324,7 @@ if($action == "saveaccount")
 		if($config['site']['newaccount_premdays'])
 		{
 			$reg_account->setCustomField("premdays", $config['site']['newaccount_premdays']);
+			$reg_account->setCustomField("lastpremdays", time() + ($config['site']['newaccount_premdays'] * 24 * 60 * 60));
 		}		
 		//show information about registration
 		$main_content .= 'Your account has been created. Please write down the account number and password. See you in Tibia!<BR><BR>

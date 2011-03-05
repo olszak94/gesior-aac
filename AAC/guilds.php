@@ -33,15 +33,15 @@ if($action == '')
 		$main_content .= '<OPTION VALUE="'.$id.'">'.$world_n.'</OPTION>';
 	}
 	$main_content .= '</SELECT> </TD><TD><INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$layout_name.'/images/buttons/sbutton_submit.gif">
-        </TD></TR></TABLE></TABLE></FORM></TABLE>';
-		foreach($config['site']['worlds'] as $idd => $world_n)
+        </TD></TR></TABLE></TABLE></FORM></TABLE><br>';
+	foreach($config['site']['worlds'] as $idd => $world_n)
+	{
+		if($idd == (int) $_REQUEST['world'])
 		{
-			if($idd == (int) $_REQUEST['world'])
-			{
-				$world_id = $idd;
-				$world_name = $world_n;
-			}
+			$world_id = $idd;
+			$world_name = $world_n;
 		}
+	}
 	if(!isset($world_id))
 	{
 		$world_id = 0;
@@ -76,7 +76,7 @@ if($action == '')
 			$description_with_lines = str_replace($newlines, '<br />', $description, $count);
 			if($count < $config['site']['guild_description_lines_limit'])
 				$description = $description_with_lines;
-			$main_content .= '<TR BGCOLOR="'.$bgcolor.'"><TD><IMG SRC="images/guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD>
+			$main_content .= '<TR BGCOLOR="'.$bgcolor.'" onmouseover="tooltip.show(\'<center><b>'.$guild->getName().'</b></center>\');" onmouseout="tooltip.hide();"><TD><IMG SRC="images/guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD>
 				<TD valign="top"><B>'.$guild->getName().'</B><BR/>'.$description.'';
 			if($group_id_of_acc_logged >= $config['site']['access_admin_panel'])
 				$main_content .= '<br /><a href="index.php?subtopic=guilds&action=deletebyadmin&guild='.$guild->getName().'">Delete this guild (for ADMIN only!)</a>';
@@ -217,7 +217,15 @@ if($action == 'show')
 						$account = $SQL->query('SELECT * FROM `accounts` WHERE id = '.$player->getAccount().'')->fetch();
 						$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
 					}
-					$main_content .= '<TR><TD><FORM ACTION="index.php?subtopic=guilds&action=change_nick&name='.$player->getName().'" METHOD=post>'.$flag.'<A HREF="index.php?subtopic=characters&name='.$player->getName().'">'.$player->getName().'</A>';
+					if(!$config['site']['showStat'] && $config['site']['showAdvenceStat'])
+					{
+						$showAdvencStat = 'onmouseover="tooltip.show(\''.$flags.'<b>Level:</b> '.$player->getLevel().'<br><b>Vocation:</b> '.$vocation_name[$player->getWorld()][$player->getPromotion()][$player->getVocation()].'\');" onmouseout="tooltip.hide();"';
+					}
+					if($config['site']['showStat'] && !$config['site']['showAdvenceStat'])
+					{
+						$showStat = 'Level: '.$player->getLevel().', '.$vocation_name[$player->getWorld()][$player->getPromotion()][$player->getVocation()].'';
+					}
+					$main_content .= '<TR '.$showAdvencStat.'><TD><FORM ACTION="index.php?subtopic=guilds&action=change_nick&name='.$player->getName().'" METHOD=post>'.$flag.'<A HREF="index.php?subtopic=characters&name='.$player->getName().'">'.$player->getName().'</A>';
 					$guild_nick = $player->getGuildNick();
 					if($logged)
 					{
@@ -235,7 +243,7 @@ if($action == 'show')
 					if($level_in_guild > $rank->getLevel() || $guild_leader)
 						if($guild_leader_char->getName() != $player->getName())
 							$main_content .= '&nbsp;<font size=1>{<a href="index.php?subtopic=guilds&action=kickplayer&guild='.urlencode($guild->getName()).'&name='.urlencode($player->getName()).'">KICK</a>}</font>';
-					$main_content .= '</FORM></TD></TR>';
+					$main_content .= '</FORM>'.$showStat.'</TD></TR>';
 				}
 				$main_content .= '</TABLE></TD></TR>';
 			}
@@ -245,33 +253,40 @@ if($action == 'show')
 		new InvitesDriver($guild);
 			$invited_list = $guild->listInvites();
 		if(count($invited_list) == 0)
-			$main_content .= '<BR><BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Invited Characters</B></TD></TR><TR BGCOLOR='.$config['site']['lightborder'].'><TD>No invited characters found.</TD></TR></TABLE>';
+			$main_content .= '<BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Invited Characters</B></TD></TR><TR BGCOLOR='.$config['site']['lightborder'].'><TD>No invited characters found.</TD></TR></TABLE>';
 		else
 		{
-			$main_content .= '<BR><BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Invited Characters</B></TD></TR>';
+			$main_content .= '<BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Invited Characters</B></TD></TR>';
 			$show_accept_invite = 0;
 			$showed_invited = 1;
 			foreach($invited_list as $invited_player)
 			{
-				if(count($account_players) > 0)
-					foreach($account_players as $player_from_acc)
-						if($player_from_acc->getName() == $invited_player->getName())
-							$show_accept_invite++;
-				if(is_int($showed_invited / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $showed_invited++;
 				if($config['site']['show_flag'])
 				{
 					$account = $SQL->query('SELECT * FROM `accounts` WHERE id = '.$invited_player->getAccount().'')->fetch();
 					$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
 				}
-				$main_content .= '<TR bgcolor="'.$bgcolor.'"><TD>'.$flag.'<a href="index.php?subtopic=characters&name='.$invited_player->getName().'">'.$invited_player->getName().'</a>';
+				if(!$config['site']['showStat'] && $config['site']['showAdvenceStat'])
+				{
+					$showAdvencStat = 'onmouseover="tooltip.show(\'<b>Level:</b> '.$invited_player->getLevel().'<br><b>Vocation:</b> '.$vocation_name[$invited_player->getWorld()][$invited_player->getPromotion()][$invited_player->getVocation()].'\');" onmouseout="tooltip.hide();"';
+				}
+				if($config['site']['showStat'] && !$config['site']['showAdvenceStat'])
+				{
+					$showStats = '<br>Level: '.$invited_player->getLevel().', '.$vocation_name[$invited_player->getWorld()][$invited_player->getPromotion()][$invited_player->getVocation()].'';
+				}
+				if(count($account_players) > 0)
+					foreach($account_players as $player_from_acc)
+						if($player_from_acc->getName() == $invited_player->getName())
+							$show_accept_invite++;
+				if(is_int($showed_invited / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $showed_invited++;
+					$main_content .= '<TR bgcolor="'.$bgcolor.'" '.$showAdvencStat.'><TD>'.$flag.'<a href="index.php?subtopic=characters&name='.$invited_player->getName().'">'.$invited_player->getName().'</a>';
 				if($guild_vice)
 					$main_content .= '  (<a href="index.php?subtopic=guilds&action=deleteinvite&guild='.$guild->getName().'&name='.$invited_player->getName().'">Cancel Invitation</a>)';
-				$main_content .= '</TD></TR>'; 
+				$main_content .= $showStat.'</TD></TR>'; 
 			}
 			$main_content .= '</TABLE>';
 		}
-		$main_content .= '<BR><BR>
-		<TABLE BORDER=0 WIDTH=100%><TR>';
+		$main_content .= '<BR><TABLE BORDER=0 WIDTH=100%><TR>';
 		if(!$logged)
 			$main_content .= '<TD ALIGN=center><FORM ACTION="index.php?subtopic=guilds&action=login&guild='.$guild->getName().'&redirect=guild" METHOD=post>
 			<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$layout_name.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=110>
@@ -302,9 +317,6 @@ if($action == 'show')
 			</TR></TABLE></TD></TR></TABLE></TABLE>';
 	}
 }
-
-
-
 //--------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------
@@ -488,7 +500,6 @@ if($action == 'changerank')
 			$main_content .= 'Error. You are not a leader or vice leader in guild '.$guild->getName().'.<FORM ACTION="index.php?subtopic=guilds&action=show&guild='.$guild->getName().'" METHOD=post><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$layout_name.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></FORM>';
 	}
 }
-
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -588,7 +599,6 @@ if($action == 'deleteinvite')
 			$main_content .= '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD CLASS=white><B>Delete player invitation</B></TD></TR><TR BGCOLOR='.$config['site']['darkborder'].'><TD WIDTH=100%>Are you sure you want to delete player with name <b>'.$player->getName().'</b> from "invites list"?</TD></TR></TABLE><br/><center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><TR><FORM ACTION="index.php?subtopic=guilds&action=deleteinvite&guild='.$guild->getName().'&name='.$player->getName().'&todo=save" METHOD=post><TD align="right" width="50%"><INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$layout_name.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18>&nbsp;&nbsp;</TD></FORM><FORM ACTION="index.php?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TD>&nbsp;&nbsp;<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$layout_name.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></TD></TR></FORM></TABLE></center>';
 	}
 }
-
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -1220,13 +1230,13 @@ if($action == 'manager')
 			{
 				$main_content .= '<center><h2>Welcome to guild manager!</h2></center>Here you can change names of ranks, delete and add ranks, pass leadership to other guild member and delete guild.';
 				$main_content .= '<br/><br/><table style=\'clear:both\' border=0 cellpadding=0 cellspacing=0 width=\'100%\'>
-				<tr bgcolor='.$config['site']['darkborder'].'><td width="170"><font color="red"><b>Option</b></font></td><td><font color="red"><b>Description</b></font></td></tr>
-				<tr bgcolor='.$config['site']['lightborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=passleadership">Pass Leadership</a></b></td><td><b>Pass leadership of guild to other guild member.</b></td></tr>
-				<tr bgcolor='.$config['site']['darkborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=deleteguild">Delete Guild</a></b></td><td><b>Delete guild, kick all members.</b></td></tr>
-				<tr bgcolor='.$config['site']['lightborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=changedescription">Change Description</a></b></td><td><b>Change description of guild.</b></td></tr>
-				<tr bgcolor='.$config['site']['darkborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=changemotd">Change MOTD</a></b></td><td><b>Change MOTD of guild.</b></td></tr>
-				<tr bgcolor='.$config['site']['lightborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=changelogo">Change guild logo</a></b></td><td><b>Upload new guild logo.</b></td></tr>
-				</table>';
+						<tr bgcolor='.$config['site']['darkborder'].'><td width="170"><font color="red"><b>Option</b></font></td><td><font color="red"><b>Description</b></font></td></tr>
+						<tr bgcolor='.$config['site']['lightborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=passleadership">Pass Leadership</a></b></td><td><b>Pass leadership of guild to other guild member.</b></td></tr>
+						<tr bgcolor='.$config['site']['darkborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=deleteguild">Delete Guild</a></b></td><td><b>Delete guild, kick all members.</b></td></tr>
+						<tr bgcolor='.$config['site']['lightborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=changedescription">Change Description</a></b></td><td><b>Change description of guild.</b></td></tr>
+						<tr bgcolor='.$config['site']['darkborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=changemotd">Change MOTD</a></b></td><td><b>Change MOTD of guild.</b></td></tr>
+						<tr bgcolor='.$config['site']['lightborder'].'><td width="170"><b><a href="index.php?subtopic=guilds&guild='.$guild->getName().'&action=changelogo">Change guild logo</a></b></td><td><b>Upload new guild logo.</b></td></tr>
+					</table>';
 				$main_content .= '<br><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$layout_name.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$layout_name.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Add new rank</div>        <span class="CaptionVerticalRight" style="background-image:url('.$layout_name.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$layout_name.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td width="120" valign="top">New rank name:</td><td> <form action="index.php?subtopic=guilds&guild='.$guild->getName().'&action=addrank" method="POST"><input type="text" name="rank_name" size="20"><input type="submit" value="Add"></form></td></tr>          </table>        </div>  </table></div></td></tr>';
 				$main_content .= '<center><h3>Change rank names and levels</h3></center><form action="index.php?subtopic=guilds&action=saveranks&guild='.$guild->getName().'" method=POST><table style=\'clear:both\' border=0 cellpadding=0 cellspacing=0 width=\'100%\'><tr bgcolor='.$config['site']['vdarkborder'].'><td rowspan="2" width="120" align="center"><font color="white"><b>ID/Delete Rank</b></font></td><td rowspan="2" width="300"><font color="white"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name</b></font></td><td colspan="3" align="center"><font color="white"><b>Level of RANK in guild</b></font></td></tr><tr bgcolor='.$config['site']['vdarkborder'].'><td align="center" bgcolor="red"><font color="white"><b>Leader (3)</b></font></td><td align="center" bgcolor="yellow"><font color="black"><b>Vice (2)</b></font></td><td align="center" bgcolor="green"><font color="white"><b>Member (1)</b></font></td></tr>';
 				$number_of_ranks = count($rank_list);
@@ -1583,7 +1593,6 @@ if($action == 'addrank')
 		}
 	}
 }
-
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -1886,7 +1895,6 @@ if($action == 'deletebyadmin')
 		$main_content .= '<br/><center><form action="index.php?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$layout_name.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$layout_name.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$layout_name.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 	}
 }
-
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -2153,48 +2161,48 @@ if($action == 'cleanup_guilds')
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
-	if($action == 'change_nick')
+if($action == 'change_nick')
+{
+	if($logged)
 	{
-		if($logged)
+		$player_n = stripslashes($_REQUEST['name']);
+		$new_nick = stripslashes($_REQUEST['nick']);
+		$player = new OTS_Player();
+		$player->find($player_n);
+		$player_from_account = FALSE;
+		if(strlen($new_nick) <= 40)
 		{
-			$player_n = stripslashes($_REQUEST['name']);
-			$new_nick = stripslashes($_REQUEST['nick']);
-			$player = new OTS_Player();
-			$player->find($player_n);
-			$player_from_account = FALSE;
-			if(strlen($new_nick) <= 40)
+			if($player->isLoaded())
 			{
-				if($player->isLoaded())
+				$account_players = $account_logged->getPlayersList();
+				if(count($account_players))
 				{
-					$account_players = $account_logged->getPlayersList();
-					if(count($account_players))
+					foreach($account_players as $acc_player)
 					{
-						foreach($account_players as $acc_player)
-						{
-							if($acc_player->getId() == $player->getId())
-								$player_from_account = TRUE;
-						}
-						if($player_from_account)
-						{
-							$player->setGuildNick($new_nick);
-							$player->save();
-							$main_content .= 'Guild nick of player <b>'.$player->getName().'</b> changed to <b>'.htmlentities($new_nick).'</b>.';
-							$addtolink = '&action=show&guild='.$player->getRank()->getGuild()->getName();
-						}
-						else
-							$main_content .= 'This player is not from your account.';
+						if($acc_player->getId() == $player->getId())
+							$player_from_account = TRUE;
+					}
+					if($player_from_account)
+					{
+						$player->setGuildNick($new_nick);
+						$player->save();
+						$main_content .= 'Guild nick of player <b>'.$player->getName().'</b> changed to <b>'.htmlentities($new_nick).'</b>.';
+						$addtolink = '&action=show&guild='.$player->getRank()->getGuild()->getName();
 					}
 					else
 						$main_content .= 'This player is not from your account.';
 				}
 				else
-					$main_content .= 'Unknow error occured.';
+					$main_content .= 'This player is not from your account.';
 			}
 			else
-				$main_content .= 'Too long guild nick. Max. 30 chars, your: '.strlen($new_nick);
+				$main_content .= 'Unknow error occured.';
 		}
-			else
-				$main_content .= 'You are not logged.';
-		$main_content .= '<center><h3><a href="index.php?subtopic=guilds'.$addtolink.'">BACK</a></h3></center>';
+		else
+			$main_content .= 'Too long guild nick. Max. 30 chars, your: '.strlen($new_nick);
 	}
+	else
+		$main_content .= 'You are not logged.';
+	$main_content .= '<center><h3><a href="index.php?subtopic=guilds'.$addtolink.'">BACK</a></h3></center>';
+}
 ?>

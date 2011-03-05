@@ -13,7 +13,7 @@ if($config['site']['serverinfo_page'])
 				<td width="50%"><font class="white">Name</font></td><td><font class="white">Value</font></td>
 			</tr>
 			<tr bgcolor="'.$config['site']['darkborder'].'">
-				<td>Server</td><td>'.(($config['status']['serverStatus_online'] == 1) ? '<font color="grenn"><b>OnLine</b></font>' : '<font color="red"><b>OffLine</b></font>').'</td>
+				<td>Server</td><td>'.(($config['status']['serverStatus_online'] == 1) ? '<font color="grenn"><b>On line</b></font>' : '<font color="red"><b>Off line</b></font>').'</td>
 			</tr>
 			<tr bgcolor="'.$config['site']['lightborder'].'">
 				<td>Player Online</td><td>'.$config['status']['serverStatus_players'].'</td>
@@ -30,7 +30,7 @@ if($config['site']['serverinfo_page'])
 		</table>
 		<br>';
 	if($config['server']['experienceStages'] == false)
-        $rateExperience .= $config['server']['rateExperience'].' x';
+        $rateExperience .= $config['server']['rateExperience'].'x';
     else
 	{
         $rateExperience .= '<table width="100%">';
@@ -51,7 +51,7 @@ if($config['site']['serverinfo_page'])
 					$bgcolor=$config['site']['lightborder'];
 				else
 					$bgcolor=$config['site']['darkborder'];
-				$rateExperience .= '<tr align="center" bgcolor="'.$bgcolor.'"><td>'.$exp["minlevel"].'</td><td>'.$max.'</td><td>'.$exp["multiplier"].'</td></tr>';
+				$rateExperience .= '<tr align="center" bgcolor="'.$bgcolor.'"><td>'.$exp["minlevel"].'</td><td>'.$max.'</td><td>'.$exp["multiplier"].'x</td></tr>';
 				$i++;
 			}
         }
@@ -68,16 +68,16 @@ if($config['site']['serverinfo_page'])
 				<td width="50%">Experience</td><td>'.$rateExperience.'</td>
 			</tr>
 			<tr bgcolor="'.$config['site']['lightborder'].'">
-				<td>Skill</td><td>'.$config['server']['rateSkill'].' x</td>
+				<td>Skill</td><td>'.$config['server']['rateSkill'].'x</td>
 			</tr>
 			<tr bgcolor="'.$config['site']['darkborder'].'">
-				<td>Magic</td><td>'.$config['server']['rateMagic'].' x</td>
+				<td>Magic</td><td>'.$config['server']['rateMagic'].'x</td>
 			</tr>
 			<tr bgcolor="'.$config['site']['lightborder'].'">
-				<td>Loot</td><td>'.$config['server']['rateLoot'].' x</td>
+				<td>Loot</td><td>'.$config['server']['rateLoot'].'x</td>
 			</tr>
 			<tr bgcolor="'.$config['site']['darkborder'].'">
-				<td>Spawn</td><td>'.$config['server']['rateSpawn'].' x</td>
+				<td>Spawn</td><td>'.$config['server']['rateSpawn'].'x</td>
 			</tr>
 		</table><br>';
 	foreach($servers as $server)
@@ -162,7 +162,7 @@ if($config['site']['serverinfo_page'])
 			else
 				$bgcolor=$config['site']['darkborder'];
 			if(is_int($i/2))
-				$main_content .= '<td>'.$command["words"].'</td></tr>';
+				$main_content .= '<td width="50%">'.$command["words"].'</td></tr>';
 			else
             {
 				$main_content .= '<tr align="center" bgcolor="'.$bgcolor.'"><td width="50%">'.$command["words"].'</td>';
@@ -231,7 +231,7 @@ if($config['site']['serverinfo_page'])
 		</tr>
 	</table><br>';
 	$idleKickTime = explode("*", $config['server']['idleKickTime']);
-	$idleKickTime = $idleKickTime[0].(count($idleKickTime) == 4 ? ' minuts' : ' hours'); 
+	$idleKickTime = $idleKickTime[0].(count($idleKickTime) == 4 ? ' hours' : ' minuts');
 	$pzLocked = explode("*", $config['server']['pzLocked']);
 	$pzLocked = $pzLocked[0].(count($pzLocked) == 3 ? ' minuts' : ' seconds'); 
 	if($config['server']['freePremium'] == true)

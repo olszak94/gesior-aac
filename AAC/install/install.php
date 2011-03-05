@@ -378,6 +378,7 @@ if($_REQUEST['page'] == 'step')
 				elseif($config['server']['sqlType'] == "mysql")
 				{
 					//if mysql
+					try { $SQL->query("ALTER TABLE `accounts` ADD `lastpremdays` INT( 11 ) NOT NULL DEFAULT '0' AFTER `premdays`;"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `accounts` ADD `premium_points` INT( 11 ) NOT NULL DEFAULT '0';"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `accounts` ADD `email_new` VARCHAR( 255 ) NOT NULL;"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `accounts` ADD `email_new_time` INT( 15 ) NOT NULL;"); } catch(PDOException $error) {}
@@ -668,7 +669,7 @@ if($_REQUEST['page'] == 'step')
 					$_SESSION['password'] = $newpass;
 					$logged = TRUE;
 					$account->setCustomField("page_lastday", time());
-					echo '<h1>Admin account number: 1<br>Admin account password: '.$_POST['newpass'].'</h1><br/><h3>It\'s end of first part of installation. Installation is blocked. From now don\'t modify file config.ini!<br>Press links to STEPs 6 and 7 in menu.</h3>'; 
+					echo '<h1>Admin account number: 1<br>Admin account password: '.$_POST['newpass'].'</h1>'; 
 					$config['site']['install'] = 'no';
 					saveconfig_ini($config['site']);
 				}

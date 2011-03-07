@@ -45,7 +45,7 @@ if(count($config['site']['worlds']) > 1)
 			$main_content .= '<OPTION VALUE="'.$id.'">'.$world_n.'</OPTION>';
 		}
 		$main_content .= '</SELECT> </TD><TD><INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$layout_name.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18>
-		</TD></TR></TABLE></TABLE></FORM></TABLE>';
+		</TD></TR></TABLE></TABLE></FORM></TABLE><br>';
 }
 $players_online_data = $SQL->query('SELECT * FROM players WHERE online > 0 AND world_id = '.$world_id.' ORDER BY '.$orderby);
 $number_of_players_online = 0;
@@ -86,8 +86,12 @@ else
 			<TD CLASS=white><B>Server Status</B></TD>
 		</TR>
 		<TR BGCOLOR='.$config['site']['darkborder'].'>
-			<TD>
-				Currently '.$number_of_players_online.' players are online.<br>
+			<TD>';
+				if($number_of_players_online == $config['status']['serverStatus_players'])
+					$main_content .= 'Currently there are '.$number_of_players_online.' players is active';
+				else
+					$main_content .= 'Currently there are '.$config['status']['serverStatus_players'].' active and '.($number_of_players_online - $config['status']['serverStatus_players']).' AFK players';
+			$main_content .= ' on '.$world_name.' gameworlds.<br>
 			</TD>
 		</TR>
 	</TABLE><BR>';

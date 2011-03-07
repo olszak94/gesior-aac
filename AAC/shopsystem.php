@@ -170,10 +170,13 @@ if($config['site']['shop_system'] == 1)
 		//show list of pacc offers
 		if(count($offer_list['pacc']) > 0)
 		{
-			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Pacc</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
+			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td colspan="3"><font size="4"><b>Pacc</b></font></td></tr>
+				<tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td width="50" align="center"><b>Picture</b></td><td width="350" align="left"><b>Description</b></td><td width="250" align="center"><b>Select product</b></td></tr>';
 			foreach($offer_list['pacc'] as $pacc)
 			{
-				$main_content .= '<tr bgcolor="gold"><td align="center"><font color="black">'.$pacc['days'].'</td><td><font color="black"<b>'.$pacc['name'].'</b> ('.$pacc['points'].' points)<br />'.$pacc['description'].'</td><td align="center">';
+				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
+					$number_of_rows++; 
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><font color="black">'.$pacc['days'].'</td><td><font color="black"<b>'.$pacc['name'].'</b> ('.$pacc['points'].' points)<br />'.$pacc['description'].'</td><td align="center">';
 				if(!$logged)
 				{
 					$main_content .= '<b>Login to buy</b>';
@@ -189,10 +192,12 @@ if($config['site']['shop_system'] == 1)
 		//show list of items offers
 		if(count($offer_list['item']) > 0)
 		{
-			$main_content .= '<center><table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;ITEMS</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
+			$main_content .= '<center><table border="0" cellpadding="1" cellspacing="1" width="90%"><tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td colspan="3"><font color="gold" size="4"><b>&nbsp;ITEMS</b></font></td></tr><tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 			foreach($offer_list['item'] as $item)
 			{
-				$main_content .= '<tr bgcolor="gold"><td align="center"><img src="images/shop/'.$item['id'].'.jpg"></td><td><b>'.$item['name'].'</b> ('.$item['points'].' points)<br />'.$item['description'].'</td><td align="center">';
+				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
+					$number_of_rows++; 
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/shop/'.$item['id'].'.jpg"></td><td><b>'.$item['name'].'</b> ('.$item['points'].' points)<br />'.$item['description'].'</td><td align="center">';
 				if(!$logged)
 				{
 					$main_content .= '<b>Login to buy</b>';
@@ -208,11 +213,12 @@ if($config['site']['shop_system'] == 1)
 		// show list of containers offers
 		if(count($offer_list['container']) > 0) 
 		{
-			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="#505050"><td colspan="3"><font color="white" size="4"><b>&nbsp;CONTAINERS WITH ITEMS</b></font></td></tr><tr bgcolor="#D4C0A1"><td width="50" align="center"><b>Picture</b></td><td width="350" align="left"><b>Description</b></td><td width="250" align="center"><b>Select product</b></td></tr>';
-
+			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td colspan="3"><font color="white" size="4"><b>&nbsp;CONTAINERS WITH ITEMS</b></font></td></tr><tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td width="50" align="center"><b>Picture</b></td><td width="350" align="left"><b>Description</b></td><td width="250" align="center"><b>Select product</b></td></tr>';
 			foreach($offer_list['container'] as $container) 
 			{
-				$main_content .= '<tr bgcolor="#F1E0C6"><td align="center"><img src="images/shop/'.$container['id'].'.jpg"></td><td><b>'.$container['name'].'</b> ('.$container['points'].' points)<br />'.$container['description'].'</td><td align="center">';
+				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
+					$number_of_rows++; 
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/shop/'.$container['id'].'.jpg"></td><td><b>'.$container['name'].'</b> ('.$container['points'].' points)<br />'.$container['description'].'</td><td align="center">';
 				if(!$logged)
 					$main_content .= '<b>Login to buy</b>';
 				else 
@@ -224,10 +230,12 @@ if($config['site']['shop_system'] == 1)
 		//show list of itemlogout offers
 		if(count($offer_list['itemlogout']) > 0)
 		{
-			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Receive Item on Logout</b></font></td></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
+			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Receive Item on Logout</b></font></td></tr><tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td width="50" align="center"><font color=red><b>Picture</b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 			foreach($offer_list['itemlogout'] as $itemlogout)
 			{
-				$main_content .= '<tr bgcolor="gold"><td align="center"><img src="images/shop/'.$itemlogout['id'].'.jpg"></td><td><b>'.$itemlogout['name'].'</b> ('.$itemlogout['points'].' points)<br />'.$itemlogout['description'].'</td><td align="center">';
+				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
+					$number_of_rows++; 
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/shop/'.$itemlogout['id'].'.jpg"></td><td><b>'.$itemlogout['name'].'</b> ('.$itemlogout['points'].' points)<br />'.$itemlogout['description'].'</td><td align="center">';
 				if(!$logged)
 				{
 					$main_content .= '<b>Login to buy</b>';
@@ -241,11 +249,13 @@ if($config['site']['shop_system'] == 1)
 			$main_content .= '</table><br />';
 		}
 		if(count($offer_list['changename']) > 0  or count($offer_list['redskull']) > 0 or count($offer_list['unban']) > 0 )
-			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr width="650" bgcolor="black"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Others</b></font></td></tr><tr width="650" bgcolor="black"></tr><tr bgcolor="black"><td width="50" align="center"><font color=red><b></b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
+			$main_content .= '<table border="0" cellpadding="1" cellspacing="1" width="90%"><tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td colspan="3"><font color="gold" size="4"><b>&nbsp;Others</b></font></td></tr><tr bgcolor="'.$config['site']['vdarkborder'].'" class="white"><td width="50" align="center"><font color=red><b></b></font></td><td width="350" align="left"><font color=red><b>Description</b></font></td><td width="250" align="center"><font color=red><b>Select product</b></font></td></tr>';
 		if(count($offer_list['changename']) > 0)
 			foreach($offer_list['changename'] as $changename)
 			{
-				$main_content .= '<tr bgcolor="gold"><td align="center"><font color="black">Change Name</td><td><font color="black"<b>'.$changename['name'].'</b> ('.$changename['points'].' points)<br />'.$changename['description'].'</td><td align="center">';
+				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
+					$number_of_rows++; 
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><font color="black">Change Name</td><td><font color="black"<b>'.$changename['name'].'</b> ('.$changename['points'].' points)<br />'.$changename['description'].'</td><td align="center">';
 				if(!$logged)
 				{
 					$main_content .= '<b>Login to buy</b>';
@@ -256,35 +266,37 @@ if($config['site']['shop_system'] == 1)
 				}
 			}
 		if(count($offer_list['redskull']) > 0)
-		//Remove Red Skull
-		foreach($offer_list['redskull'] as $redskull)
-		{
-			$main_content .= '<tr bgcolor="gold"><td align="center"><img src="images/shop/'.$redskull['id'].'.jpg"></td><td><font color="black"<b>'.$redskull['name'].'</b> ('.$redskull['points'].' points)<br />'.$redskull['description'].'</td><td align="center">';
-			if(!$logged)
+			foreach($offer_list['redskull'] as $redskull)
 			{
-				$main_content .= '<b>Login to buy</b>';
+				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
+					$number_of_rows++; 
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/shop/'.$redskull['id'].'.jpg"></td><td><font color="black"<b>'.$redskull['name'].'</b> ('.$redskull['points'].' points)<br />'.$redskull['description'].'</td><td align="center">';
+				if(!$logged)
+				{
+					$main_content .= '<b>Login to buy</b>';
+				}
+				else
+				{
+					$main_content .= '<form action="index.php?subtopic=shopsystem&action=select_player" method=POST><input type="hidden" name="buy_id" value="'.$redskull['id'].'"><input type="submit" value="Buy '.$redskull['name'].'"><br><font color="black"<b>for '.$redskull['points'].' points</b></form>';
+				}
+				$main_content .= '</td></tr>';
 			}
-			else
-			{
-				$main_content .= '<form action="index.php?subtopic=shopsystem&action=select_player" method=POST><input type="hidden" name="buy_id" value="'.$redskull['id'].'"><input type="submit" value="Buy '.$redskull['name'].'"><br><font color="black"<b>for '.$redskull['points'].' points</b></form>';
-			}
-			$main_content .= '</td></tr>';
-		}
 		if(count($offer_list['unban']) > 0)
-		//Unban
-		foreach($offer_list['unban'] as $unban)
-		{
-			$main_content .= '<tr bgcolor="gold"><td align="center"><font color="black">Unban</td><td><font color="black"<b>'.$unban['name'].'</b> ('.$unban['points'].' points)<br />'.$unban['description'].'</td><td align="center">';
-			if(!$logged)
+			foreach($offer_list['unban'] as $unban)
 			{
-				$main_content .= '<b>Login to buy</b>';
+				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
+					$number_of_rows++; 
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><font color="black">Unban</td><td><font color="black"<b>'.$unban['name'].'</b> ('.$unban['points'].' points)<br />'.$unban['description'].'</td><td align="center">';
+				if(!$logged)
+				{
+					$main_content .= '<b>Login to buy</b>';
+				}
+				else
+				{
+					$main_content .= '<form action="index.php?subtopic=shopsystem&action=select_player" method=POST><input type="hidden" name="buy_id" value="'.$unban['id'].'"><input type="submit" value="Buy '.$unban['name'].'"><br><font color="black"<b>for '.$unban['points'].' points</b></form>';
+				}
+				$main_content .= '</td></tr>';
 			}
-			else
-			{
-				$main_content .= '<form action="index.php?subtopic=shopsystem&action=select_player" method=POST><input type="hidden" name="buy_id" value="'.$unban['id'].'"><input type="submit" value="Buy '.$unban['name'].'"><br><font color="black"<b>for '.$unban['points'].' points</b></form>';
-			}
-			$main_content .= '</td></tr>';
-		}
 		$main_content .= '</table><br /></center>';
 	}
 	elseif($action == 'select_player')

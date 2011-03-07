@@ -182,8 +182,10 @@ else
 					$m = floor(($value - $h * 3600000) / 60000);
 					return $h.':'.$m;
 				}
-				if($staminaPlayer < 50400000)
+				if($staminaPlayer <= 50400000)
 					$colorbg = 'red';
+				elseif($staminaPlayer <= 144000000)
+					$colorbg = 'orange';
 				else
 					$colorbg = 'lime';
 				$stamminaPer = ($staminaPlayer / $staminaDefault) * 100;
@@ -417,7 +419,7 @@ else
 						$frag_add_content .= ' ('.(($frag['unjustified'] == 0) ? '<font size=2 color=green>Justified</font>' : '<font size=2 color=red>Unjustified</font>').').</td></tr>'; 
 					}
 					if($frags >= 1) 
-						$main_content .= '<br><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR><TD>Victims</TD><td>Frags: </td></TR>'.$frag_add_content.'</TABLE>'; 
+						$main_content .= '<br><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR bgcolor='.$config['site']['vdarkborder'].'><TD>Victims</TD><td>Frags: '.$count($player_frags).'</td></TR>'.$frag_add_content.'</TABLE>'; 
 				}
 			}
 			// onther info

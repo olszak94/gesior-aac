@@ -39,3 +39,4 @@ ToDo in 0.6
   * new script to exprince table
   * new disgn in shop offer
   * little change in who is online (AFK system)
+  * new bans.php now wy can unban account from web site

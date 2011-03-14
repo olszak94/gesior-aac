@@ -34,7 +34,7 @@ Progres Gesior-AAC
 ||map generator||generate.php||100%||
 ||Biling information||accountmanagement.php||100%||
 ||||||0.6||
-||exprince table||experiencetable.php||%||
+||exprince table||experiencetable.php||100%||
 ||signature||signature.php||%||
 ||afk system info||whoisonline.php||100%||
 ||newdisgn shop offer||shopsystem.php||100%||

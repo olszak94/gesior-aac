@@ -387,6 +387,7 @@ if($_REQUEST['page'] == 'step')
 					try { $SQL->query('ALTER TABLE `players` ADD `old_name` VARCHAR(255) NOT NULL DEFAULT "";'); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `players` ADD `hide_char` INT( 11 ) NOT NULL DEFAULT '0';"); } catch(PDOException $error) {}
 					try { $SQL->query("ALTER TABLE `players` ADD `comment` TEXT NOT NULL;"); } catch(PDOException $error) {}
+					try { $SQL->query("ALTER TABLE `players` ADD `join_date` BIGINT( 20 ) NOT NULL AFTER  `guildnick`;"); } catch(PDOException $error) {}
 					echo "Added columns to table <b>players</b><br/>";
 					try { $SQL->query("CREATE TABLE `z_news_big` (
 							`hide_news` tinyint(1) NOT NULL DEFAULT '0',

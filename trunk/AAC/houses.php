@@ -183,11 +183,15 @@ if(empty($id))
 					<input type="radio" name="status" value="0" ';
 					if($houses_status == 0)
 						$main_content .= 'checked="checked" ';
-					$main_content .= '>houses and flats<br>
-					<input type="radio" name="status" value="1" ';
-					if($houses_status == 1)
-						$main_content .= 'checked="checked" ';
-					$main_content .= '>guildhalls<br>
+					$main_content .= '>houses and flats<br>';
+					if($config['server']['guildHalls'] == true)
+					{
+						$main_content .= '<input type="radio" name="status" value="1" ';
+						if($houses_status == 1)
+							$main_content .= 'checked="checked" ';
+						$main_content .= '>guildhalls<br>';
+					}
+					$main_content .= '
 				</td>
 			</tr>
 			<tr>

@@ -16,8 +16,9 @@
 				<table border="0" cellspacing="1" cellpadding="4" width="100%"> 
 				<tr bgcolor="'.$config['site']['vdarkborder'].'"> 
 					<td width="75%"><font class=white><b>Name</b></font></td> 
-					<td width="15%"><font class=white><b>Status</b></font></td> 
-					<td width="20%"><font class=white><b>World</b></font></td>';  
+					<td width="15%"><font class=white><b>Status</b></font></td> ';
+					if(count($config['site']['worlds']) > 1)
+						$main_content .= '<td width="20%"><font class=white><b>World</b></font></td>';  
             $group_id = (int)$gm['group_id'];  
         }
 		if($config['site']['show_flag'])
@@ -25,7 +26,9 @@
 			$account = $SQL->query('SELECT * FROM `accounts` WHERE '.$SQL->fieldName('id').' = '.$gm['account_id'].'')->fetch();
 			$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
 		}
-        $main_content .= '<tr bgcolor="'.(is_int($showed_players++ / 2) ? $config['site']['darkborder'] : $config['site']['lightborder']).'" class="over"><td>'.$flag.'<a href="?subtopic=characters&name='.urlencode($gm['name']).'">'.$gm['name'].'</a></td><td><font color="'.($gm['online'] == 0 ? 'red">Offline' : 'green">Online').'</font></td><td>'.$config['site']['worlds'][$gm['world_id']].'</td></tr>';  
+        $main_content .= '<tr bgcolor="'.(is_int($showed_players++ / 2) ? $config['site']['darkborder'] : $config['site']['lightborder']).'" class="over"><td>'.$flag.'<a href="?subtopic=characters&name='.urlencode($gm['name']).'">'.$gm['name'].'</a></td><td><font color="'.($gm['online'] == 0 ? 'red">Offline' : 'green">Online').'</font></td>';
+		if(count($config['site']['worlds']) > 1)
+			$main_content .= '<td>'.$config['site']['worlds'][$gm['world_id']].'</td></tr>';  
     }  
     $main_content .= '</table>';
 ?>

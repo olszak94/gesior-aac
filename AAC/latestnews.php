@@ -80,7 +80,7 @@ if($action == "")
 	}
 	//show "BIG" news here
 	if($config['site']['langSystem'])
-		$main_content .= '<table style="border: 1px solid #CFB181; border-spacing: 1px" width=100%>
+		$main_content .= '<table style="border: 1px solid '.$config['site']['vdarkborder'].'; border-spacing: 1px" width=100%>
 				<tr style="vertical-align: middle">
 					<td><b>Set news language:</b> 
 						<a href="index.php?subtopic=latestnews&lang=en"><img src="http://images.boardhost.com/flags/us.png"></a>
@@ -88,14 +88,13 @@ if($action == "")
 					</td>
 				</tr>
 			</table><br>';
-	$langConfig = $config['site']['chooseLang'];
 	if($lang == 'en')
 	{
 		$newsLanguageSystem = 'topic_df, text_df';
 		$newsTopicInfo = 'topic_df';
 		$newsTextInfo = 'text_df';
 	}
-	elseif($lang == $langConfig)
+	elseif($lang == $config['site']['chooseLang'])
 	{
 		$newsLanguageSystem = 'topic_ot, text_ot';
 		$newsTopicInfo = 'topic_ot';

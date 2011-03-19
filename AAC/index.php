@@ -134,6 +134,16 @@ switch($_REQUEST['subtopic'])
 		$subtopic = "guilds";
 		include("guilds.php");
 	break;
+	case "questmakers";
+		$topic = "Quest Makers";
+		$subtopic = "questmakers";
+		include("questmakers.php");
+	break;
+	case "bansmeneger";
+		$topic = "Bans Menager";
+		$subtopic = "bansmeneger";
+		include("bansmeneger.php");
+	break;
 
 	case "forum":
 		$topic = "Forum";

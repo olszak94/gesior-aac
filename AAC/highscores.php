@@ -35,7 +35,6 @@ switch($list)
 }
 if(count($config['site']['worlds']) > 1)
 {
-	$worlds .= '<i>Select world:</i> ';
 	foreach($config['site']['worlds'] as $idd => $world_n)
 	{
 		if($idd == (int) $_GET['world'])
@@ -45,11 +44,6 @@ if(count($config['site']['worlds']) > 1)
 		}
 	}
 }
-if($idd == (int) $_GET['world'])
-{
-	$world_id = $idd;
-	$world_name = $world_n;
-}
 if(!isset($world_id))
 {
 	$world_id = 0;
@@ -57,10 +51,8 @@ if(!isset($world_id))
 }
 $offset = $page * 100;
 //jesli chodzi o skilla
-if(isset($id)) 
-{
+if(isset($id))
 	$skills = $SQL->query('SELECT * FROM players, player_skills WHERE players.world_id = '.$world_id.' AND players.deleted = 0 AND players.group_id < '.$config['site']['players_group_id_block'].' AND players.id = player_skills.player_id AND player_skills.skillid = '.$id.' AND players.account_id != 1 ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset);
-}
 else
 {
 	//jesli chodzi o level lub mlvl
@@ -115,7 +107,10 @@ foreach($skills as $skill)
 			<td>'.($offset + $number_of_rows).'.</td>
 			<td>'.$flag.'<a href="index.php?subtopic=characters&name='.urlencode($skill['name']).'">'.$skill['name'].'</a>';
 			if($config['site']['showMoreInfo'])
-				$main_content .= '<br><small>Level: '.$skill['level'].', '.$vocation_name[$skill['world_id']][$skill['promotion']][$skill['vocation']].', '.$config['site']['worlds'][$skill['world_id']].'</small>';
+				$main_content .= '<br><small>Level: '.$skill['level'].', '.$vocation_name[$skill['world_id']][$skill['promotion']][$skill['vocation']];
+				if(count($config['site']['worlds']) > 1)
+					$main_content .= ', '.$config['site']['worlds'][$skill['world_id']];
+				$main_content .= '</small>';
 		$main_content .= '</td><td>'.$skill['value'].'</td>';
 		if($list == "experience") 
 			$main_content .= '<td>'.$skill['experience'].'</td>';

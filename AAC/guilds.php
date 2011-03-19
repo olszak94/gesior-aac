@@ -197,8 +197,9 @@ if($action == 'show')
 		$main_content .= '<BR><BR>
 			<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>
 			<TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=3 CLASS=white><B>Guild Members</B></TD></TR>
-			<TR BGCOLOR='.$config['site']['darkborder'].'><TD WIDTH=30%><B>Rank</B></TD>
-			<TD WIDTH=70%><B>Name and Title</B></TD></TR>';
+			<TR BGCOLOR='.$config['site']['darkborder'].'><TD WIDTH=20%><B>Rank</B></TD>
+			<TD WIDTH=60%><B>Name and Title</B></TD>
+			<td><B>Joining Date</B></td></TR>';
 		$showed_players = 1;
 		foreach($rank_list as $rank)
 		{
@@ -223,7 +224,7 @@ if($action == 'show')
 					}
 					if($config['site']['showStat'] && !$config['site']['showAdvenceStat'])
 					{
-						$showStat = 'Level: '.$player->getLevel().', '.$vocation_name[$player->getWorld()][$player->getPromotion()][$player->getVocation()].'';
+						$showStat = '<small>Level: '.$player->getLevel().', '.$vocation_name[$player->getWorld()][$player->getPromotion()][$player->getVocation()].'</small>';
 					}
 					$main_content .= '<TR '.$showAdvencStat.'><TD><FORM ACTION="index.php?subtopic=guilds&action=change_nick&name='.$player->getName().'" METHOD=post>'.$flag.'<A HREF="index.php?subtopic=characters&name='.$player->getName().'">'.$player->getName().'</A>';
 					$guild_nick = $player->getGuildNick();
@@ -243,9 +244,9 @@ if($action == 'show')
 					if($level_in_guild > $rank->getLevel() || $guild_leader)
 						if($guild_leader_char->getName() != $player->getName())
 							$main_content .= '&nbsp;<font size=1>{<a href="index.php?subtopic=guilds&action=kickplayer&guild='.urlencode($guild->getName()).'&name='.urlencode($player->getName()).'">KICK</a>}</font>';
-					$main_content .= '</FORM>'.$showStat.'</TD></TR>';
+					$main_content .= '</FORM></TD></TR>';
 				}
-				$main_content .= '</TABLE></TD></TR>';
+				$main_content .= '</TABLE>'.$showStat.'</TD><td>'.date("M d Y", $player->getCustomField("join_date")).'</td></TR>';
 			}
 		}
 		$main_content .= '</TABLE>';
@@ -256,7 +257,7 @@ if($action == 'show')
 			$main_content .= '<BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Invited Characters</B></TD></TR><TR BGCOLOR='.$config['site']['lightborder'].'><TD>No invited characters found.</TD></TR></TABLE>';
 		else
 		{
-			$main_content .= '<BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Invited Characters</B></TD></TR>';
+			$main_content .= '<BR><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Invited Characters</B></TD></TR><tr BGCOLOR='.$config['site']['darkborder'].'><td><b>Name</b></td><td><b>Invitation Date</b></td></tr>';
 			$show_accept_invite = 0;
 			$showed_invited = 1;
 			foreach($invited_list as $invited_player)
@@ -272,17 +273,17 @@ if($action == 'show')
 				}
 				if($config['site']['showStat'] && !$config['site']['showAdvenceStat'])
 				{
-					$showStats = '<br>Level: '.$invited_player->getLevel().', '.$vocation_name[$invited_player->getWorld()][$invited_player->getPromotion()][$invited_player->getVocation()].'';
+					$showStat = '<br><small>Level: '.$invited_player->getLevel().', '.$vocation_name[$invited_player->getWorld()][$invited_player->getPromotion()][$invited_player->getVocation()].'</small>';
 				}
 				if(count($account_players) > 0)
 					foreach($account_players as $player_from_acc)
 						if($player_from_acc->getName() == $invited_player->getName())
 							$show_accept_invite++;
 				if(is_int($showed_invited / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $showed_invited++;
-					$main_content .= '<TR bgcolor="'.$bgcolor.'" '.$showAdvencStat.'><TD>'.$flag.'<a href="index.php?subtopic=characters&name='.$invited_player->getName().'">'.$invited_player->getName().'</a>';
+					$main_content .= '<TR bgcolor="'.$bgcolor.'" '.$showAdvencStat.'><TD width=80%>'.$flag.'<a href="index.php?subtopic=characters&name='.$invited_player->getName().'">'.$invited_player->getName().'</a>';
 				if($guild_vice)
-					$main_content .= '  (<a href="index.php?subtopic=guilds&action=deleteinvite&guild='.$guild->getName().'&name='.$invited_player->getName().'">Cancel Invitation</a>)';
-				$main_content .= $showStat.'</TD></TR>'; 
+					$main_content .= ' (<a href="index.php?subtopic=guilds&action=deleteinvite&guild='.$guild->getName().'&name='.$invited_player->getName().'">Cancel Invitation</a>)';
+				$main_content .= $showStat.'</TD><td>'.date("M d Y", $player->getCustomField("join_date")).'</td></TR>'; 
 			}
 			$main_content .= '</TABLE>';
 		}
@@ -702,6 +703,7 @@ if($action == 'invite')
 		if($_REQUEST['todo'] == 'save') 
 		{
 			$guild->invite($player);
+			$player->setCustomField('join_date', time());
 			$main_content .= '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD CLASS=white><B>Invite player</B></TD></TR><TR BGCOLOR='.$config['site']['darkborder'].'><TD WIDTH=100%>Player with name <b>'.$player->getName().'</b> has been invited to your guild.</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="index.php?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$layout_name.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
 		}
 		else
@@ -811,6 +813,7 @@ if($action == 'acceptinvite')
 		if($_REQUEST['todo'] == 'save') 
 		{
 			$guild->acceptInvite($player);
+			$player->setCustomField('join_date', time());
 			$main_content .= '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD CLASS=white><B>Accept invitation</B></TD></TR><TR BGCOLOR='.$config['site']['darkborder'].'><TD WIDTH=100%>Player with name <b>'.$player->getName().'</b> has been added to guild <b>'.$guild->getName().'</b>.</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="index.php?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$layout_name.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
 		}
 		else

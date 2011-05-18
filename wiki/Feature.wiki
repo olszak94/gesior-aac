@@ -1,5 +1,5 @@
 #labels Featured,Phase-Requirements
-  * [Articles ban management]
+#sidebar * [Articles ban management]
 
 == ban management ==
   * system of raport wrong: comment, name, guild name and onther

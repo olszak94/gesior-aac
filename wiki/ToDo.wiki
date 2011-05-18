@@ -34,7 +34,6 @@ ToDo in 0.5
   * map generator show where player been and where
 
 ToDo in 0.6
-  * add system signatur
   * new encryption password
   * new script to exprince table
   * new disgn in shop offer

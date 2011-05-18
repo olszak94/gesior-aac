@@ -35,7 +35,6 @@ Progres Gesior-AAC
 ||Biling information||accountmanagement.php||100%||
 ||||||0.6||
 ||exprince table||experiencetable.php||100%||
-||signature||signature.php||%||
 ||afk system info||whoisonline.php||100%||
 ||newdisgn shop offer||shopsystem.php||100%||
 ||new encryption password||config-and-functions.php||100%||

@@ -12,5 +12,5 @@
 ----
 == admin panel ==
 ----
-Installation
+== Installation ==
   * a new instalation we can see a new version marked a 0.7.1

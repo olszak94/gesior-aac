@@ -39,3 +39,5 @@ Progres Gesior-AAC
 ||newdisgn shop offer||shopsystem.php||100%||
 ||new encryption password||config-and-functions.php||100%||
 ||uban account from web site||bans.php||100%||
+||||||0.7||
+||Installer||install/install.php<br>install/schema/mysql.sql<br>install/schema/sqlite.sql||30%<br>100%<br>100%||

@@ -5,6 +5,7 @@
   * system of raport wrong: comment, name, guild name and onther
   * system delete or deactive banishment // done
   * system acpet raport, this i want use something to kick banishment player
+  * system of banishment account // done
 ----
 == war system ==
   * invite/reject to war onther guild

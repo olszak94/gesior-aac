@@ -216,7 +216,7 @@ if($action == 'show')
 					if($config['site']['show_flag'])
 					{
 						$account = $SQL->query('SELECT * FROM `accounts` WHERE id = '.$player->getAccount().'')->fetch();
-						$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
+						$flag = '<image src="images/flags/'.$account['flag'].'.png" alt="" /> ';
 					}
 					if(!$config['site']['showStat'] && $config['site']['showAdvenceStat'])
 					{
@@ -265,7 +265,7 @@ if($action == 'show')
 				if($config['site']['show_flag'])
 				{
 					$account = $SQL->query('SELECT * FROM `accounts` WHERE id = '.$invited_player->getAccount().'')->fetch();
-					$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
+					$flag = '<image src="images/flags/'.$account['flag'].'.png" alt=""/> ';
 				}
 				if(!$config['site']['showStat'] && $config['site']['showAdvenceStat'])
 				{

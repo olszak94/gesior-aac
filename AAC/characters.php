@@ -22,7 +22,7 @@ else
 			if($config['site']['show_flag'])
 			{
 				$flagg = $account->getCustomField("flag");
-				$flag = '<image src="http://images.boardhost.com/flags/'.$flagg.'.png"/> ';
+				$flag = '<image src="images/flags/'.$flagg.'.png" alt="" /> ';
 			}
 			$main_content .= '<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%><TR><TD></TD><TD><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Character Information</B></TD></TR>';
 			if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
@@ -112,7 +112,7 @@ else
 			// Show Statistics
 			if($config['site']['showStatistic'])
 			{
-				$listaddon = array('128','129','130','131','132','133','134','135','136','137','138','139','140','141','142','143','144','145','146','147','148','149','150','151','152','153','154','155','158','159','251','252','268','269','270','273','278','279','288','289','302','324','325');
+				$listaddon = array('128','129','130','131','132','133','134','135','136','137','138','139','140','141','142','143','144','145','146','147','148','149','150','151','152','153','154','155','158','159','251','252','266','268','269','270','273','278','279','288','289','302','324','325');
 				$lookadd = array('0','1','2','3');
 				foreach ($listaddon as $pid => $name)
 				{
@@ -331,7 +331,7 @@ else
 						if($config['site']['show_flag'])
 						{
 							$accounts = $SQL->query('SELECT * FROM accounts WHERE id = '.$listVip['account_id'].'')->fetch();
-							$flags = '<image src="http://images.boardhost.com/flags/'.$accounts['flag'].'.png"/> ';
+							$flags = '<image src="images/flags/'.$accounts['flag'].'.png" alt=""/> ';
 						}
 						if(is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
 							$vipResult .= '<tr bgcolor='.$bgcolor.'>

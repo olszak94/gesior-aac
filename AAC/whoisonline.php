@@ -55,7 +55,7 @@ foreach($players_online_data as $player)
 	if($config['site']['show_flag'])
 	{
 		$account = $SQL->query('SELECT * FROM accounts WHERE id = '.$player['account_id'].'')->fetch();
-		$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
+		$flag = '<image src="images/flags/'.$account['flag'].'.png"/> ';
 	}
 	if(is_int($number_of_players_online / 2)) 
 	{

@@ -2,6 +2,7 @@
 //start :)
 session_start();
 ob_start("ob_gzhandler");
+date_default_timezone_set('Europe/Warsaw');
 //require('./exaBD.php');
 function microtime_float()
 {
@@ -120,9 +121,9 @@ switch($_REQUEST['subtopic'])
 		include("killstatistics.php");
 	break;
   	case "bans":
- 	    $topic = "Banishments";
-    	$subtopic = "bans";
-    	include("bans.php");
+		$topic = "Banishments";
+ 		$subtopic = "bans";
+		include("bans.php");
  	break;
 	case "houses";
 		$topic = "Houses";
@@ -144,13 +145,11 @@ switch($_REQUEST['subtopic'])
 		$subtopic = "bansmeneger";
 		include("bansmeneger.php");
 	break;
-
 	case "forum":
 		$topic = "Forum";
 		$subtopic = "forum";
 		include("forum.php");
 	break;
-
 	case "accountmanagement";
 		$topic = "Account Management";
 		$subtopic = "accountmanagement";
@@ -171,7 +170,6 @@ switch($_REQUEST['subtopic'])
 		$topic = "Downloads";
 		include("downloads.php");
 	break;
-
 	case "tibiarules";
 		$topic = "Server Rules";
 		$subtopic = "tibiarules";
@@ -192,6 +190,11 @@ switch($_REQUEST['subtopic'])
 		$topic = "Gamemasters List";
 		include("team.php");
 	break;
+	case "wars";
+		$subtopic = "wars";
+		$topic = "Guilds Wars";
+		include("wars.php");
+	break;
 	case "adminpanel":
 		$topic = "Admin Panel";
 		$subtopic = "adminpanel";
@@ -202,7 +205,6 @@ switch($_REQUEST['subtopic'])
 		$topic = "Namelock Manager";
 		include("namelocks.php");
 	break;
-
 	case "buypoints";
 		$subtopic = "buypoints";
 		$topic = "Buy Points";
@@ -213,12 +215,16 @@ switch($_REQUEST['subtopic'])
 		$topic = "Shop System";
 		include("shopsystem.php");
 	break;
-
   	case "credits":
- 	    $topic = "Credits";
-    	$subtopic = "credits";
-    	include("credits.php");
+		$topic = "Credits";
+ 		$subtopic = "credits";
+		include("credits.php");
  	break;
+	case "error":
+		$topic = "Error";
+		$subtopic = "error";
+		include("error.php");
+	break;
 }
 // ##### generate title of page
 if(empty($topic)) 

@@ -83,8 +83,8 @@ if($action == "")
 		$main_content .= '<table style="border: 1px solid '.$config['site']['vdarkborder'].'; border-spacing: 1px" width=100%>
 				<tr style="vertical-align: middle">
 					<td><b>Set news language:</b> 
-						<a href="index.php?subtopic=latestnews&lang=en"><img src="http://images.boardhost.com/flags/us.png"></a>
-						<a href="index.php?subtopic=latestnews&lang='.$config['site']['chooseLang'].'"><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"></a> 
+						<a href="index.php?subtopic=latestnews&lang=en"><img src="images/flags/us.png"></a>
+						<a href="index.php?subtopic=latestnews&lang='.$config['site']['chooseLang'].'"><img src="images/flags/'.$config['site']['chooseLang'].'.png" alt=""></a> 
 					</td>
 				</tr>
 			</table><br>';
@@ -117,7 +117,7 @@ if($action == "")
 				{
 					if(showednewnews_state == "0") 
 					{
-						document.getElementById("newnewsform").innerHTML = \'<form action="index.php?subtopic=latestnews&action=newnews" method="post" ><table border="0"><tr><td bgcolor="D4C0A1" align="center"><b>Select icon:</b></td><td><table border="0" bgcolor="F1E0C6"><tr><td><img src="images/news/icon_0.gif" width="20"></td><td><img src="images/news/icon_1.gif" width="20"></td><td><img src="images/news/icon_2.gif" width="20"></td><td><img src="images/news/icon_3.gif" width="20"></td><td><img src="images/news/icon_4.gif" width="20"></td></tr><tr><td><input type="radio" name="icon_id" value="0" checked="checked"></td><td><input type="radio" name="icon_id" value="1"></td><td><input type="radio" name="icon_id" value="2"></td><td><input type="radio" name="icon_id" value="3"></td><td><input type="radio" name="icon_id" value="4"></td></tr></table></td></tr><tr><td align="center" bgcolor="F1E0C6"><b><img src="http://images.boardhost.com/flags/us.png"> Topic defutal language:</b></td><td><input type="text" name="news_topic_df" maxlenght="50" style="width: 300px" ></td></tr><tr><td align="center" bgcolor="F1E0C6"><b><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"> Topic onther language:</b></td><td><input type="text" name="news_topic_ot" maxlenght="50" style="width: 300px" ></td></tr><tr><td align="center" bgcolor="D4C0A1"><b><img src="http://images.boardhost.com/flags/us.png"> News text:</b></td><td bgcolor="F1E0C6"><textarea name="news_text_df" rows="6" cols="40"></textarea></td></tr><tr><td align="center" bgcolor="D4C0A1"><b><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"> News text:</b></td><td bgcolor="F1E0C6"><textarea name="news_text_ot" rows="6" cols="40"></textarea></td></tr><tr><td align="center" bgcolor="F1E0C6"><b>Your nick:</b></td><td><input type="text" name="news_name" maxlenght="40" style="width: 200px" ></td></tr><tr><td><div class="BigButton" style="background-image:url('.$layout_name.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$layout_name.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$layout_name.'/images/buttons/_sbutton_submit.gif" ></div></div></form><div class="BigButton" style="background-image:url('.$layout_name.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$layout_name.'/images/buttons/sbutton_over.gif);" ></div><img class="ButtonText" id="CancelAddNews" src="'.$layout_name.'/images/buttons/_sbutton_cancel.gif" onClick="showNewNewsForm()" alt="CancelAddNews" /></div></div></td></tr></table>\';
+						document.getElementById("newnewsform").innerHTML = \'<form action="index.php?subtopic=latestnews&action=newnews" method="post" ><table border="0"><tr><td bgcolor="D4C0A1" align="center"><b>Select icon:</b></td><td><table border="0" bgcolor="F1E0C6"><tr><td><img src="images/news/icon_0.gif" width="20"></td><td><img src="images/news/icon_1.gif" width="20"></td><td><img src="images/news/icon_2.gif" width="20"></td><td><img src="images/news/icon_3.gif" width="20"></td><td><img src="images/news/icon_4.gif" width="20"></td></tr><tr><td><input type="radio" name="icon_id" value="0" checked="checked"></td><td><input type="radio" name="icon_id" value="1"></td><td><input type="radio" name="icon_id" value="2"></td><td><input type="radio" name="icon_id" value="3"></td><td><input type="radio" name="icon_id" value="4"></td></tr></table></td></tr><tr><td align="center" bgcolor="F1E0C6"><b><img src="images/flags/us.png"> Topic defutal language:</b></td><td><input type="text" name="news_topic_df" maxlenght="50" style="width: 300px" ></td></tr><tr><td align="center" bgcolor="F1E0C6"><b><img src="images/flags/'.$config['site']['chooseLang'].'.png"> Topic onther language:</b></td><td><input type="text" name="news_topic_ot" maxlenght="50" style="width: 300px" ></td></tr><tr><td align="center" bgcolor="D4C0A1"><b><img src="images/flags/us.png"> News text:</b></td><td bgcolor="F1E0C6"><textarea name="news_text_df" rows="6" cols="40"></textarea></td></tr><tr><td align="center" bgcolor="D4C0A1"><b><img src="images/flags/'.$config['site']['chooseLang'].'.png"> News text:</b></td><td bgcolor="F1E0C6"><textarea name="news_text_ot" rows="6" cols="40"></textarea></td></tr><tr><td align="center" bgcolor="F1E0C6"><b>Your nick:</b></td><td><input type="text" name="news_name" maxlenght="40" style="width: 200px" ></td></tr><tr><td><div class="BigButton" style="background-image:url('.$layout_name.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$layout_name.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$layout_name.'/images/buttons/_sbutton_submit.gif" ></div></div></form><div class="BigButton" style="background-image:url('.$layout_name.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$layout_name.'/images/buttons/sbutton_over.gif);" ></div><img class="ButtonText" id="CancelAddNews" src="'.$layout_name.'/images/buttons/_sbutton_cancel.gif" onClick="showNewNewsForm()" alt="CancelAddNews" /></div></div></td></tr></table>\';
 						document.getElementById("chicken").innerHTML = \'\';
 						showednewnews_state = "1";
 					}
@@ -243,7 +243,7 @@ if($action == "newnews")
 			<table style=\'clear:both\' border=0 cellpadding=0 cellspacing=0 width=\'100%\'>
 				<tr>
 					<td><img src="'.$layout_name.'/images/global/general/blank.gif" width=10 height=1 border=0 alt=\'\' /></td>
-					<td width="100%"><img src="http://images.boardhost.com/flags/us.png"> '.$news_text_df.'<br><br><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"> '.$news_text_ot.'<br><br><h6><i>Posted by </i><font color="green">'.$news_name.'</font>&nbsp;
+					<td width="100%"><img src="images/flags/us.png"> '.$news_text_df.'<br><br><img src="images/flags/'.$config['site']['chooseLang'].'.png"> '.$news_text_ot.'<br><br><h6><i>Posted by </i><font color="green">'.$news_name.'</font>&nbsp;
 					<a href="index.php?subtopic=latestnews&action=editnews&edit_date='.$time.'&edit_author='.urlencode($news_name).'"><img src="'.$layout_name.'/images/news/edit_news.png" border="0"></a>&nbsp;<a href="index.php?subtopic=latestnews&action=deletenews&id='.$time.'"><img src="'.$layout_name.'/images/news/delete_news.png" border="0"></a></h6></td>
 					<td><img src="'.$layout_name.'/images/global/general/blank.gif" width=10 height=1 border=0 alt=\'\' /></td>
 				</tr>
@@ -266,19 +266,19 @@ if($action == "newnews")
 						<td><table border="0" bgcolor="'.$config['site']['lightborder'].'"><tr><td><img src="'.$layout_name.'/images/news/icon_0.gif" width="20"></td><td><img src="'.$layout_name.'/images/news/icon_1.gif" width="20"></td><td><img src="'.$layout_name.'/images/news/icon_2.gif" width="20"></td><td><img src="'.$layout_name.'/images/news/icon_3.gif" width="20"></td><td><img src="'.$layout_name.'/images/news/icon_4.gif" width="20"></td></tr><tr><td><input type="radio" name="icon_id" value="0" checked="checked"></td><td><input type="radio" name="icon_id" value="1"></td><td><input type="radio" name="icon_id" value="2"></td><td><input type="radio" name="icon_id" value="3"></td><td><input type="radio" name="icon_id" value="4"></td></tr></table></td>
 					</tr>
 					<tr>
-						<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="http://images.boardhost.com/flags/us.png"> Topic defutal language:</b></td>
+						<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="images/flags/us.png"> Topic defutal language:</b></td>
 						<td><input type="text" name="news_topic_df" maxlenght="50" style="width: 300px" value="'.$news_topic_df.'" /></td>
 					</tr>
 					<tr>
-						<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"> Topic onther language:</b></td>
+						<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="images/flags/'.$config['site']['chooseLang'].'.png"> Topic onther language:</b></td>
 						<td><input type="text" name="news_topic_ot" maxlenght="50" style="width: 300px" value="'.$news_topic_ot.'" /></td>
 					</tr>
 					<tr>
-						<td align="center" bgcolor="'.$config['site']['darkborder'].'"><b><img src="http://images.boardhost.com/flags/us.png"> News text:</b></td>
+						<td align="center" bgcolor="'.$config['site']['darkborder'].'"><b><img src="images/flags/us.png"> News text:</b></td>
 						<td bgcolor="'.$config['site']['lightborder'].'"><textarea name="news_text_df" rows="6" cols="60">'.$news_text_df.'</textarea></td>
 					</tr>
 					<tr>
-						<td align="center" bgcolor="'.$config['site']['darkborder'].'"><b><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"> News text:</b></td>
+						<td align="center" bgcolor="'.$config['site']['darkborder'].'"><b><img src="images/flags/'.$config['site']['chooseLang'].'.png"> News text:</b></td>
 						<td bgcolor="'.$config['site']['lightborder'].'"><textarea name="news_text_ot" rows="6" cols="60">'.$news_text_ot.'</textarea></td>
 					</tr>
 					<tr>
@@ -346,7 +346,7 @@ if($action == "editnews")
 						</div>
 						<table style=clear:both border=0 cellpadding=0 cellspacing=0 width=\'100%\'>
 							<tr>
-								<td width="100%"><img src="http://images.boardhost.com/flags/us.png"> '.$news_text_df.'<br><br><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"> '.$news_text_ot.'<br><br><h6><i>Posted by </i><font color="green">'.$news_name.'</font>&nbsp;
+								<td width="100%"><img src="images/flags/us.png" alt=""> '.$news_text_df.'<br><br><img src="images/flags/'.$config['site']['chooseLang'].'.png" alt=""> '.$news_text_ot.'<br><br><h6><i>Posted by </i><font color="green">'.$news_name.'</font>&nbsp;
 								<a href="index.php?subtopic=latestnews&action=editnews&edit_date='.htmlspecialchars($news_date).'&edit_author='.htmlspecialchars($news_name).'"><img src="'.$layout_name.'/images/news/edit_news.png" border="0"></a>&nbsp;
 								<a href="index.php?subtopic=latestnews&action=deletenews&id='.$news_date.'"><img src="'.$layout_name.'/images/news/delete_news.png" border="0"></a></h6></td>
 							</tr>
@@ -362,8 +362,8 @@ if($action == "editnews")
 							$main_content .= '<li>'.$an_error;
 						$main_content .= '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$layout_name.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$layout_name.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
 						//okno edycji newsa z wpisanymi danymi przeslanymi wczesniej
-						//<img src="http://images.boardhost.com/flags/us.png">
-						//<img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png">
+						//<img src="images/flags/us.png">
+						//<img src="images/flags/'.$config['site']['chooseLang'].'.png">
 						$main_content .= '<form action="index.php?subtopic=latestnews&action=editnews" method="post" >
 							<input type="hidden" name="saveedit" value="1"><input type="hidden" name="edit_date" value="'.$_REQUEST['edit_date'].'">
 							<input type="hidden" name="edit_author" value="'.$_REQUEST['edit_author'].'">
@@ -373,11 +373,11 @@ if($action == "editnews")
 										<td><table border="0" bgcolor="'.$config['site']['lightborder'].'"><tr><td><img src="'.$layout_name.'/images/news/icon_0.gif" width="20"></td><td><img src="'.$layout_name.'/images/news/icon_1.gif" width="20"></td><td><img src="'.$layout_name.'/images/news/icon_2.gif" width="20"></td><td><img src="'.$layout_name.'/images/news/icon_3.gif" width="20"></td><td><img src="'.$layout_name.'/images/news/icon_4.gif" width="20"></td></tr><tr><td><input type="radio" name="icon_id" value="0" checked="checked"></td><td><input type="radio" name="icon_id" value="1"></td><td><input type="radio" name="icon_id" value="2"></td><td><input type="radio" name="icon_id" value="3"></td><td><input type="radio" name="icon_id" value="4"></td></tr></table></td>
 									</tr>
 									<tr>
-										<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="http://images.boardhost.com/flags/us.png"> Topic defutal language:</b></td>
+										<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="images/flags/us.png"> Topic defutal language:</b></td>
 										<td><input type="text" name="news_topic_df" maxlenght="50" style="width: 300px" value="'.$news_topic_df.'" /></td>
 									</tr>
 									<tr>
-										<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"> Topic onther language:</b></td>
+										<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="images/flags/'.$config['site']['chooseLang'].'.png"> Topic onther language:</b></td>
 										<td><input type="text" name="news_topic_ot" maxlenght="50" style="width: 300px" value="'.$news_topic_ot.'" /></td>
 									</tr>
 									<tr>
@@ -430,19 +430,19 @@ if($action == "editnews")
 								</td>
 							</tr>
 							<tr>
-								<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="http://images.boardhost.com/flags/us.png"> Topic defutal language:</b></td>
+								<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="images/flags/us.png"> Topic defutal language:</b></td>
 								<td><input type="text" name="news_topic_df" maxlenght="50" style="width: 300px" value="'.htmlspecialchars(stripslashes($edited['topic_df'])).'" /></td>
 							</tr>
 							<tr>
-								<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"> Topic onther language:</b></td>
+								<td align="center" bgcolor="'.$config['site']['lightborder'].'"><b><img src="images/flags/'.$config['site']['chooseLang'].'.png"> Topic onther language:</b></td>
 								<td><input type="text" name="news_topic_ot" maxlenght="50" style="width: 300px" value="'.htmlspecialchars(stripslashes($edited['topic_ot'])).'" /></td>
 							</tr>
 							<tr>
-								<td align="center" bgcolor="'.$config['site']['darkborder'].'"><b><img src="http://images.boardhost.com/flags/us.png"> News text:</b></td>
+								<td align="center" bgcolor="'.$config['site']['darkborder'].'"><b><img src="images/flags/us.png"> News text:</b></td>
 								<td bgcolor="'.$config['site']['lightborder'].'"><textarea name="news_text_df" rows="6" cols="60">'.stripslashes($edited['text_df']).'</textarea></td>
 							</tr>
 							<tr>
-								<td align="center" bgcolor="'.$config['site']['darkborder'].'"><b><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"> News text:</b></td>
+								<td align="center" bgcolor="'.$config['site']['darkborder'].'"><b><img src="images/flags/'.$config['site']['chooseLang'].'.png"> News text:</b></td>
 								<td bgcolor="'.$config['site']['lightborder'].'"><textarea name="news_text_ot" rows="6" cols="60">'.stripslashes($edited['text_ot']).'</textarea></td>
 							</tr>
 							<tr>

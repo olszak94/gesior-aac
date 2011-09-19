@@ -451,6 +451,14 @@
 										<div class='RightChain' style='background-image:url(<?PHP echo $layout_name; ?>/images/general/chain.gif);'></div>
 									</div>
 								</a>
+								<a href='?subtopic=wars'>
+									<div id='submenu_wars' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+										<div class='LeftChain' style='background-image:url(<?PHP echo $layout_name; ?>/images/general/chain.gif);'></div>
+										<div id='ActiveSubmenuItemIcon_wars' class='ActiveSubmenuItemIcon' style='background-image:url(<?PHP echo $layout_name; ?>/images/menu/icon-activesubmenu.gif);'></div>
+										<div class='SubmenuitemLabel'>Wars</div>
+										<div class='RightChain' style='background-image:url(<?PHP echo $layout_name; ?>/images/general/chain.gif);'></div>
+									</div>
+								</a>
 							</div>
 						</div>
 						<?PHP
@@ -670,7 +678,7 @@
 								<div class="Corner-tr" style="background-image:url(<?PHP echo $layout_name; ?>/images/content/corner-tr.gif);"></div>
 								<div class="Border_1" style="background-image:url(<?PHP echo $layout_name; ?>/images/content/border-1.gif);"></div>
 								<div class="BorderTitleText" style="background-image:url(<?PHP echo $layout_name; ?>/images/content/title-background-green.gif);"></div>
-								<img class="Title" src="<?PHP echo $layout_name; ?>/images/header/headline-<?PHP echo $subtopic; ?>.gif" alt="Contentbox headline" />
+								<img class="Title" src="headline.php?txt=<?PHP echo $subtopic; ?>" alt="Contentbox headline" />
 								<div class="Border_2">
 									<div class="Border_3">
 										<div class="BoxContent" style="background-image:url(http://i63.photobucket.com/albums/h122/Mister_Dude/scroll.gif);">
@@ -694,7 +702,7 @@
 				</div>
 				<div id="ThemeboxesColumn">
 					<div id="RightArtwork">
-						<img id="Monster" src="monsters/<?PHP echo logo_monster() ?>.gif" onClick="window.location = '?subtopic=creatures&amp;creature=<?PHP echo logo_monster() ?>';" alt="Monster of the Week" />
+						<img id="Monster" src="images/monsters/<?PHP echo logo_monster() ?>.gif" onClick="window.location = '?subtopic=creatures&amp;creature=<?PHP echo logo_monster() ?>';" alt="Monster of the Week" />
 						<img id="PedestalAndOnline" src="http://i63.photobucket.com/albums/h122/Mister_Dude/pedestal-and-online.gif" alt="Monster Pedestal and Players Online Box"/>
 						<div id="PlayersOnline" onClick="window.location = '?subtopic=whoisonline'">
 							<?PHP

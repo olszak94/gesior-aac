@@ -73,7 +73,7 @@ elseif($houses_status == 1)
 	$status_name = 'Guildhalls';
 }
 ##-- List Houses --##
-$id = $_GET['show'];
+$id = (int) $_GET['show'];
 if(empty($id))
 {
 	$main_content .= 'Here you can see the list of all available houses, flats or guildhall. Click on any view button to get more information about a house or adjust the search criteria and start a new search.<br><br>';

@@ -25,8 +25,8 @@ if(empty($_REQUEST['id']))
 		$main_content .= '<table style="border: 1px solid #CFB181; border-spacing: 1px" width=100%>
 				<tr style="vertical-align: middle">
 					<td><b>Set news language:</b> 
-						<a href="index.php?subtopic=archive&lang=en"><img src="http://images.boardhost.com/flags/us.png"></a>
-						<a href="index.php?subtopic=archive&lang='.$config['site']['chooseLang'].'"><img src="http://images.boardhost.com/flags/'.$config['site']['chooseLang'].'.png"></a> 
+						<a href="index.php?subtopic=archive&lang=en"><img src="images/flags/us.png" alt=""></a>
+						<a href="index.php?subtopic=archive&lang='.$config['site']['chooseLang'].'"><img src="images/flags/'.$config['site']['chooseLang'].'.png"></a> 
 					</td>
 				</tr>
 			</table><br>';

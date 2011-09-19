@@ -24,7 +24,7 @@
 		if($config['site']['show_flag'])
 		{
 			$account = $SQL->query('SELECT * FROM `accounts` WHERE '.$SQL->fieldName('id').' = '.$gm['account_id'].'')->fetch();
-			$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
+			$flag = '<image src="images/flags/'.$account['flag'].'.png" alt="'.$account['flag'].'" /> ';
 		}
         $main_content .= '<tr bgcolor="'.(is_int($showed_players++ / 2) ? $config['site']['darkborder'] : $config['site']['lightborder']).'" class="over"><td>'.$flag.'<a href="?subtopic=characters&name='.urlencode($gm['name']).'">'.$gm['name'].'</a></td><td><font color="'.($gm['online'] == 0 ? 'red">Offline' : 'green">Online').'</font></td>';
 		if(count($config['site']['worlds']) > 1)

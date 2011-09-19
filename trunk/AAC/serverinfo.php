@@ -13,7 +13,7 @@ if($config['site']['serverinfo_page'])
 				<td width="50%"><font class="white">Name</font></td><td><font class="white">Value</font></td>
 			</tr>
 			<tr bgcolor="'.$config['site']['darkborder'].'">
-				<td>Server</td><td>'.(($config['status']['serverStatus_online'] == 1) ? '<font color="grenn"><b>On line</b></font>' : '<font color="red"><b>Off line</b></font>').'</td>
+				<td>Server</td><td>'.(($config['status']['serverStatus_online'] == 1) ? '<font color="grenn"><b>Online</b></font>' : '<font color="red"><b>Offline</b></font>').'</td>
 			</tr>
 			<tr bgcolor="'.$config['site']['lightborder'].'">
 				<td>Player Online</td><td>'.$config['status']['serverStatus_players'].'</td>

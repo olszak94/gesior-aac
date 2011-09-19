@@ -197,7 +197,7 @@ if($config['site']['shop_system'] == 1)
 			{
 				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
 					$number_of_rows++; 
-				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/items/'.$item['itemid1'].'.gif"></td><td><b>'.$item['name'].'</b> ('.$item['points'].' points)<br />'.$item['description'].'</td><td align="center">';
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/items/'.$item['item_id'].'.gif"></td><td><b>'.$item['name'].'</b> ('.$item['points'].' points)<br />'.$item['description'].'</td><td align="center">';
 				if(!$logged)
 				{
 					$main_content .= '<b>Login to buy</b>';
@@ -218,7 +218,7 @@ if($config['site']['shop_system'] == 1)
 			{
 				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
 					$number_of_rows++; 
-				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/'.$container['itemid1'].'.gif"></td><td><b>'.$container['name'].'</b> ('.$container['points'].' points)<br />'.$container['description'].'</td><td align="center">';
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/'.$container['item_id'].'.gif"></td><td><b>'.$container['name'].'</b> ('.$container['points'].' points)<br />'.$container['description'].'</td><td align="center">';
 				if(!$logged)
 					$main_content .= '<b>Login to buy</b>';
 				else 
@@ -235,7 +235,7 @@ if($config['site']['shop_system'] == 1)
 			{
 				if(is_int($number_of_rows / 2)) $bgcolor = $config['site']['darkborder']; else $bgcolor = $config['site']['lightborder']; 
 					$number_of_rows++; 
-				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/'.$itemlogout['itemid1'].'.gif"></td><td><b>'.$itemlogout['name'].'</b> ('.$itemlogout['points'].' points)<br />'.$itemlogout['description'].'</td><td align="center">';
+				$main_content .= '<tr bgcolor="'.$bgcolor.'"><td align="center"><img src="images/'.$itemlogout['item_id'].'.gif"></td><td><b>'.$itemlogout['name'].'</b> ('.$itemlogout['points'].' points)<br />'.$itemlogout['description'].'</td><td align="center">';
 				if(!$logged)
 				{
 					$main_content .= '<b>Login to buy</b>';

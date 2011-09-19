@@ -94,7 +94,7 @@ foreach($skills as $skill)
 	if($config['site']['show_flag'])
 	{
 		$account = $SQL->query('SELECT * FROM accounts WHERE id = '.$skill['account_id'].'')->fetch();
-		$flag = '<image src="http://images.boardhost.com/flags/'.$account['flag'].'.png"/> ';
+		$flag = '<image src="images/flags/'.$account['flag'].'.png"/> ';
 	}
 	if($number_of_rows < 100) 
 	{

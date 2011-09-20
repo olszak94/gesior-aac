@@ -2,6 +2,8 @@
 //start :)
 session_start();
 ob_start("ob_gzhandler");
+ini_set('include_path', ini_get('include_path') . ':./libs');
+ini_set('session.use_trans_sid', 0);
 date_default_timezone_set('Europe/Warsaw');
 //require('./exaBD.php');
 function microtime_float()

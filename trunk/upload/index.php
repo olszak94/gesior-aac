@@ -1,4 +1,5 @@
 <?PHP
+error_reporting(E_ALL ^ E_NOTICE); 
 //start :)
 session_start();
 ob_start("ob_gzhandler");

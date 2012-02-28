@@ -1,4 +1,5 @@
 <?PHP
+error_reporting(E_ALL ^ E_NOTICE); 
 $config['site'] = parse_ini_file('../config/config.ini');
 session_start();
 //save config in ini file

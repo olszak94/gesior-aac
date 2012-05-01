@@ -271,6 +271,9 @@ function check_rank_name($name)
 // is guild name valid?
 function check_guild_name($name)
 {
+	if ( substr($name, -1) == "-" OR substr($name, 1, 1) == ' ' OR substr($name, -2, 1) == " " ) )
+		return false;
+	
 	$temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789- ");
 	if ($temp != strlen($name))
 	{
@@ -396,7 +399,7 @@ if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
 	$config['status']['serverStatus_checkInterval'] = $statustimeout+3;
 	$config['status']['serverStatus_lastCheck'] = time();
 	$info = chr(6).chr(0).chr(255).chr(255).'info';
-	$sock = @fsockopen("127.0.0.1", $config['server']['statusPort'], $errno, $errstr, 1);
+	$sock = @fsockopen($config['server']['ip'], $config['server']['statusPort'], $errno, $errstr, 1);
 	if ($sock)
 	{
 		fwrite($sock, $info);

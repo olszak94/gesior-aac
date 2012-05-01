@@ -1332,10 +1332,12 @@ if($action == 'changelogo')
 				$allowed_ext = array('image/gif', 'image/jpg', 'image/pjpeg', 'image/jpeg', 'image/bmp', 'image/png', 'image/x-png');
 				$ext_name = array('image/gif' => 'gif', 'image/jpg' => 'jpg', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/bmp' => 'bmp', 'image/png' => 'png', 'image/x-png' => 'png');
 				$save_file_name = str_replace(' ', '_', strtolower($guild->getName()));
-				$save_path = 'guilds/'.$save_file_name;
+				$save_path = 'images/guilds/'.$save_file_name;
 				if($_REQUEST['todo'] == 'save') 
 				{
 					$file = $_FILES['newlogo'];
+					if($save_file_name == "default_logo")
+						die('Spierdalaj');
 					if(is_uploaded_file($file['tmp_name'])) 
 					{
 						if($file['size'] > $max_image_size_b) 

@@ -3,7 +3,6 @@
 <b>GNU Linux<b>
 {{{
 cd /var/www
-svn co http://gesior-aac.googlecode.com/svn/trunk/upload/ ./
-find . -name .svn -print0 | xargs -0 rm -rf
+svn export http://gesior-aac.googlecode.com/svn/trunk/upload/ ./
 chmod 777 images/guilds
 }}}

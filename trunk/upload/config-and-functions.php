@@ -271,7 +271,7 @@ function check_rank_name($name)
 // is guild name valid?
 function check_guild_name($name)
 {
-	if ( substr($name, -1) == "-" OR substr($name, 1, 1) == ' ' OR substr($name, -2, 1) == " " ) )
+	if ( substr($name, -1) == "-" OR substr($name, 1, 1) == ' ' OR substr($name, -2, 1) == " " )
 		return false;
 	
 	$temp = strspn("$name", "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789- ");

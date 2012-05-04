@@ -47,11 +47,7 @@ if($action == '')
 		$world_id = 0;
 		$world_name = $config['server']['serverName'];
 	}
-	$filter = new OTS_SQLFilter();
-	$filter->compareField('world_id', (int) $world_id);
-	$guilds_list = $ots->createObject('Guilds_List');
-	$guilds_list->setFilter($filter);
-	$guilds_list->orderBy('name');
+	$guilds_list = $SQL->query('SELECT `name`, `description`, `logo_gfx_name` FROM `guilds` WHERE `world_id` = '.(int)$world_id.' ORDER BY `name` ASC;')->fetchAll();
 	$main_content .= '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>
 	<TR BGCOLOR='.$config['site']['vdarkborder'].'><TD COLSPAN=3 CLASS=white><B>Active Guilds on '.$config['server']['serverName'].'</B></TD></TR>
 	<TR BGCOLOR='.$config['site']['darkborder'].'><TD WIDTH=64><B>Logo</B></TD>
@@ -65,22 +61,22 @@ if($action == '')
 			if(is_int($showed_guilds / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $showed_guilds++;
 			foreach (array("/", "\\", "..") as $char) 
 			{
-				$guild_logo = str_replace($char, "", $guild->getCustomField('logo_gfx_name'));
+				$guild_logo = str_replace($char, "", $guild['logo_gfx_name']);
 			}
 			if (empty($guild_logo) || !file_exists("images/guilds/".$guild_logo)) 
 			{
 				$guild_logo = "default_logo.gif";
 			}
-			$description = $guild->getCustomField('description');
+			$description = $guild['description'];
 			$newlines   = array("\r\n", "\n", "\r");
 			$description_with_lines = str_replace($newlines, '<br />', $description, $count);
 			if($count < $config['site']['guild_description_lines_limit'])
 				$description = $description_with_lines;
-			$main_content .= '<TR BGCOLOR="'.$bgcolor.'" onmouseover="tooltip.show(\'<center><b>'.$guild->getName().'</b></center>\');" onmouseout="tooltip.hide();"><TD><IMG SRC="images/guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD>
-				<TD valign="top"><B>'.$guild->getName().'</B><BR/>'.$description.'';
+			$main_content .= '<TR BGCOLOR="'.$bgcolor.'" onmouseover="tooltip.show(\'<center><b>'.$guild['name'].'</b></center>\');" onmouseout="tooltip.hide();"><TD><IMG SRC="images/guilds/'.$guild_logo.'" WIDTH=64 HEIGHT=64></TD>
+				<TD valign="top"><B>'.$guild['name'].'</B><BR/>'.$description.'';
 			if($group_id_of_acc_logged >= $config['site']['access_admin_panel'])
 				$main_content .= '<br /><a href="index.php?subtopic=guilds&action=deletebyadmin&guild='.$guild->getName().'">Delete this guild (for ADMIN only!)</a>';
-			$main_content .= '</TD><TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="index.php?subtopic=guilds&action=show&guild='.$guild->getName().'" METHOD=post><TR><TD>
+			$main_content .= '</TD><TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="index.php?subtopic=guilds&action=show&guild='.urlencode($guild['name']).'" METHOD=post><TR><TD>
 				<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$layout_name.'/images/buttons/sbutton_view.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 				</TD></TR></FORM></TABLE>
 				</TD></TR>';
@@ -112,7 +108,7 @@ if($action == '')
 //show guild page
 if($action == 'show')
 {
-	$guild_name = $_REQUEST['guild'];
+	$guild_name = urldecode($_REQUEST['guild']);
 	if(!check_guild_name($guild_name))
 		$guild_errors[] = 'Invalid guild name format.';
 	if(empty($guild_errors))

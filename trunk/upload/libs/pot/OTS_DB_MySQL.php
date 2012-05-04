@@ -24,6 +24,9 @@
  */
 class OTS_DB_MySQL extends OTS_Base_DB
 {
+
+	public $queriesCount = 0;
+
 /**
  * Creates database connection.
  * 
@@ -143,6 +146,17 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
         return $sql;
     }
+
+	public function query($query)
+	{
+		$this->queriesCount++;
+		return parent::query($query);
+	}
+
+	public function getQueriesCount()
+	{
+		return $this->queriesCount;
+	}
 }
 
 /**#@-*/

@@ -1,15 +1,15 @@
 <?PHP
-error_reporting(E_ALL ^ E_NOTICE); 
+error_reporting(E_ALL ^ E_NOTICE);
+ini_set('include_path', ini_get('include_path') . ':../libs');
 $config['site'] = parse_ini_file('../config/config.ini');
 session_start();
 //save config in ini file
 function saveconfig_ini($config) 
 {
-	$file = fopen("../config/config.ini", "w");
+	$file = fopen('../config/config.ini', "w");
 	foreach($config as $param => $data) 
 	{
-$file_data .= $param.' = "'.str_replace('"', '', $data).'"
-';
+		$file_data .= $param.' = "'.str_replace('"', '', $data)."\"\n";
 	}
 	rewind($file);
 	fwrite($file, $file_data);
@@ -83,7 +83,7 @@ if($_REQUEST['page'] == 'step')
 			}
 			$sqlitefile = $config['server']['sqliteDatabase'];
 			// loads #####POT mainfile#####
-			include('../pot/OTS.php');
+			include('pot/OTS.php');
 			// PDO and POT connects to database
 			$ots = POT::getInstance();
 			if(strtolower($config['server']['sqlType']) == "mysql")
@@ -127,8 +127,20 @@ if($_REQUEST['page'] == 'step')
 		}
 		if($step == 'start') 
 		{
-			echo '<h1>STEP '.$step.'</h1>Informations<br>';
-			echo 'Welcome to Gesior Account Maker installer. <b>First do steps 1-5 one by one, later (when you will be logged on admin account) press on links to steps 6-7 to load configuration from OTS.</b>';
+			echo '<h1>STEP '.$step.'</h1>Informations<br>Welcome to Gesior Account Maker installer. <b>First do steps 1-5 one by one, later (when you will be logged on admin account) press on links to steps 6-7 to load configuration from OTS.</b><span style="color: red; font-weight:bold;">';
+			$dir = array('cache', 'config', 'images/guilds');
+			$filez = array('config/config.ini', 'config/config.php', 'cache/usercounter.dat', 'cache/serverstatus');
+			foreach ($dir as $check)
+			{
+				if(!is_writable('../'.$check))
+					echo "<br>Please set chmod 777 ".$_SERVER["DOCUMENT_ROOT"].'/'.$check;
+			}
+			foreach ($filez as $check)
+			{
+				if(!is_writable('../'.$check))
+					echo "<br>Please set chmod 777 ".$_SERVER["DOCUMENT_ROOT"].'/'.$check;
+			}
+			echo '</span>';
 		}
 		if($step == '1') 
 		{
@@ -140,7 +152,6 @@ if($_REQUEST['page'] == 'step')
 				$config['site']['server_path'] = str_replace("\\\\", "/", $config['site']['server_path']);
 				$config['site']['server_path'] = str_replace("\\", "/", $config['site']['server_path']);
 				$config['site']['server_path'] = str_replace("//", "/", $config['site']['server_path']);
-				saveconfig_ini($config['site']);
 				if(file_exists($config['site']['server_path'].'config.lua')) 
 				{
 					$config['server'] = parse_ini_file($config['site']['server_path'].'config.lua');
@@ -182,7 +193,7 @@ if($_REQUEST['page'] == 'step')
 			}
 			$sqlitefile = $config['server']['sqliteDatabase'];
 			// loads #####POT mainfile#####
-			include('../pot/OTS.php');
+			include('pot/OTS.php');
 			// PDO and POT connects to database
 			$ots = POT::getInstance();
 			if(strtolower($config['server']['sqlType']) == "mysql")
@@ -554,7 +565,7 @@ if($_REQUEST['page'] == 'step')
 		if($step == '4') 
 		{
 			echo '<h1>STEP '.$step.'</h1>Add samples to DB:<br>';
-			$check_news_ticker = $SQL->query('SELECT * FROM z_news_tickers WHERE image_id = 1 AND author = 1 AND hide_ticker = 0 LIMIT 1 OFFSET 0')->fetch();
+			$check_news_ticker = $SQL->query('SELECT * FROM z_news_tickers WHERE image_id = 1 AND author = 1 AND hide_ticker = 0 LIMIT 1 OFFSET 0;')->fetch();
 			if(!isset($check_news_ticker['author'])) 
 			{
 				$SQL->query('INSERT INTO z_news_tickers (date, author, image_id, text, hide_ticker) VALUES 

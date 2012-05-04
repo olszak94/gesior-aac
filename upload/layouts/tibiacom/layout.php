@@ -697,7 +697,7 @@
 							$time_end = microtime_float();
 							$time = $time_end - $time_start;
 						?>
-						<?PHP echo getFooter() ?><br/>Page has been viewed <?PHP echo $page_views; ?> times. Load time: <?PHP echo round($time, 4); ?> seconds
+						<?PHP echo getFooter().'<br/>Page has been viewed '.$page_views.' times. Load time: '.round($time, 4).' seconds. Queries: '.$SQL->getQueriesCount(); ?>
 					</div>
 				</div>
 				<div id="ThemeboxesColumn">

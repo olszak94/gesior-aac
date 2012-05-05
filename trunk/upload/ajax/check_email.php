@@ -26,7 +26,7 @@ if(strlen($email) < 255)
 				$sqlitefile = $server_config['sqliteDatabase'];
 			}
 			// loads #####POT mainfile#####
-			include('../pot/OTS.php');
+			include('../libs/pot/OTS.php');
 			// PDO and POT connects to database
 			$ots = POT::getInstance();
 			if($server_config['sqlType'] == "mysql")

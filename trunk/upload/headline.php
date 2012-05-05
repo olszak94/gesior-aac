@@ -1,5 +1,5 @@
 <?php
-	$text = $_GET['txt'];
+	$text = urldecode($_GET['txt']);
 	$text = strtoupper($text[0]).substr($text,1,strlen($text));
 	$size = 18;
 	$sizex = 280;

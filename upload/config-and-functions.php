@@ -540,17 +540,5 @@ class EQShower
         if($attributes==$config['epic']['attributes']){return $config['class']['epic'];}
         if($attributes>=$config['legendary']['attributes']){return $config['class']['legendary'];}
     }
-    function table_exists ($table, $db)
-	{
-		$tables = mysql_list_tables ($db);
-		while (list ($temp) = mysql_fetch_array ($tables))
-		{
-			if ($temp == $table)
-			{
-				return TRUE;
-			}
-		}
-		return FALSE;
-	}
 }
 ?>

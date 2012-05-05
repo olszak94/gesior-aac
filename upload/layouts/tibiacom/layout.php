@@ -678,7 +678,7 @@
 								<div class="Corner-tr" style="background-image:url(<?PHP echo $layout_name; ?>/images/content/corner-tr.gif);"></div>
 								<div class="Border_1" style="background-image:url(<?PHP echo $layout_name; ?>/images/content/border-1.gif);"></div>
 								<div class="BorderTitleText" style="background-image:url(<?PHP echo $layout_name; ?>/images/content/title-background-green.gif);"></div>
-								<img class="Title" src="headline.php?txt=<?PHP echo $subtopic; ?>" alt="Contentbox headline" />
+								<img class="Title" src="headline.php?txt=<?PHP echo urlencode($topic); ?>" alt="Contentbox headline" />
 								<div class="Border_2">
 									<div class="Border_3">
 										<div class="BoxContent" style="background-image:url(http://i63.photobucket.com/albums/h122/Mister_Dude/scroll.gif);">

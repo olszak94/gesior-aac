@@ -392,8 +392,9 @@ foreach(explode("*", str_replace(" ", "", $config['server']['statusTimeout'])) a
 	if($status_var > 0)
 		$statustimeout = $statustimeout * $status_var;
 
+$stfile = 'cache/serverstatus';
 $statustimeout = $statustimeout / 1000;
-$config['status'] = parse_ini_file('cache/serverstatus');
+$config['status'] = parse_ini_file($stfile);
 if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
 {
 	$config['status']['serverStatus_checkInterval'] = $statustimeout+3;
@@ -429,37 +430,52 @@ if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
 		$config['status']['serverStatus_uptime'] = 0;
 		$config['status']['serverStatus_npcs'] = 0;
 	}
-	$file = fopen("cache/serverstatus", "w");
-	foreach($config['status'] as $param => $data)
+	if(!is_writable($stfile))
+		echo '<span style="color: red; font-weight:bold;">Please set chmod 666 '.$_SERVER["DOCUMENT_ROOT"].'/'.$stfile.'</span><br />';
+	else
 	{
-$file_data .= $param.' = "'.str_replace('"', '', $data).'"
-';
+		$file = fopen($stfile, "w");
+		foreach($config['status'] as $param => $data)
+		{
+			$file_data .= $param.' = "'.str_replace('"', '', $data).'"';
+		}
+		rewind($file);
+		fwrite($file, $file_data);
+		fclose($file);
 	}
-	rewind($file);
-	fwrite($file, $file_data);
-	fclose($file);
 }
 //PAGE VIEWS COUNTER :)
 $views_counter = "cache/usercounter.dat";
 // checking if the file exists
 if (file_exists($views_counter))
 {
-    // het bestand bestaat, waarde + 1
-    $actie = fopen($views_counter, "r+");
-    $page_views = fgets($actie, 9);
-    $page_views++;
-    rewind($actie);
-    fputs($actie, $page_views, 9);
-    fclose($actie);
+	if(!is_writable($views_counter))
+		echo '<span style="color: red; font-weight:bold;">Please set chmod 666 '.$_SERVER["DOCUMENT_ROOT"].'/'.$views_counter.'</span><br />';
+	else
+	{
+		// het bestand bestaat, waarde + 1
+		$actie = fopen($views_counter, "r+");
+		$page_views = fgets($actie, 9);
+		$page_views++;
+		rewind($actie);
+		fputs($actie, $page_views, 9);
+		fclose($actie);
+	}
 }
 else
 {
-    // the file doesn't exist, creating a new one with value 1
-    $actie = fopen($views_counter, "w");
-    $page_views = 1;
-    fputs($actie, $page_views, 9);
-    fclose($actie);
+	if(!is_writable('cache'))
+		echo '<span style="color: red; font-weight:bold;">Please set chmod 777 '.$_SERVER["DOCUMENT_ROOT"].'/cache</span><br />';
+	else
+	{
+		// the file doesn't exist, creating a new one with value 1
+		$actie = fopen($views_counter, "w");
+		$page_views = 1;
+		fputs($actie, $page_views, 9);
+		fclose($actie);
+	}
 }
+
 function makeOrder($arr, $order, $default) {
     // Function by Colandus!
     $type = 'asc';

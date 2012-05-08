@@ -83,7 +83,7 @@ if($_REQUEST['page'] == 'step')
 			}
 			$sqlitefile = $config['server']['sqliteDatabase'];
 			// loads #####POT mainfile#####
-			include('pot/OTS.php');
+			include('../libs/pot/OTS.php');
 			// PDO and POT connects to database
 			$ots = POT::getInstance();
 			if(strtolower($config['server']['sqlType']) == "mysql")
@@ -193,7 +193,7 @@ if($_REQUEST['page'] == 'step')
 			}
 			$sqlitefile = $config['server']['sqliteDatabase'];
 			// loads #####POT mainfile#####
-			include('pot/OTS.php');
+			include('../libs/pot/OTS.php');
 			// PDO and POT connects to database
 			$ots = POT::getInstance();
 			if(strtolower($config['server']['sqlType']) == "mysql")

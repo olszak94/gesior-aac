@@ -26,6 +26,9 @@ $SystemConfig = array
 	
 	'template'	=> 'tibiacom',
 	'site_news'	=> 5
+
+	'description'	=> 'Tibia is a free massive multiplayer online role playing game (MMORPG).',
+	'keywords'	=> 'free online game, free multiplayer game, ots, open tibia server'
 )
 
 foreach($SystemConfig as $key => $value) define(strtoupper($key), $value);

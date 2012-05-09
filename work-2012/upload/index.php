@@ -1,20 +1,47 @@
-<?PHP
-error_reporting(E_ALL ^ E_NOTICE); 
-//start :)
-ini_set('session.use_trans_sid', 0);
-session_start();
-ob_start("ob_gzhandler");
+<?php
+
 ini_set('include_path', ini_get('include_path') . ':./libs');
-date_default_timezone_set('Europe/Warsaw');
-//require('./exaBD.php');
+ini_set('session.use_trans_sid', 0);
+ini_set('session.use_cookies', 1);
+ini_set('session.use_only_cookies', 1);
+set_time_limit(30);
+ob_start('ob_gzhandler');
+session_start();
+
 function microtime_float()
 {
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
 }
 $time_start = microtime_float();
+
+require_once('config/configuration.php');
+require_once('smarty/Smarty.class.php');
+require_once('init.php');
+date_default_timezone_set(TIMEZONE);
+
+// Initialize database connection
+if ( SQL_CONNECT )
+{
+	// TODO
+}
+
+
+
+
+// Smarty Init
+$template = new Smarty;
+$template->compile_check = true;
+$template->debugging = false;
+$template->compile_dir = CACHEDIR.COMPILE_DIR;
+$template->cache_dir = CACHEDIR;
+$template->template_dir = TEMPLATESPATH.SITE_TEMPLATE;
+
+
+
+
 //##### CONFIG #####
-include('config-and-functions.php');
+//include('config-and-functions.php');
 $action = $_REQUEST['action'];
 //##### LOGOUT #####
 if($action == "logout") 

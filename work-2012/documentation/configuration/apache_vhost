@@ -8,6 +8,14 @@
                 Order allow,deny
                 allow from all
         </Directory>
+	RewriteEngine On
+	AddDefaultCharset Off
+	<IfModule mod_rewrite.c>
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule (.*) index.php/$1 [L]
+	</IfModule>
+
         ErrorLog ${APACHE_LOG_DIR}/error.log
         LogLevel warn
         CustomLog ${APACHE_LOG_DIR}/access.log combined

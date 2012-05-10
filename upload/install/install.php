@@ -128,7 +128,7 @@ if($_REQUEST['page'] == 'step')
 		if($step == 'start') 
 		{
 			echo '<h1>STEP '.$step.'</h1>Informations<br>Welcome to Gesior Account Maker installer. <b>First do steps 1-5 one by one, later (when you will be logged on admin account) press on links to steps 6-7 to load configuration from OTS.</b><span style="color: red; font-weight:bold;">';
-			$dir = array('cache', 'config', 'images/guilds');
+			$dir = array('cache', 'config', 'images/guilds', 'cache/images');
 			$filez = array('config/config.ini', 'config/config.php', 'cache/usercounter.dat', 'cache/serverstatus');
 			foreach ($dir as $check)
 			{

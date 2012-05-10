@@ -192,7 +192,7 @@ function check_name($name)//sprawdza name
 		return false;
 	else
 	{
-		$ok = "/[a-zA-Z ']{1,25}/";
+		$ok = "/[a-zA-Z\s']{1,25}/";
 		return (preg_match($ok, $name))? true: false;
 	}
 }
@@ -249,7 +249,7 @@ function check_name_new_char($name)//sprawdza name
 		return false;
 	else
 	{
-		$ok = "/[a-zA-Z ']{1,25}/";
+		$ok = "/[a-zA-Z\s']{1,25}/";
 		return (preg_match($ok, $name))? true: false;
 	}
 }
@@ -263,7 +263,7 @@ function check_rank_name($name)
 	}
 	else
 	{
-		$ok = "/[a-zA-Z ]{1,60}/";
+		$ok = "/[a-zA-Z\s]{1,60}/";
 		return (preg_match($ok, $name))? true: false;
 	}
 }

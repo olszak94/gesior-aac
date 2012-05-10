@@ -1,5 +1,4 @@
 <?PHP
-// ###################### CONFIG ########################
 //load page config file
 $config['site'] = parse_ini_file('config/config.ini');
 include('config/config.php');
@@ -19,9 +18,8 @@ if(isset($config['server']['sqlHost']))
 	$mysqlpass = $config['server']['sqlPass'];
 	$mysqldatabase = $config['server']['sqlDatabase'];
 }
-// loads #####POT mainfile#####
+
 include('pot/OTS.php');
-// PDO and POT connects to database
 $ots = POT::getInstance();
 if(strtolower($config['server']['sqlType']) == "mysql")
 {
@@ -61,12 +59,13 @@ $layout_name = "layouts/".$layout_name = $config['site']['layout'];;
 $layout_ini = parse_ini_file($layout_name.'/layout_config.ini');
 foreach($layout_ini as $key => $value)
 	$config['site'][$key] = $value;
-//###################### FUNCTIONS ######################
+
 function getTooltip()
 {
 	echo '<link rel="stylesheet" type="text/css" href="aplication/tooltip/style.css" />';
 	echo '<script src="aplication/tooltip/script.js"></script>';
 }
+
 // language system
 header('Cache-control: private'); // IE 6 FIX
 if(isSet($_GET['lang']))
@@ -87,7 +86,7 @@ else
 {
 	$lang = 'en';
 }
-// force / potegi
+// force  /// TODO: use - bcpow();
 function force($podstawa, $wykladnik)
 {
     $wynik = $podstawa;
@@ -366,8 +365,6 @@ function getReason($reasonId)
 	}
 	return "Unknown Reason";
 }
-
-//################### DISPLAY FUNCTIONS #####################
 //return shorter text (news ticker)
 function short_text($text, $chars_limit)
 {
@@ -444,7 +441,6 @@ if($config['status']['serverStatus_lastCheck']+$statustimeout < time())
 		fclose($file);
 	}
 }
-//PAGE VIEWS COUNTER :)
 $views_counter = "cache/usercounter.dat";
 // checking if the file exists
 if (file_exists($views_counter))

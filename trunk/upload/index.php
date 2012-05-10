@@ -1,28 +1,27 @@
-<?PHP
+<?php
+
 error_reporting(E_ALL ^ E_NOTICE); 
-//start :)
 ini_set('session.use_trans_sid', 0);
 session_start();
 ob_start("ob_gzhandler");
 ini_set('include_path', ini_get('include_path') . ':./libs');
 date_default_timezone_set('Europe/Warsaw');
-//require('./exaBD.php');
+
 function microtime_float()
 {
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
 }
 $time_start = microtime_float();
-//##### CONFIG #####
+
 include('config-and-functions.php');
 $action = $_REQUEST['action'];
-//##### LOGOUT #####
 if($action == "logout") 
 {
 	unset($_SESSION['account']);
 	unset($_SESSION['password']);
 }
-//##### LOGIN #####
+
 //check is player logged
 $logged = FALSE;
 if(isset($_SESSION['account'])) 
@@ -62,7 +61,7 @@ if(!$logged && !empty($login_account) && !empty($login_password))
 			$logged = FALSE;
 	}
 }
-//#### LOAD PAGE ##########
+
 //load subtopic page
 if(empty($_REQUEST['subtopic'])) 
 {
@@ -227,7 +226,7 @@ switch($_REQUEST['subtopic'])
 		require_once("modules/error.php");
 	break;
 }
-// ##### generate title of page
+// generate title of page
 if(empty($topic)) 
 {
 	$title = $GLOBALS['config']['server']["serverName"]." - OTS";
@@ -288,4 +287,5 @@ else
 $layout_header .= " var activeSubmenuItem='".$subtopic."';</script>";
 include($layout_name."/layout.php");
 ob_end_flush();
+
 ?>

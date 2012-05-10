@@ -3,61 +3,68 @@
 #aktywacja dotpay oraz dostepych systemow platnosci, wartosci: true / false
 $config['paypal_active'] = $config['site']['paypal_active']; #active paypal system?
 $config['zaypay_active'] = $config['site']['zaypay_active']; #active zaypay system?
+
+
+
+$config['paypal'] = array();
+$config['paypal']['email'] = 'YOUREMAIL@hotmail.com';
+
 # activation of DotPay system
 $config['dotpay'] = array();
 $config['dotpay_active'] = $config['site']['dotpay_active']; #active dotpay system?
-	# opcje transferu
-	$config['dotpay_active_sms'] = true; #active dotpay system?
-	$config['dotpay_active_transfer'] = true; #active dotpay system?
-	# przykladowy konfig dla SMS
-	$config['dotpay'][0]['id'] = 21468;       # numer ID zarejestrowanego klienta
-	$config['dotpay'][0]['code'] = "DEB3"; # identyfikator uslug SMS
-	$config['dotpay'][0]['type'] = "sms";   # typ konta: C1 - 8 znakowy kod bezobslugowy, sms - dla sprawdzania SMSow
-	$config['dotpay'][0]['addpoints'] = 100; # ile premium punktow daje dany sms
-	$config['dotpay'][0]['sms_number'] = 73068; # numer na jaki nalezy wyslac kod
-	$config['dotpay'][0]['sms_text'] = "AP.DEB3"; # tresc jaka ma byc w SMSie
-	$config['dotpay'][0]['sms_cost'] = "3.69 zl brutto"; # cena za wyslanie sms
-	# przykladowy konfig dla przelewu bankowego/karty kredytowej
-	$config['dotpay'][1]['id'] = 21468;       # numer ID zarejestrowanego klienta
-	$config['dotpay'][1]['code'] = "DEBT"; # identyfikator uslug SMS
-	$config['dotpay'][1]['type'] = "C1";   # typ konta: C1 - 8 znakowy kod bezobslugowy, sms - dla sprawdzania SMSow
-	$config['dotpay'][1]['addpoints'] = 400; # ile premium punktow daje dany sms
-	$config['dotpay'][1]['sms_number'] = ""; # numer na jaki nalezy wyslac kod
-	$config['dotpay'][1]['sms_text'] = "DEBT"; # tresc jaka ma byc w SMSie
-	$config['dotpay'][1]['sms_cost'] = "5 zl brutto"; # cena za wyslanie sms
+
+# opcje transferu
+$config['dotpay_active_sms'] = true; #active dotpay system?
+$config['dotpay_active_transfer'] = true; #active dotpay system?
+# przykladowy konfig dla SMS
+$config['dotpay'][0]['id'] = 21468;       # numer ID zarejestrowanego klienta
+$config['dotpay'][0]['code'] = "DEB3"; # identyfikator uslug SMS
+$config['dotpay'][0]['type'] = "sms";   # typ konta: C1 - 8 znakowy kod bezobslugowy, sms - dla sprawdzania SMSow
+$config['dotpay'][0]['addpoints'] = 100; # ile premium punktow daje dany sms
+$config['dotpay'][0]['sms_number'] = 73068; # numer na jaki nalezy wyslac kod
+$config['dotpay'][0]['sms_text'] = "AP.DEB3"; # tresc jaka ma byc w SMSie
+$config['dotpay'][0]['sms_cost'] = "3.69 zl brutto"; # cena za wyslanie sms
+# przykladowy konfig dla przelewu bankowego/karty kredytowej
+$config['dotpay'][1]['id'] = 21468;       # numer ID zarejestrowanego klienta
+$config['dotpay'][1]['code'] = "DEBT"; # identyfikator uslug SMS
+$config['dotpay'][1]['type'] = "C1";   # typ konta: C1 - 8 znakowy kod bezobslugowy, sms - dla sprawdzania SMSow
+$config['dotpay'][1]['addpoints'] = 400; # ile premium punktow daje dany sms
+$config['dotpay'][1]['sms_number'] = ""; # numer na jaki nalezy wyslac kod
+$config['dotpay'][1]['sms_text'] = "DEBT"; # tresc jaka ma byc w SMSie
+$config['dotpay'][1]['sms_cost'] = "5 zl brutto"; # cena za wyslanie sms
 # activation of DaoPay system
 $config['daopay'] = array();
 $config['daopay_active'] = $config['site']['daopay_active']; #active daopay system?
-	# example config for daopay
-	$config['daopay'][0]['appcode'] = 46870; #
-	$config['daopay'][0]['prodcode'] = 'DEB2'; #
-	$config['daopay'][0]['addpoints'] = '100'; #
-	$config['daopay'][0]['cost'] = "1 euro inc. VAT"; #
-	# przk³ad
-	$config['daopay'][1]['appcode'] = 46870; #
-	$config['daopay'][1]['prodcode'] = 'DEB3'; #
-	$config['daopay'][1]['addpoints'] = '200'; #
-	$config['daopay'][1]['cost'] = "2 euro inc. VAT"; #
+# example config for daopay
+$config['daopay'][0]['appcode'] = 46870; #
+$config['daopay'][0]['prodcode'] = 'DEB2'; #
+$config['daopay'][0]['addpoints'] = '100'; #
+$config['daopay'][0]['cost'] = "1 euro inc. VAT"; #
+# przk³ad
+$config['daopay'][1]['appcode'] = 46870; #
+$config['daopay'][1]['prodcode'] = 'DEB3'; #
+$config['daopay'][1]['addpoints'] = '200'; #
+$config['daopay'][1]['cost'] = "2 euro inc. VAT"; #
 # activation of HomePay system
 $config['homepay'] = array();
 $config['homepay_active'] = $config['site']['homepayActive'];
-	# opcje transferu
-	$config['homepay_active_sms'] = true; #active homepay sms system?
-	$config['homepay_active_transfer'] = true; #active homepay transfer system?
-	# przykladowy konfig dla SMS
-	$config['homepay'][0]['acc_id']=2;
-	$config['homepay'][0]['addpoints']=10;
-	$config['homepay'][0]['sms_number']="79550";
-	$config['homepay'][0]['type']="sms";
-	$config['homepay'][0]['sms_text']="HPAY.NASZAUSLUGA";
-	$config['homepay'][0]['sms_cost']="10.98 zl brutto";
-	# przykladowy konfig dla przelewu
-	$config['homepay'][1]['acc_id']=1;
-	$config['homepay'][1]['addpoints']=10;
-	$config['homepay'][1]['link']="https://ssl.homepay.pl/wplata/1-NASZAUSLUGA";
-	$config['homepay'][1]['type']="przelew";
-	$config['homepay'][1]['przelew_text']="NASZAUSLUGA";
-	$config['homepay'][1]['przelew_cost']="10.00 zl brutto";
+# opcje transferu
+$config['homepay_active_sms'] = true; #active homepay sms system?
+$config['homepay_active_transfer'] = true; #active homepay transfer system?
+# przykladowy konfig dla SMS
+$config['homepay'][0]['acc_id']=2;
+$config['homepay'][0]['addpoints']=10;
+$config['homepay'][0]['sms_number']="79550";
+$config['homepay'][0]['type']="sms";
+$config['homepay'][0]['sms_text']="HPAY.NASZAUSLUGA";
+$config['homepay'][0]['sms_cost']="10.98 zl brutto";
+# przykladowy konfig dla przelewu
+$config['homepay'][1]['acc_id']=1;
+$config['homepay'][1]['addpoints']=10;
+$config['homepay'][1]['link']="https://ssl.homepay.pl/wplata/1-NASZAUSLUGA";
+$config['homepay'][1]['type']="przelew";
+$config['homepay'][1]['przelew_text']="NASZAUSLUGA";
+$config['homepay'][1]['przelew_cost']="10.00 zl brutto";
 #################################################################################
 function check_code_daopay($appcode, $prodcode, $pin)
 {
@@ -134,8 +141,43 @@ function add_points(OTS_Account $account, $number_of_points)
 }
 if ($_REQUEST['system'] == 'paypal' && $config['paypal_active']) 
 {
-	$content = file_get_contents("paypal/paypal.htm");
-		$main_content .= $content;
+	$main_content .= '<b>PayPal Shop System.</b><br><br>
+The shop costs:<ul><li> 5 EUR (for 7 points)</li><li> 10 EUR (for 15 points)</li><li> 20 EUR (for 32 points)</li><br>
+
+<b>Here are the steps you need to make:</b> <br>
+1. A PayPal account with a required balance [5, 10 or 20 EUR] or a creditcard. <br>
+2. Fill in your account number. <br>
+3. Click on the Buy Now button or your creditcard brand. <br>
+4. Make a transaction. <br>
+5. After the transaction 6, 14 or 31 points will be automatically added to your account. <br>
+6. Go to Item shop and use your points <br> <br> <br> </b>
+
+<span style="color:red">If you recall the money, and your premiumpoints can\'t be recalled your account will be deleted</span>
+
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_xclick">
+<input type="hidden" name="business" value="' . $config['paypal']['email'] . '">
+<input type="hidden" name="lc" value="US">
+<input type="hidden" name="item_name" value="XXX Premium points">
+<b>Account name/login:</b> <input type="text"  name="custom" value="">
+
+<select name="amount">
+  <option value="5.00">5 EUR</option>
+  <option value="10.00">10 EUR</option>
+  <option value="20.00">20 EUR</option>
+</select>
+<input type="hidden" name="button_subtype" value="products">
+<input type="hidden" name="currency_code" value="EUR">
+<input type="hidden" name="no_shipping" value="1">
+<input type="hidden" name="currency_code" value="EUR">
+<input type="hidden" name="notify_url" value="http://' . $_SERVER["HTTP_HOST"] . '/paypal/ipn/ipn.php">
+<input type="hidden" name="return" value="http://' . $_SERVER["HTTP_HOST"] . '/">
+<input type="hidden" name="rm" value="0">
+<input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynowCC_LG.gif:NonHostedGuest">
+<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>';
+
 }
 elseif ($_REQUEST['system'] == 'zaypay' && $config['zaypay_active']) 
 {

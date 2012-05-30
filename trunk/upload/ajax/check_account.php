@@ -1,5 +1,6 @@
-﻿<?PHP
-function check_account_name($name)//sprawdza name
+﻿<?php
+error_reporting(E_ALL ^ E_NOTICE);
+function check_account_name($name)//check name
 {
 	$temp = strspn("$name", "QWERTYUIOPASDFGHJKLZXCVBNM0123456789");
 	if ($temp != strlen($name))
